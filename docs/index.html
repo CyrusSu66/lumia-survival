@@ -3,55 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Project Lumia - 黑色倖存 (純網頁單機版)</title>
+  <title>Project Lumia - 黑色倖存 (單機生存戰術版)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
-    <!-- 頂部 HUD -->
+    <!-- 頂部 HUD：存活人數、禁區倒數、生命精力、攻防裝備 -->
     <header class="hud-header">
       <div class="user-meta">
-        <span class="player-name" id="hud-name">受試者 #01</span>
-        <span class="player-lvl" id="hud-level">Lv.1</span>
+        <div class="meta-left">
+          <span class="player-name" id="hud-name">受試者 #01</span>
+          <span class="player-lvl" id="hud-level">Lv.1</span>
+          <button id="btn-stance" class="stance-badge stance-normal" title="點擊切換探索姿態 [T]">⚖️ 均衡姿態</button>
+        </div>
+        <div class="meta-right">
+          <span class="alive-badge" id="hud-alive" title="剩餘存活受試者">👤 10/10</span>
+          <span class="zone-timer" id="hud-zone-timer" title="距離下次禁區封鎖">⏱️ 12 動</span>
+        </div>
       </div>
+
+      <!-- HP / SP 條 -->
       <div class="vital-bars">
         <div class="bar-wrap">
           <div class="bar-fill hp-bar" id="hp-bar" style="width: 100%;"></div>
-          <span class="bar-label" id="hp-text">100 / 100</span>
+          <span class="bar-label" id="hp-text">HP 100 / 100</span>
         </div>
         <div class="bar-wrap">
           <div class="bar-fill sp-bar" id="sp-bar" style="width: 100%;"></div>
-          <span class="bar-label" id="sp-text">80 / 80</span>
+          <span class="bar-label" id="sp-text">SP 80 / 80</span>
+        </div>
+      </div>
+
+      <!-- 攻防屬性與已穿戴裝備列 -->
+      <div class="equip-status-bar">
+        <div class="stat-chips">
+          <span class="stat-chip atk-chip">⚔️ 攻擊 <strong id="hud-atk">12</strong></span>
+          <span class="stat-chip def-chip">🛡️ 防禦 <strong id="hud-def">5</strong></span>
+          <span class="stat-chip mas-chip" id="hud-mastery">熟練 F (0%)</span>
+        </div>
+        <div class="equipped-slots">
+          <div class="eq-slot" id="eq-weapon" title="當前裝備武器">🗡️ <span>空手</span></div>
+          <div class="eq-slot" id="eq-body" title="當前身體防具">👕 <span>無衣服</span></div>
+          <div class="eq-slot" id="eq-arm" title="當前臂甲/盾牌">🛡️ <span>無臂甲</span></div>
         </div>
       </div>
     </header>
 
     <!-- 主遊戲中央區域 -->
     <main class="main-viewport">
-      <!-- 區域背景與場景狀態 -->
-      <section class="area-banner">
-        <div class="area-info">
-          <h2 id="area-title">學校</h2>
-          <p id="area-desc">荒廢的教學大樓，散落著文具與急救物資</p>
+      <section class="area-banner" id="area-banner">
+        <div class="area-top-row">
+          <div class="area-info">
+            <div class="area-title-wrap">
+              <h2 id="area-title">學校</h2>
+              <span id="area-zone-tag" class="zone-tag safe">安全區</span>
+            </div>
+            <p id="area-desc">荒廢的教學大樓，散落著文具與急救物資</p>
+          </div>
+          <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 配方圖鑑</button>
         </div>
-        <!-- 探索發現通知窗 -->
+
+        <!-- 區域出沒資訊提示 -->
+        <div class="area-drops-hint" id="area-drops-hint"></div>
+
+        <!-- 探索發現物資通知窗 -->
         <div id="discovery-card" class="discovery-card hidden">
-          <div class="card-header">探索發現！</div>
+          <div class="card-header">📦 探索發現物資！</div>
           <div class="item-preview">
             <span id="disc-item-name" class="highlight-name">物品名稱</span>
             <p id="disc-item-desc">物品說明</p>
           </div>
           <div class="discovery-actions">
-            <button id="btn-pickup" class="btn btn-primary">放入背包 [Space/Enter]</button>
-            <button id="btn-discard" class="btn btn-secondary">無視 [Esc]</button>
+            <button id="btn-pickup" class="btn btn-primary">放入背包 [Space]</button>
+            <button id="btn-discard" class="btn btn-secondary">略過 [Esc]</button>
+          </div>
+        </div>
+
+        <!-- 遭遇戰鬥卡片 (野生動物 / AI 倖存者) -->
+        <div id="combat-card" class="discovery-card combat-card hidden">
+          <div class="combat-header">
+            <span id="enemy-tag" class="enemy-type-badge">⚠️ 遭遇敵襲</span>
+            <span id="enemy-stats" class="enemy-stats-text">攻 15 / 防 5</span>
+          </div>
+          <div class="enemy-info-row">
+            <span id="enemy-name" class="highlight-name">敵人名稱</span>
+            <span id="enemy-hp-text" class="enemy-hp-num">HP 60/60</span>
+          </div>
+          <div class="bar-wrap enemy-hp-wrap">
+            <div class="bar-fill hp-bar" id="enemy-hp-bar" style="width: 100%;"></div>
+          </div>
+          <p id="combat-round-desc" class="combat-desc">敵人正虎視眈眈地盯著你！</p>
+          <div class="discovery-actions">
+            <button id="btn-attack" class="btn btn-danger" style="flex:1.5;">⚔️ 揮擊交戰 [Space/A]</button>
+            <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 撤退 (-4 SP) [Esc]</button>
           </div>
         </div>
       </section>
 
-      <!-- 戰鬥與訊息 Log -->
-      <section class="log-panel" id="combat-log">
-        <div class="log-entry sys-msg">已進入單人試驗模式（免伺服器，純前端離線運算）。</div>
-      </section>
+      <!-- 戰鬥與廣播訊息 Log -->
+      <section class="log-panel" id="combat-log"></section>
     </main>
 
     <!-- 下半部：背包與配方 -->
@@ -60,7 +110,7 @@
       <div class="inventory-section">
         <div class="section-title">
           <span>戰術背包 (6格)</span>
-          <span class="shortcut-tip">點擊管理/丟棄物品</span>
+          <span class="shortcut-tip">點擊物品或按 1~6 使用/裝備/丟棄</span>
         </div>
         <div class="grid-inventory" id="inventory-grid"></div>
       </div>
@@ -68,17 +118,17 @@
       <!-- 可用合成配方列表 -->
       <div class="craft-section">
         <div class="section-title">
-          <span>快速合成</span>
-          <span class="shortcut-tip">鍵盤 C 鍵一鍵合成</span>
+          <span>🔨 可立即合成</span>
+          <span class="shortcut-tip">鍵盤 C 鍵快速合成</span>
         </div>
         <div class="recipe-list" id="recipe-list">
-          <div class="no-recipe">背包內無可合成組合</div>
+          <div class="no-recipe">湊齊材料自動浮現（可點右上「📖 配方圖鑑」查詢）</div>
         </div>
       </div>
 
       <!-- 操作按鈕列 -->
       <div class="actions-dock">
-        <button id="btn-search" class="btn btn-action search-btn">🔍 探索 [Space/S]</button>
+        <button id="btn-search" class="btn btn-action search-btn">🔍 探索 (-5 SP) [S]</button>
         <button id="btn-rest" class="btn btn-action">💤 休息 [R]</button>
         <button id="btn-open-map" class="btn btn-action">🗺️ 移動 [M]</button>
       </div>
@@ -89,10 +139,11 @@
       <div class="modal-content item-action-dialog">
         <div class="item-action-title" id="item-modal-title">物品名稱</div>
         <div class="item-action-desc" id="item-modal-desc">物品說明</div>
+        <div class="item-recipe-usage" id="item-modal-recipes"></div>
         <div class="item-action-buttons">
-          <button id="btn-modal-use" class="btn btn-primary">使用 / 裝備</button>
-          <button id="btn-modal-drop" class="btn btn-danger">丟棄物品</button>
-          <button id="btn-modal-cancel" class="btn btn-secondary">取消</button>
+          <button id="btn-modal-use" class="btn btn-primary">使用 / 裝備 [Enter]</button>
+          <button id="btn-modal-drop" class="btn btn-danger">🗑️ 丟棄物品 [D]</button>
+          <button id="btn-modal-cancel" class="btn btn-secondary">取消 [Esc]</button>
         </div>
       </div>
     </div>
@@ -100,9 +151,40 @@
     <!-- 地圖切換彈窗 -->
     <div id="map-modal" class="modal hidden">
       <div class="modal-content">
-        <h3>選擇移動目標區域 (消耗 3 SP)</h3>
+        <div class="modal-header-row">
+          <h3>🗺️ 選擇移動區域 (消耗 3 SP)</h3>
+          <span id="map-zone-hint" class="shortcut-tip">注意避開紅/黃色禁區</span>
+        </div>
         <div class="area-grid" id="area-selector"></div>
-        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 15px; width: 100%;">關閉 [Esc]</button>
+        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉地圖 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 合成圖鑑彈窗 -->
+    <div id="codex-modal" class="modal hidden">
+      <div class="modal-content codex-dialog">
+        <div class="modal-header-row">
+          <h3>📖 裝備與補給合成圖鑑</h3>
+          <span class="shortcut-tip">綠字代表背包已持有該材料</span>
+        </div>
+        <div class="codex-tabs">
+          <button class="codex-tab active" data-tab="all">全部</button>
+          <button class="codex-tab" data-tab="weapon">🗡️ 武器</button>
+          <button class="codex-tab" data-tab="armor">🛡️ 防具</button>
+          <button class="codex-tab" data-tab="consumable">💊 補給/素材</button>
+        </div>
+        <div class="codex-list" id="codex-list"></div>
+        <button id="btn-close-codex" class="btn btn-secondary" style="margin-top: 12px; width: 100%;">關閉圖鑑 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 遊戲勝負結算彈窗 -->
+    <div id="gameover-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <h2 id="gameover-title" style="margin-bottom: 8px; font-size: 1.5rem;">實驗結束</h2>
+        <p id="gameover-desc" style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 14px;"></p>
+        <div id="gameover-stats" class="gameover-stats-box"></div>
+        <button id="btn-restart" class="btn btn-primary" style="width: 100%; margin-top: 14px; font-size: 1rem;">🔄 重新開始新一局實驗</button>
       </div>
     </div>
   </div>

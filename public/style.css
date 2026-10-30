@@ -48,14 +48,15 @@ body {
 
 @media (min-width: 768px) {
   #app {
-    max-height: 900px;
+    max-height: 920px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
   }
 }
 
+/* 頂部 HUD */
 .hud-header {
-  padding: 10px 14px;
+  padding: 10px 12px;
   background: #13171f;
   border-bottom: 1px solid var(--border-color);
   display: flex;
@@ -68,11 +69,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
+}
+
+.meta-left, .meta-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .player-name {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #fff;
 }
 
@@ -80,10 +88,53 @@ body {
   background: #1e3a8a;
   color: #93c5fd;
   border: 1px solid #3b82f6;
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: bold;
+}
+
+.stance-badge {
+  border: 1px solid #475569;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #e2e8f0;
+  background: #1e293b;
+}
+
+.stance-badge.stance-aggressive {
+  background: rgba(220, 38, 38, 0.25);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.stance-badge.stance-stealth {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+.alive-badge {
+  background: #1f2937;
+  border: 1px solid #374151;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: #fde047;
+}
+
+.zone-timer {
+  background: #311b1b;
+  border: 1px solid #7f1d1d;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: #fca5a5;
 }
 
 .vital-bars {
@@ -103,7 +154,7 @@ body {
 
 .bar-fill {
   height: 100%;
-  transition: width 0.25s ease;
+  transition: width 0.22s ease;
 }
 
 .hp-bar { background: linear-gradient(90deg, #dc2626, #ef4444); }
@@ -111,6 +162,8 @@ body {
 
 .bar-label {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   text-align: center;
   font-size: 0.7rem;
@@ -119,6 +172,62 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
+/* 裝備與屬性列 */
+.equip-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 2px;
+}
+
+.stat-chips {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.stat-chip {
+  font-size: 0.72rem;
+  background: #1a202c;
+  border: 1px solid #2d3748;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #cbd5e1;
+}
+
+.atk-chip strong { color: #f87171; }
+.def-chip strong { color: #60a5fa; }
+.mas-chip { color: #fcd34d; margin-left: auto; }
+
+.equipped-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.eq-slot {
+  background: #1b2230;
+  border: 1px dashed #3b465c;
+  border-radius: 5px;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.eq-slot.active-eq {
+  background: #232f46;
+  border: 1px solid #60a5fa;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+/* 中央主舞台 */
 .main-viewport {
   flex: 1;
   display: flex;
@@ -130,57 +239,163 @@ body {
 .area-banner {
   flex: 1;
   background: radial-gradient(circle at center, #1e2634 0%, #11151c 100%);
-  padding: 14px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  overflow-y: auto;
+}
+
+.area-banner.zone-warning-bg {
+  background: radial-gradient(circle at center, #382a18 0%, #141210 100%);
+}
+
+.area-banner.zone-restricted-bg {
+  background: radial-gradient(circle at center, #421818 0%, #180c0c 100%);
+}
+
+.area-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.area-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .area-info h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #facc15;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
+.zone-tag {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.zone-tag.safe { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+.zone-tag.warning { background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 1px solid #d97706; }
+.zone-tag.restricted { background: rgba(239, 68, 68, 0.3); color: #f87171; border: 1px solid #dc2626; }
+
 .area-info p {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin-top: 3px;
 }
 
+.btn-codex {
+  background: #1e293b;
+  color: #93c5fd;
+  border: 1px solid #3b82f6;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-codex:active { transform: scale(0.95); }
+
+.area-drops-hint {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  background: rgba(15, 17, 21, 0.55);
+  border: 1px solid #262f3f;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+/* 探索發現卡片與戰鬥卡片 */
 .discovery-card {
   background: rgba(18, 22, 31, 0.96);
   border: 1px solid #475569;
   border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-  animation: slideUp 0.18s ease-out;
+  padding: 11px 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.65);
+  animation: slideUp 0.16s ease-out;
+  margin-top: auto;
+}
+
+.combat-card {
+  border-color: #ef4444;
+  background: rgba(28, 16, 20, 0.96);
 }
 
 @keyframes slideUp {
-  from { transform: translateY(12px); opacity: 0; }
+  from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 .discovery-card.hidden { display: none; }
-.card-header { font-size: 0.8rem; color: var(--success); font-weight: bold; }
-.highlight-name { font-size: 1.25rem; font-weight: bold; color: #fff; margin: 2px 0; }
-.item-preview p { font-size: 0.8rem; color: #cbd5e1; margin-bottom: 10px; }
+.card-header { font-size: 0.78rem; color: var(--success); font-weight: bold; }
+.highlight-name { font-size: 1.15rem; font-weight: bold; color: #fff; margin: 2px 0; }
+.item-preview p { font-size: 0.78rem; color: #cbd5e1; margin-bottom: 8px; }
+
+.combat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.enemy-type-badge {
+  font-size: 0.75rem;
+  color: #fca5a5;
+  font-weight: bold;
+}
+
+.enemy-stats-text {
+  font-size: 0.74rem;
+  color: #fde047;
+  font-weight: 600;
+}
+
+.enemy-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.enemy-hp-num {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #f87171;
+}
+
+.enemy-hp-wrap {
+  height: 12px;
+  margin-bottom: 6px;
+}
+
+.combat-desc {
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
 
 .discovery-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
+/* 戰鬥與廣播訊息 Log */
 .log-panel {
-  height: 85px;
+  height: 88px;
   background: #090a0d;
-  padding: 8px 12px;
+  padding: 6px 12px;
   overflow-y: auto;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -192,14 +407,16 @@ body {
 .log-entry.gain-msg { color: #4ade80; }
 .log-entry.craft-msg { color: #fde047; }
 .log-entry.warn-msg { color: #f87171; }
+.log-entry.combat-msg { color: #fb923c; }
 
+/* 底部操作面板 */
 .interaction-dock {
   background: #13171f;
-  padding: 10px 12px;
+  padding: 8px 12px 10px;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   flex-shrink: 0;
 }
 
@@ -209,13 +426,15 @@ body {
   color: #64748b;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 3px;
 }
 
 .shortcut-tip {
-  color: #475569;
+  color: #64748b;
   font-size: 0.65rem;
 }
 
+/* 6格背包 */
 .grid-inventory {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -224,7 +443,7 @@ body {
 
 .inv-slot {
   aspect-ratio: 1;
-  min-height: 52px;
+  min-height: 50px;
   background: var(--bg-slot);
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -251,18 +470,19 @@ body {
 }
 
 .slot-tag {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   color: #38bdf8;
   margin-top: 2px;
 }
 
+/* 快速合成欄 */
 .recipe-list {
   display: flex;
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: none;
-  min-height: 42px;
+  min-height: 38px;
 }
 
 .recipe-list::-webkit-scrollbar { display: none; }
@@ -270,9 +490,9 @@ body {
 .recipe-chip {
   background: linear-gradient(135deg, #1e3a8a, #2563eb);
   color: #fff;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -284,19 +504,19 @@ body {
 }
 
 .recipe-chip:active { transform: scale(0.96); }
-.no-recipe { font-size: 0.75rem; color: #475569; line-height: 38px; }
+.no-recipe { font-size: 0.73rem; color: #475569; line-height: 34px; }
 
+/* 底部三核心動作按鈕 */
 .actions-dock {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1.2fr;
+  grid-template-columns: 2fr 1.1fr 1.1fr;
   gap: 8px;
-  margin-top: 2px;
 }
 
 .btn {
   border: none;
   border-radius: 6px;
-  padding: 12px 10px;
+  padding: 11px 10px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
@@ -311,18 +531,19 @@ body {
   filter: brightness(0.9);
 }
 
-.btn-primary { background: var(--success); color: #fff; flex: 1.5; font-size: 0.95rem; }
-.btn-secondary { background: #334155; color: #fff; flex: 1; }
-.btn-danger { background: #dc2626; color: #fff; }
+.btn-primary { background: var(--success); color: #fff; flex: 1.5; font-size: 0.9rem; }
+.btn-secondary { background: #334155; color: #fff; flex: 1; font-size: 0.85rem; }
+.btn-danger { background: #dc2626; color: #fff; font-size: 0.9rem; }
 .btn-action { background: #1e293b; color: #e2e8f0; font-size: 0.85rem; border: 1px solid var(--border-color); }
 .search-btn {
   background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: #0f172a;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
   box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
 }
 
+/* 彈窗樣式 */
 .modal {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -339,10 +560,20 @@ body {
 .modal-content {
   background: #1e2430;
   border: 1px solid var(--border-color);
-  padding: 18px;
+  padding: 16px;
   border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
+  width: 92%;
+  max-width: 430px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .item-action-dialog {
@@ -353,37 +584,162 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .item-action-desc {
   font-size: 0.85rem;
   color: var(--text-muted);
-  margin-bottom: 18px;
+  margin-bottom: 10px;
+}
+
+.item-recipe-usage {
+  background: #141820;
+  border: 1px solid #2b3342;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  margin-bottom: 14px;
+  text-align: left;
+  line-height: 1.5;
 }
 
 .item-action-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
+/* 地圖選區按鈕 */
 .area-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 6px;
 }
 
 .area-choice-btn {
   background: #283142;
   color: #f1f5f9;
   border: 1px solid #3b465c;
-  padding: 12px 8px;
+  padding: 10px 8px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
 }
 
-.area-choice-btn:active { background: #3b82f6; }
+.area-choice-btn.zone-warn {
+  border-color: #d97706;
+  background: rgba(217, 119, 6, 0.15);
+}
+
+.area-choice-btn.zone-closed {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.2);
+  opacity: 0.75;
+}
+
+.area-choice-btn.current-area {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* 圖鑑樣式 */
+.codex-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.codex-tab {
+  flex: 1;
+  background: #141820;
+  color: #94a3b8;
+  border: 1px solid #2b3342;
+  padding: 6px 4px;
+  border-radius: 5px;
+  font-size: 0.76rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.codex-tab.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #60a5fa;
+}
+
+.codex-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 52vh;
+  padding-right: 2px;
+}
+
+.codex-card {
+  background: #141820;
+  border: 1px solid #2b3342;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.codex-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.codex-res-name {
+  font-weight: bold;
+  font-size: 0.88rem;
+  color: #facc15;
+}
+
+.codex-res-stat {
+  font-size: 0.74rem;
+  color: #38bdf8;
+}
+
+.codex-mats {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.mat-badge {
+  background: #1e2430;
+  border: 1px solid #334155;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.mat-badge.owned {
+  border-color: #10b981;
+  color: #4ade80;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.gameover-stats-box {
+  background: #141820;
+  border: 1px solid #2b3342;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+}
