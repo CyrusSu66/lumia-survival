@@ -1,21 +1,265 @@
 {
-  "branch": { "name": "樹枝", "type": "material", "desc": "隨處可見的堅韌樹枝" },
-  "stone": { "name": "石頭", "type": "material", "desc": "硬質鵝卵石" },
-  "bandage": { "name": "繃帶", "type": "consumable", "heal_hp": 20, "desc": "乾淨的布條，可回復 20 HP" },
-  "pills": { "name": "止痛藥", "type": "consumable", "heal_hp": 35, "desc": "強效止痛藥，可回復 35 HP" },
-  "water": { "name": "生水", "type": "consumable", "heal_sp": 25, "desc": "甘甜的清水，可回復 25 SP" },
-  "lighter": { "name": "打火機", "type": "material", "desc": "可以生火或加熱液體" },
-  "scrap_metal": { "name": "廢鐵", "type": "material", "desc": "粗糙的鐵塊組件" },
-  "hammer": { "name": "鐵鎚", "type": "weapon", "subType": "blunt", "atk": 12, "desc": "簡易鈍器 (+12 攻擊)" },
-  "scalpel": { "name": "手術刀", "type": "weapon", "subType": "blade", "atk": 14, "desc": "鋒利的手術刀 (+14 攻擊)" },
-  "iron_ore": { "name": "鐵礦石", "type": "material", "desc": "純淨的鐵礦" },
-  "herb": { "name": "草藥", "type": "consumable", "heal_hp": 15, "desc": "清涼草藥 (+15 HP)" },
-  "turtle_shell": { "name": "龜殼", "type": "material", "desc": "硬實的防禦素材" },
-  "steel": { "name": "鋼鐵", "type": "material", "desc": "精煉鋼材" },
-  "boiled_water": { "name": "熱水", "type": "consumable", "heal_sp": 40, "desc": "剛煮沸的水 (+40 SP)" },
-  "herbal_tea": { "name": "草本茶", "type": "consumable", "heal_sp": 65, "heal_hp": 15, "desc": "舒緩身心的草藥茶 (+65 SP, +15 HP)" },
-  "first_aid_kit": { "name": "急救包", "type": "consumable", "heal_hp": 70, "desc": "專業戰地醫療包 (+70 HP)" },
-  "war_hammer": { "name": "戰鎚", "type": "weapon", "subType": "blunt", "atk": 32, "desc": "沉重且致命的重錘 (+32 攻擊)" },
-  "steel_blade": { "name": "精鋼短刀", "type": "weapon", "subType": "blade", "atk": 36, "desc": "冷光凜冽的鍛造短刀 (+36 攻擊)" },
-  "turtle_shield": { "name": "龜甲盾", "type": "armor", "subType": "arm", "def": 22, "desc": "防護力極佳的臂甲 (+22 防禦)" }
+  "branch": {
+    "name": "樹枝",
+    "type": "material",
+    "desc": "隨處可見的堅韌樹枝"
+  },
+  "stone": {
+    "name": "石頭",
+    "type": "material",
+    "desc": "硬質鵝卵石，可打磨或加固"
+  },
+  "lighter": {
+    "name": "打火機",
+    "type": "material",
+    "desc": "可以生火、煮水或烘烤食物"
+  },
+  "scrap_metal": {
+    "name": "廢鐵",
+    "type": "material",
+    "desc": "粗糙的鐵塊組件"
+  },
+  "iron_ore": {
+    "name": "鐵礦石",
+    "type": "material",
+    "desc": "純淨的鐵礦，可與廢鐵精煉成鋼鐵"
+  },
+  "turtle_shell": {
+    "name": "龜殼",
+    "type": "material",
+    "desc": "硬實的甲殼防禦素材"
+  },
+  "pen": {
+    "name": "鋼筆",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 8,
+    "desc": "金屬筆尖的鋼筆 (+8 攻擊)"
+  },
+  "needle": {
+    "name": "縫合針",
+    "type": "material",
+    "desc": "醫療用尖銳長針"
+  },
+  "wire": {
+    "name": "鐵絲",
+    "type": "material",
+    "desc": "高韌性工業金屬線"
+  },
+  "oil": {
+    "name": "機油",
+    "type": "material",
+    "desc": "易燃工業潤滑油"
+  },
+  "flower": {
+    "name": "山茶花",
+    "type": "material",
+    "desc": "具有鎮靜功效的野生花朵"
+  },
+  "cloth": {
+    "name": "布料",
+    "type": "material",
+    "desc": "厚實的帆布衣料"
+  },
+  "leather": {
+    "name": "皮革",
+    "type": "material",
+    "desc": "堅韌的動物毛皮"
+  },
+  "feather": {
+    "name": "鴉羽",
+    "type": "material",
+    "desc": "輕盈的黑色羽翎"
+  },
+  "alcohol": {
+    "name": "高濃度酒精",
+    "type": "material",
+    "desc": "醫療消毒與燃燒溶劑"
+  },
+  "bandage": {
+    "name": "繃帶",
+    "type": "consumable",
+    "heal_hp": 22,
+    "desc": "乾淨的布條，回復 22 HP"
+  },
+  "pills": {
+    "name": "止痛藥",
+    "type": "consumable",
+    "heal_hp": 35,
+    "desc": "強效止痛藥，回復 35 HP"
+  },
+  "water": {
+    "name": "生水",
+    "type": "consumable",
+    "heal_sp": 25,
+    "desc": "甘甜的清水，回復 25 SP"
+  },
+  "herb": {
+    "name": "草藥",
+    "type": "consumable",
+    "heal_hp": 18,
+    "desc": "清涼草藥，回復 18 HP"
+  },
+  "fish": {
+    "name": "生鮮海魚",
+    "type": "consumable",
+    "heal_hp": 15,
+    "desc": "剛捕獲的海魚，直接吃回復 15 HP，烤熟效果極佳"
+  },
+  "meat": {
+    "name": "生獸肉",
+    "type": "consumable",
+    "heal_hp": 20,
+    "desc": "新鮮野獸肉，烤熟後可大幅恢復體力"
+  },
+  "hammer": {
+    "name": "鐵鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 13,
+    "desc": "工業重鐵鎚 (+13 攻擊)"
+  },
+  "scalpel": {
+    "name": "手術刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 15,
+    "desc": "鋒利的外科手術刀 (+15 攻擊)"
+  },
+  "steel": {
+    "name": "鋼鐵",
+    "type": "material",
+    "desc": "由廢鐵與鐵礦精煉的高硬度鋼材"
+  },
+  "boiled_water": {
+    "name": "熱水",
+    "type": "consumable",
+    "heal_sp": 45,
+    "desc": "剛煮沸的熱水 (+45 SP)"
+  },
+  "herbal_tea": {
+    "name": "草本茶",
+    "type": "consumable",
+    "heal_sp": 70,
+    "heal_hp": 20,
+    "desc": "舒緩身心的草藥茶 (+70 SP, +20 HP)"
+  },
+  "flower_tea": {
+    "name": "山茶花露",
+    "type": "consumable",
+    "heal_sp": 55,
+    "heal_hp": 40,
+    "desc": "芬芳提神的花茶 (+55 SP, +40 HP)"
+  },
+  "first_aid_kit": {
+    "name": "急救包",
+    "type": "consumable",
+    "heal_hp": 75,
+    "desc": "專業戰地醫療包 (+75 HP)"
+  },
+  "grilled_fish": {
+    "name": "炭烤海魚",
+    "type": "consumable",
+    "heal_hp": 60,
+    "heal_sp": 20,
+    "desc": "香氣四溢的烤魚 (+60 HP, +20 SP)"
+  },
+  "steak": {
+    "name": "炙烤肉排",
+    "type": "consumable",
+    "heal_hp": 85,
+    "heal_sp": 25,
+    "desc": "頂級炙烤獸肉排 (+85 HP, +25 SP)"
+  },
+  "med_alcohol": {
+    "name": "戰地止血劑",
+    "type": "consumable",
+    "heal_hp": 55,
+    "heal_sp": 15,
+    "desc": "酒精消毒強效繃帶 (+55 HP, +15 SP)"
+  },
+  "poison_scalpel": {
+    "name": "精密刺針刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 26,
+    "desc": "結合縫合針改造的暗殺刀 (+26 攻擊)"
+  },
+  "spiked_club": {
+    "name": "狼牙木棒",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 24,
+    "desc": "纏繞鐵絲與尖針的木棒 (+24 攻擊)"
+  },
+  "feather_dagger": {
+    "name": "黑羽飛刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 27,
+    "desc": "裝配鴉羽尾翼的高速利刃 (+27 攻擊)"
+  },
+  "war_hammer": {
+    "name": "戰鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 34,
+    "desc": "沉重且致命的鋼製重錘 (+34 攻擊)"
+  },
+  "steel_blade": {
+    "name": "精鋼短刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 38,
+    "desc": "冷光凜冽的鍛造短刀 (+38 攻擊)"
+  },
+  "flame_blade": {
+    "name": "烈焰魔劍",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 54,
+    "desc": "塗滿燃油並點火的致命傳奇長刃 (+54 攻擊)"
+  },
+  "thor_hammer": {
+    "name": "雷霆粉碎鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 52,
+    "desc": "纏繞高壓電線的重型戰鎚 (+52 攻擊)"
+  },
+  "leather_vest": {
+    "name": "獵人皮衣",
+    "type": "armor",
+    "subType": "body",
+    "def": 14,
+    "desc": "縫合布料與皮革的防具 (+14 防禦)"
+  },
+  "chain_armor": {
+    "name": "鋼鐵鎖子甲",
+    "type": "armor",
+    "subType": "body",
+    "def": 28,
+    "desc": "以鋼鐵與鐵絲編織的重甲 (+28 防禦)"
+  },
+  "combat_suit": {
+    "name": "特種防彈衣",
+    "type": "armor",
+    "subType": "body",
+    "def": 32,
+    "desc": "皮革強化鋼板的頂級戰術護甲 (+32 防禦)"
+  },
+  "turtle_shield": {
+    "name": "龜甲盾",
+    "type": "armor",
+    "subType": "arm",
+    "def": 22,
+    "desc": "防護力極佳的龜殼鋼盾 (+22 防禦)"
+  },
+  "spiked_shield": {
+    "name": "荊棘臂盾",
+    "type": "armor",
+    "subType": "arm",
+    "def": 30,
+    "desc": "鑲嵌鐵絲尖刺的合金重盾 (+30 防禦)"
+  }
 }

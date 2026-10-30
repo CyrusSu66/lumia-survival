@@ -1,37 +1,142 @@
 [
   {
     "result": "boiled_water",
-    "materials": ["water", "lighter"],
-    "amount": 2
+    "materials": [
+      "water",
+      "lighter"
+    ]
   },
   {
     "result": "herbal_tea",
-    "materials": ["boiled_water", "herb"],
-    "amount": 2
+    "materials": [
+      "boiled_water",
+      "herb"
+    ]
+  },
+  {
+    "result": "flower_tea",
+    "materials": [
+      "boiled_water",
+      "flower"
+    ]
   },
   {
     "result": "first_aid_kit",
-    "materials": ["bandage", "pills"],
-    "amount": 1
+    "materials": [
+      "bandage",
+      "pills"
+    ]
+  },
+  {
+    "result": "med_alcohol",
+    "materials": [
+      "bandage",
+      "alcohol"
+    ]
+  },
+  {
+    "result": "grilled_fish",
+    "materials": [
+      "fish",
+      "lighter"
+    ]
+  },
+  {
+    "result": "steak",
+    "materials": [
+      "meat",
+      "lighter"
+    ]
   },
   {
     "result": "steel",
-    "materials": ["scrap_metal", "iron_ore"],
-    "amount": 2
+    "materials": [
+      "scrap_metal",
+      "iron_ore"
+    ]
+  },
+  {
+    "result": "poison_scalpel",
+    "materials": [
+      "scalpel",
+      "needle"
+    ]
+  },
+  {
+    "result": "spiked_club",
+    "materials": [
+      "branch",
+      "wire"
+    ]
+  },
+  {
+    "result": "feather_dagger",
+    "materials": [
+      "scalpel",
+      "feather"
+    ]
   },
   {
     "result": "war_hammer",
-    "materials": ["hammer", "steel"],
-    "amount": 1
+    "materials": [
+      "hammer",
+      "steel"
+    ]
   },
   {
     "result": "steel_blade",
-    "materials": ["scalpel", "steel"],
-    "amount": 1
+    "materials": [
+      "scalpel",
+      "steel"
+    ]
+  },
+  {
+    "result": "flame_blade",
+    "materials": [
+      "steel_blade",
+      "oil"
+    ]
+  },
+  {
+    "result": "thor_hammer",
+    "materials": [
+      "war_hammer",
+      "wire"
+    ]
+  },
+  {
+    "result": "leather_vest",
+    "materials": [
+      "cloth",
+      "leather"
+    ]
+  },
+  {
+    "result": "chain_armor",
+    "materials": [
+      "steel",
+      "wire"
+    ]
+  },
+  {
+    "result": "combat_suit",
+    "materials": [
+      "leather_vest",
+      "steel"
+    ]
   },
   {
     "result": "turtle_shield",
-    "materials": ["turtle_shell", "steel"],
-    "amount": 1
+    "materials": [
+      "turtle_shell",
+      "steel"
+    ]
+  },
+  {
+    "result": "spiked_shield",
+    "materials": [
+      "turtle_shield",
+      "wire"
+    ]
   }
 ]
