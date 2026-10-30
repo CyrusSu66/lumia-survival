@@ -218,6 +218,12 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.eq-slot:active {
+  transform: scale(0.95);
 }
 
 .eq-slot.active-eq {
@@ -329,6 +335,55 @@ body {
 .combat-card {
   border-color: #ef4444;
   background: rgba(28, 16, 20, 0.96);
+}
+
+.loot-card {
+  border-color: #f59e0b;
+  background: rgba(24, 22, 16, 0.97);
+}
+
+.loot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.loot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.loot-item-btn {
+  background: #232936;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 7px 8px;
+  color: #f8fafc;
+  font-size: 0.78rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.loot-item-btn:hover {
+  border-color: #fde047;
+  background: #2b3344;
+}
+
+.loot-item-btn:active {
+  transform: scale(0.96);
+}
+
+.loot-item-tag {
+  font-size: 0.68rem;
+  color: #38bdf8;
+  background: #161c26;
+  padding: 2px 5px;
+  border-radius: 4px;
 }
 
 @keyframes slideUp {

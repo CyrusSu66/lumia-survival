@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <!-- 攻防屬性與已穿戴裝備列 -->
+      <!-- 攻防屬性與已穿戴裝備列 (點擊可主動卸下) -->
       <div class="equip-status-bar">
         <div class="stat-chips">
           <span class="stat-chip atk-chip">⚔️ 攻擊 <strong id="hud-atk">12</strong></span>
@@ -42,9 +42,9 @@
           <span class="stat-chip mas-chip" id="hud-mastery">熟練 F (0%)</span>
         </div>
         <div class="equipped-slots">
-          <div class="eq-slot" id="eq-weapon" title="當前裝備武器">🗡️ <span>空手</span></div>
-          <div class="eq-slot" id="eq-body" title="當前身體防具">👕 <span>無衣服</span></div>
-          <div class="eq-slot" id="eq-arm" title="當前臂甲/盾牌">🛡️ <span>無臂甲</span></div>
+          <div class="eq-slot" id="eq-weapon" title="點擊檢視或卸下武器">🗡️ <span>空手</span></div>
+          <div class="eq-slot" id="eq-body" title="點擊檢視或卸下防具">👕 <span>無衣服</span></div>
+          <div class="eq-slot" id="eq-arm" title="點擊檢視或卸下臂甲">🛡️ <span>無臂甲</span></div>
         </div>
       </div>
     </header>
@@ -66,7 +66,7 @@
         <!-- 區域出沒資訊提示 -->
         <div class="area-drops-hint" id="area-drops-hint"></div>
 
-        <!-- 探索發現物資通知窗 -->
+        <!-- 探索發現單一物資通知窗 -->
         <div id="discovery-card" class="discovery-card hidden">
           <div class="card-header">📦 探索發現物資！</div>
           <div class="item-preview">
@@ -76,6 +76,18 @@
           <div class="discovery-actions">
             <button id="btn-pickup" class="btn btn-primary">放入背包 [Space]</button>
             <button id="btn-discard" class="btn btn-secondary">略過 [Esc]</button>
+          </div>
+        </div>
+
+        <!-- 擊殺後屍體戰利品搜尋區 (Loot Box) -->
+        <div id="loot-card" class="discovery-card loot-card hidden">
+          <div class="loot-header">
+            <span id="loot-title" class="card-header" style="color:#fde047;">💀 戰利品搜刮區</span>
+            <span class="shortcut-tip">點擊物品放入背包（可隨時整理下方背包）</span>
+          </div>
+          <div id="loot-grid" class="loot-grid"></div>
+          <div class="discovery-actions" style="margin-top:8px;">
+            <button id="btn-close-loot" class="btn btn-secondary" style="width:100%;">🚪 離開現場（放棄剩餘物品）[Esc]</button>
           </div>
         </div>
 
@@ -110,7 +122,7 @@
       <div class="inventory-section">
         <div class="section-title">
           <span>戰術背包 (6格)</span>
-          <span class="shortcut-tip">點擊物品或按 1~6 使用/裝備/丟棄</span>
+          <span class="shortcut-tip">點擊背包或上方裝備欄管理</span>
         </div>
         <div class="grid-inventory" id="inventory-grid"></div>
       </div>
@@ -118,7 +130,7 @@
       <!-- 可用合成配方列表 -->
       <div class="craft-section">
         <div class="section-title">
-          <span>🔨 可立即合成</span>
+          <span>🔨 可立即合成 (支援含已裝備物品合成)</span>
           <span class="shortcut-tip">鍵盤 C 鍵快速合成</span>
         </div>
         <div class="recipe-list" id="recipe-list">
@@ -129,12 +141,12 @@
       <!-- 操作按鈕列 -->
       <div class="actions-dock">
         <button id="btn-search" class="btn btn-action search-btn">🔍 探索 (-5 SP) [S]</button>
-        <button id="btn-rest" class="btn btn-action">💤 休息 [R]</button>
+        <button id="btn-rest" class="btn btn-action" title="有人在同區域時休息可能遭突襲">💤 休息 [R]</button>
         <button id="btn-open-map" class="btn btn-action">🗺️ 移動 [M]</button>
       </div>
     </footer>
 
-    <!-- 物品操作彈窗 (使用/裝備/丟棄) -->
+    <!-- 物品與已穿戴裝備操作彈窗 -->
     <div id="item-modal" class="modal hidden">
       <div class="modal-content item-action-dialog">
         <div class="item-action-title" id="item-modal-title">物品名稱</div>
@@ -142,6 +154,7 @@
         <div class="item-recipe-usage" id="item-modal-recipes"></div>
         <div class="item-action-buttons">
           <button id="btn-modal-use" class="btn btn-primary">使用 / 裝備 [Enter]</button>
+          <button id="btn-modal-unequip" class="btn btn-primary" style="background:#2563eb; display:none;">📥 卸下至背包 [Enter]</button>
           <button id="btn-modal-drop" class="btn btn-danger">🗑️ 丟棄物品 [D]</button>
           <button id="btn-modal-cancel" class="btn btn-secondary">取消 [Esc]</button>
         </div>
@@ -165,7 +178,7 @@
       <div class="modal-content codex-dialog">
         <div class="modal-header-row">
           <h3>📖 裝備與補給合成圖鑑</h3>
-          <span class="shortcut-tip">綠字代表背包已持有該材料</span>
+          <span class="shortcut-tip">綠字代表背包或身上已持有</span>
         </div>
         <div class="codex-tabs">
           <button class="codex-tab active" data-tab="all">全部</button>

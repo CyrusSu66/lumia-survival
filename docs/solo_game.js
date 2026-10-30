@@ -6,35 +6,35 @@ const GAME_DATA = {
       name: "學校",
       desc: "荒廢的教學大樓，散落著文具、布料與急救物資",
       items: ["branch", "bandage", "lighter", "pen", "water", "cloth"],
-      wild: { name: "變異烏鴉", hp: 45, maxHp: 45, atk: 13, def: 3, exp: 20, drop: ["feather", "herb"] }
+      wild: { name: "變異烏鴉", hp: 45, maxHp: 45, atk: 13, def: 3, exp: 20, drop: ["feather", "herb", "meat"] }
     },
     {
       id: "hospital",
       name: "醫院",
       desc: "充滿消毒水氣味的診所，有豐富的醫療藥品與銳器",
       items: ["bandage", "scalpel", "pills", "needle", "water", "alcohol"],
-      wild: { name: "狂暴實驗犬", hp: 65, maxHp: 65, atk: 18, def: 6, exp: 30, drop: ["leather", "bandage"] }
+      wild: { name: "狂暴實驗犬", hp: 65, maxHp: 65, atk: 18, def: 6, exp: 30, drop: ["leather", "bandage", "meat"] }
     },
     {
       id: "factory",
       name: "工廠",
       desc: "廢棄重工業區，能找到各類金屬零件、鐵絲與工具",
       items: ["scrap_metal", "hammer", "iron_ore", "wire", "oil", "cloth"],
-      wild: { name: "巡邏機械犬", hp: 80, maxHp: 80, atk: 22, def: 10, exp: 40, drop: ["scrap_metal", "steel"] }
+      wild: { name: "巡邏機械犬", hp: 80, maxHp: 80, atk: 22, def: 10, exp: 40, drop: ["scrap_metal", "steel", "wire"] }
     },
     {
       id: "forest",
       name: "森林",
       desc: "島嶼中央的繁茂樹林，適合採集天然素材、毛皮與草藥",
       items: ["branch", "stone", "herb", "flower", "water", "leather"],
-      wild: { name: "叢林山豬", hp: 90, maxHp: 90, atk: 24, def: 12, exp: 45, drop: ["meat", "leather"] }
+      wild: { name: "叢林山豬", hp: 90, maxHp: 90, atk: 24, def: 12, exp: 45, drop: ["meat", "leather", "herb"] }
     },
     {
       id: "beach",
       name: "海灘",
       desc: "被海浪沖刷的海岸線，有龜殼、海魚與漂流廢鐵",
       items: ["scrap_metal", "stone", "water", "turtle_shell", "fish", "lighter"],
-      wild: { name: "巨型寄居蟹", hp: 75, maxHp: 75, atk: 19, def: 16, exp: 35, drop: ["turtle_shell", "fish"] }
+      wild: { name: "巨型寄居蟹", hp: 75, maxHp: 75, atk: 19, def: 16, exp: 35, drop: ["turtle_shell", "fish", "water"] }
     }
   ],
 
@@ -46,7 +46,7 @@ const GAME_DATA = {
     scrap_metal: { name: "廢鐵", type: "material", desc: "粗糙的鐵塊組件" },
     iron_ore: { name: "鐵礦石", type: "material", desc: "純淨的鐵礦，可與廢鐵精煉成鋼鐵" },
     turtle_shell: { name: "龜殼", type: "material", desc: "硬實的甲殼防禦素材" },
-    pen: { name: "鋼筆", type: " weapon", subType: "blade", atk: 8, desc: "金屬筆尖的鋼筆 (+8 攻擊)" },
+    pen: { name: "鋼筆", type: "weapon", subType: "blade", atk: 8, desc: "金屬筆尖的鋼筆 (+8 攻擊)" },
     needle: { name: "縫合針", type: "material", desc: "醫療用尖銳長針" },
     wire: { name: "鐵絲", type: "material", desc: "高韌性工業金屬線" },
     oil: { name: "機油", type: "material", desc: "易燃工業潤滑油" },
@@ -64,7 +64,7 @@ const GAME_DATA = {
     fish: { name: "生鮮海魚", type: "consumable", heal_hp: 15, desc: "剛捕獲的海魚，直接吃回復 15 HP，烤熟效果極佳" },
     meat: { name: "生獸肉", type: "consumable", heal_hp: 20, desc: "新鮮野獸肉，烤熟後可大幅恢復體力" },
 
-    // 基礎武器与防具
+    // 基礎武器與防具
     hammer: { name: "鐵鎚", type: "weapon", subType: "blunt", atk: 13, desc: "工業重鐵鎚 (+13 攻擊)" },
     scalpel: { name: "手術刀", type: "weapon", subType: "blade", atk: 15, desc: "鋒利的外科手術刀 (+15 攻擊)" },
 
@@ -81,6 +81,7 @@ const GAME_DATA = {
     // 合成武器
     poison_scalpel: { name: "精密刺針刀", type: "weapon", subType: "blade", atk: 26, desc: "結合縫合針改造的暗殺刀 (+26 攻擊)" },
     spiked_club: { name: "狼牙木棒", type: "weapon", subType: "blunt", atk: 24, desc: "纏繞鐵絲與尖針的木棒 (+24 攻擊)" },
+    feather_dagger: { name: "黑羽飛刀", type: "weapon", subType: "blade", atk: 27, desc: "裝配鴉羽尾翼的高速利刃 (+27 攻擊)" },
     war_hammer: { name: "戰鎚", type: "weapon", subType: "blunt", atk: 34, desc: "沉重且致命的鋼製重錘 (+34 攻擊)" },
     steel_blade: { name: "精鋼短刀", type: "weapon", subType: "blade", atk: 38, desc: "冷光凜冽的鍛造短刀 (+38 攻擊)" },
     flame_blade: { name: "烈焰魔劍", type: "weapon", subType: "blade", atk: 54, desc: "塗滿燃油並點火的致命傳奇長刃 (+54 攻擊)" },
@@ -108,6 +109,7 @@ const GAME_DATA = {
     { result: "steel", materials: ["scrap_metal", "iron_ore"] },
     { result: "poison_scalpel", materials: ["scalpel", "needle"] },
     { result: "spiked_club", materials: ["branch", "wire"] },
+    { result: "feather_dagger", materials: ["scalpel", "feather"] },
     { result: "war_hammer", materials: ["hammer", "steel"] },
     { result: "steel_blade", materials: ["scalpel", "steel"] },
 
@@ -124,20 +126,17 @@ const GAME_DATA = {
   ]
 };
 
-// Fix minor typo in pen type if any
-GAME_DATA.items.pen.type = "weapon";
-
-// AI 受試者名單
+// AI 受試者名單與初始攜帶物
 const AI_ROSTER = [
-  { name: "06M-RF18 傑琪", weapon: "雙刀", atk: 15, def: 6 },
-  { name: "14M-RFT02 阿雅", weapon: "左輪手槍", atk: 16, def: 5 },
-  { name: "14M-RFT04 玄佑", weapon: "皮手套", atk: 14, def: 8 },
-  { name: "14M-RFT03 菲歐拉", weapon: "西洋劍", atk: 16, def: 6 },
-  { name: "14M-RFT07 娜汀", weapon: "獵弓", atk: 15, def: 5 },
-  { name: "15M-RFT16 雪", weapon: "太刀", atk: 16, def: 7 },
-  { name: "14M-RFT10 羅薩里奧", weapon: "球棒", atk: 17, def: 6 },
-  { name: "15M-RFT18 席瑟拉", weapon: "暗器", atk: 14, def: 5 },
-  { name: "14M-RFT06 馬格努斯", weapon: "鐵管", atk: 15, def: 9 }
+  { name: "06M-RF18 傑琪", weapon: "雙刀", atk: 15, def: 6, bag: ["scalpel", "bandage", "leather"] },
+  { name: "14M-RFT02 阿雅", weapon: "左輪手槍", atk: 16, def: 5, bag: ["pills", "scrap_metal", "boiled_water"] },
+  { name: "14M-RFT04 玄佑", weapon: "皮手套", atk: 14, def: 8, bag: ["hammer", "turtle_shell", "water"] },
+  { name: "14M-RFT03 菲歐拉", weapon: "西洋劍", atk: 16, def: 6, bag: ["poison_scalpel", "herb", "steel"] },
+  { name: "14M-RFT07 娜汀", weapon: "獵弓", atk: 15, def: 5, bag: ["leather_vest", "meat", "lighter"] },
+  { name: "15M-RFT16 雪", weapon: "太刀", atk: 16, def: 7, bag: ["steel_blade", "bandage", "flower_tea"] },
+  { name: "14M-RFT10 羅薩里奧", weapon: "球棒", atk: 17, def: 6, bag: ["war_hammer", "pills", "wire"] },
+  { name: "15M-RFT18 席瑟拉", weapon: "暗器", atk: 14, def: 5, bag: ["feather_dagger", "first_aid_kit", "oil"] },
+  { name: "14M-RFT06 馬格努斯", weapon: "鐵管", atk: 15, def: 9, bag: ["spiked_club", "turtle_shield", "med_alcohol"] }
 ];
 
 // ==================== 遊戲狀態變數 ====================
@@ -149,8 +148,10 @@ let actionCounter = 0;
 const ACTIONS_PER_PHASE = 12;
 
 let pendingFoundItem = null;
-let activeEnemy = null; // 當前遭遇的野怪或 AI
+let currentLootItems = []; // 擊殺後的屍體戰利品陣列
+let activeEnemy = null;
 let selectedSlotIdx = null;
+let selectedEquipType = null; // 'weapon' | 'body' | 'arm'
 let currentCodexTab = "all";
 let isGameOver = false;
 
@@ -184,6 +185,11 @@ const discoveryCard = document.getElementById('discovery-card');
 const discItemName = document.getElementById('disc-item-name');
 const discItemDesc = document.getElementById('disc-item-desc');
 
+const lootCard = document.getElementById('loot-card');
+const lootTitle = document.getElementById('loot-title');
+const lootGrid = document.getElementById('loot-grid');
+const btnCloseLoot = document.getElementById('btn-close-loot');
+
 const combatCard = document.getElementById('combat-card');
 const enemyTag = document.getElementById('enemy-tag');
 const enemyStats = document.getElementById('enemy-stats');
@@ -197,6 +203,7 @@ const itemModalTitle = document.getElementById('item-modal-title');
 const itemModalDesc = document.getElementById('item-modal-desc');
 const itemModalRecipes = document.getElementById('item-modal-recipes');
 const btnModalUse = document.getElementById('btn-modal-use');
+const btnModalUnequip = document.getElementById('btn-modal-unequip');
 const btnModalDrop = document.getElementById('btn-modal-drop');
 const btnModalCancel = document.getElementById('btn-modal-cancel');
 
@@ -230,8 +237,10 @@ function initGame() {
   restrictedAreas.clear();
   warningAreas.clear();
   pendingFoundItem = null;
+  currentLootItems = [];
   activeEnemy = null;
   selectedSlotIdx = null;
+  selectedEquipType = null;
 
   player = {
     name: "受試者 #01",
@@ -246,13 +255,12 @@ function initGame() {
     masteryExp: 0,
     kills: 0,
     crafts: 0,
-    stance: "normal", // normal, aggressive, stealth
+    stance: "normal",
     area: "school",
     equipment: { weapon: null, body: null, arm: null },
     inventory: ["water", "bandage", null, null, null, null]
   };
 
-  // 建立 9 名 AI 對手
   aiBots = AI_ROSTER.map((tpl, idx) => {
     const randomArea = GAME_DATA.areas[idx % GAME_DATA.areas.length].id;
     return {
@@ -263,16 +271,17 @@ function initGame() {
       maxHp: 95,
       atk: tpl.atk,
       def: tpl.def,
+      bag: [...tpl.bag],
       area: randomArea,
       alive: true
     };
   });
 
-  // 預設第一波預告禁區 (海灘)
   warningAreas.add("beach");
 
   combatLog.innerHTML = '';
   discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
   combatCard.classList.add('hidden');
   gameoverModal.classList.add('hidden');
 
@@ -327,17 +336,17 @@ function findItemDropAreas(itemId) {
   return list;
 }
 
-// ==================== 介面渲染 ====================
-function logMessage(text, type = 'sys-msg') {
-  const entry = document.createElement('div');
-  entry.className = `log-entry ${type}`;
-  entry.innerText = text;
-  combatLog.appendChild(entry);
-  combatLog.scrollTop = combatLog.scrollHeight;
+// 取得玩家目前擁有的所有物品 ID（含背包與已穿戴裝備），用於合成偵測
+function getAllPlayerItemIds() {
+  const ids = player.inventory.filter(Boolean);
+  if (player.equipment.weapon) ids.push(player.equipment.weapon);
+  if (player.equipment.body) ids.push(player.equipment.body);
+  if (player.equipment.arm) ids.push(player.equipment.arm);
+  return ids;
 }
 
 function getAvailableRecipes() {
-  const inv = player.inventory.filter(Boolean);
+  const allOwned = getAllPlayerItemIds();
   const available = [];
 
   GAME_DATA.recipes.forEach(recipe => {
@@ -346,11 +355,11 @@ function getAvailableRecipes() {
     let hasMat2 = false;
 
     if (mat1 === mat2) {
-      hasMat1 = inv.filter(id => id === mat1).length >= 2;
+      hasMat1 = allOwned.filter(id => id === mat1).length >= 2;
       hasMat2 = hasMat1;
     } else {
-      hasMat1 = inv.includes(mat1);
-      hasMat2 = inv.includes(mat2);
+      hasMat1 = allOwned.includes(mat1);
+      hasMat2 = allOwned.includes(mat2);
     }
 
     if (hasMat1 && hasMat2) {
@@ -364,6 +373,73 @@ function getAvailableRecipes() {
   return available;
 }
 
+// ==================== 介面渲染 ====================
+function logMessage(text, type = 'sys-msg') {
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${type}`;
+  entry.innerText = text;
+  combatLog.appendChild(entry);
+  combatLog.scrollTop = combatLog.scrollHeight;
+}
+
+function renderLootCard() {
+  if (!currentLootItems || currentLootItems.length === 0) {
+    lootCard.classList.add('hidden');
+    return;
+  }
+
+  lootGrid.innerHTML = '';
+  currentLootItems.forEach((itemId, idx) => {
+    const it = GAME_DATA.items[itemId];
+    if (!it) return;
+    let tag = '素材';
+    if (it.type === 'weapon') tag = `攻+${it.atk}`;
+    else if (it.type === 'armor') tag = `防+${it.def}`;
+    else if (it.heal_hp) tag = `+${it.heal_hp}HP`;
+    else if (it.heal_sp) tag = `+${it.heal_sp}SP`;
+
+    const btn = document.createElement('button');
+    btn.className = 'loot-item-btn';
+    btn.innerHTML = `<span>📦 <strong>${it.name}</strong></span><span class="loot-item-tag">${tag}</span>`;
+    btn.onclick = () => pickupLootItem(idx);
+    lootGrid.appendChild(btn);
+  });
+
+  lootCard.classList.remove('hidden');
+}
+
+function pickupLootItem(lootIdx) {
+  const itemId = currentLootItems[lootIdx];
+  if (!itemId) return;
+
+  const emptyIdx = player.inventory.findIndex(s => s === null);
+  if (emptyIdx === -1) {
+    logMessage('⚠️ 背包已滿（6 格）！可先點擊下方背包丟棄或使用物品，再繼續拾取戰利品。', 'warn-msg');
+    return;
+  }
+
+  const it = GAME_DATA.items[itemId];
+  player.inventory[emptyIdx] = itemId;
+  currentLootItems.splice(lootIdx, 1);
+  logMessage(`📥 從戰利品中拾取了 [${it.name}]！`, 'gain-msg');
+
+  if (currentLootItems.length === 0) {
+    lootCard.classList.add('hidden');
+    logMessage('✨ 已搜刮完所有戰利品。', 'sys-msg');
+  } else {
+    renderLootCard();
+  }
+  updateUI();
+}
+
+btnCloseLoot.onclick = () => {
+  if (currentLootItems.length > 0) {
+    logMessage('🚪 離開了現場，放棄剩餘的戰利品。', 'sys-msg');
+    currentLootItems = [];
+  }
+  lootCard.classList.add('hidden');
+};
+
 function updateUI() {
   hudName.innerText = player.name;
   hudLevel.innerText = `Lv.${player.level}`;
@@ -371,7 +447,6 @@ function updateUI() {
   const remain = ACTIONS_PER_PHASE - (actionCounter % ACTIONS_PER_PHASE);
   hudZoneTimer.innerText = `⏱️ ${remain} 動`;
 
-  // 姿態顯示
   btnStance.className = 'stance-badge';
   if (player.stance === 'aggressive') {
     btnStance.classList.add('stance-aggressive');
@@ -383,7 +458,6 @@ function updateUI() {
     btnStance.innerText = '⚖️ 均衡姿態';
   }
 
-  // HP & SP
   const hpPct = Math.max(0, (player.hp / player.maxHp) * 100);
   const spPct = Math.max(0, (player.sp / player.maxSp) * 100);
   hpBar.style.width = `${hpPct}%`;
@@ -391,7 +465,6 @@ function updateUI() {
   spBar.style.width = `${spPct}%`;
   spText.innerText = `SP ${player.sp} / ${player.maxSp}`;
 
-  // 攻防與已穿戴裝備
   hudAtk.innerText = getPlayerAtk();
   hudDef.innerText = getPlayerDef();
   hudMastery.innerText = getMasteryLabel();
@@ -399,14 +472,17 @@ function updateUI() {
   const wItem = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
   eqWeapon.className = `eq-slot ${wItem ? 'active-eq' : ''}`;
   eqWeapon.innerHTML = `🗡️ <span>${wItem ? `${wItem.name} (+${wItem.atk})` : '空手'}</span>`;
+  eqWeapon.onclick = () => openEquipModal('weapon');
 
   const bItem = player.equipment.body ? GAME_DATA.items[player.equipment.body] : null;
   eqBody.className = `eq-slot ${bItem ? 'active-eq' : ''}`;
   eqBody.innerHTML = `👕 <span>${bItem ? `${bItem.name} (+${bItem.def})` : '無衣服'}</span>`;
+  eqBody.onclick = () => openEquipModal('body');
 
   const aItem = player.equipment.arm ? GAME_DATA.items[player.equipment.arm] : null;
   eqArm.className = `eq-slot ${aItem ? 'active-eq' : ''}`;
   eqArm.innerHTML = `🛡️ <span>${aItem ? `${aItem.name} (+${aItem.def})` : '無臂甲'}</span>`;
+  eqArm.onclick = () => openEquipModal('arm');
 
   // 渲染背包 6 格
   inventoryGrid.innerHTML = '';
@@ -476,7 +552,7 @@ function updateUI() {
 
     const dropNames = curArea.items.map(id => GAME_DATA.items[id]?.name || id).join('、');
     const aiHere = aiBots.filter(b => b.alive && b.area === curArea.id).length;
-    areaDropsHint.innerHTML = `📦 <strong>區域物資</strong>：${dropNames}<br>🐾 <strong>野生生物</strong>：${curArea.wild.name} ｜ 📡 <strong>生命反應</strong>：${aiHere > 0 ? `<span style="color:#f87171;font-weight:bold;">偵測到 ${aiHere} 名受試者！</span>` : '周遭無其他受試者'}`;
+    areaDropsHint.innerHTML = `📦 <strong>區域物資</strong>：${dropNames}<br>🐾 <strong>野生生物</strong>：${curArea.wild.name} ｜ 📡 <strong>生命反應</strong>：${aiHere > 0 ? `<span style="color:#f87171;font-weight:bold;">偵測到 ${aiHere} 名受試者（休息可能遭突襲）！</span>` : '周遭無其他受試者（可安心休息）'}`;
   }
 }
 
@@ -485,7 +561,6 @@ function advanceWorldTick() {
   if (isGameOver) return;
   actionCounter++;
 
-  // 若玩家滯留於已封鎖禁區，扣除手環電擊傷害
   if (restrictedAreas.has(player.area)) {
     player.hp = Math.max(0, player.hp - 25);
     logMessage('⚡ 警告！你滯留在已封鎖禁區，手環釋放高壓電流 (-25 HP)！請立即移動！', 'warn-msg');
@@ -495,28 +570,30 @@ function advanceWorldTick() {
     }
   }
 
-  // AI 行動模擬 (移動、強化、AI 互砍)
   const safeAreaIds = GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id));
   aiBots.forEach(bot => {
     if (!bot.alive) return;
 
-    // 若 AI 在禁區或預告禁區，優先逃往安全區
     if ((restrictedAreas.has(bot.area) || warningAreas.has(bot.area)) && safeAreaIds.length > 0) {
       bot.area = safeAreaIds[Math.floor(Math.random() * safeAreaIds.length)];
     } else if (Math.random() < 0.35 && safeAreaIds.length > 0) {
       bot.area = safeAreaIds[Math.floor(Math.random() * safeAreaIds.length)];
     }
 
-    // AI 隨時間微幅強化裝備數值
     if (actionCounter % 5 === 0) {
       bot.atk += 2;
       bot.def += 1;
       bot.maxHp += 5;
       bot.hp = Math.min(bot.maxHp, bot.hp + 10);
+      // AI 隨時間搜刮額外戰利品放入屍體包
+      const areaObj = GAME_DATA.areas.find(a => a.id === bot.area);
+      if (areaObj && bot.bag.length < 5) {
+        const randItem = areaObj.items[Math.floor(Math.random() * areaObj.items.length)];
+        bot.bag.push(randItem);
+      }
     }
   });
 
-  // 模擬 AI 之間遭遇交戰 (每幾動有機率發生 AI 互殺)
   const aliveBots = aiBots.filter(b => b.alive);
   if (aliveBots.length >= 2 && Math.random() < 0.28) {
     const attacker = aliveBots[Math.floor(Math.random() * aliveBots.length)];
@@ -527,6 +604,10 @@ function advanceWorldTick() {
       victim.hp -= dmg;
       if (victim.hp <= 0) {
         victim.alive = false;
+        // 擊殺者搜刮死者 1 件物品
+        if (victim.bag.length > 0 && attacker.bag.length < 5) {
+          attacker.bag.push(victim.bag[0]);
+        }
         const areaName = GAME_DATA.areas.find(a => a.id === victim.area)?.name || '未知區域';
         logMessage(`💀 [擊殺廣播] ${attacker.name} 在 [${areaName}] 擊殺了 ${victim.name}！(剩餘 ${getAliveCount()} 人)`, 'combat-msg');
         checkVictory();
@@ -534,9 +615,7 @@ function advanceWorldTick() {
     }
   }
 
-  // 禁區階段推進
   if (actionCounter % ACTIONS_PER_PHASE === 0) {
-    // 預告禁區轉為正式禁區
     warningAreas.forEach(aId => {
       restrictedAreas.add(aId);
       const aName = GAME_DATA.areas.find(a => a.id === aId)?.name;
@@ -544,7 +623,6 @@ function advanceWorldTick() {
     });
     warningAreas.clear();
 
-    // 挑選下一個預告禁區（保留至少 1 個最終決戰安全區）
     const remainingSafe = GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id));
     if (remainingSafe.length > 1) {
       const nextWarn = remainingSafe[Math.floor(Math.random() * remainingSafe.length)];
@@ -587,6 +665,58 @@ function triggerGameOver(isWin, reasonText) {
   gameoverModal.classList.remove('hidden');
 }
 
+// ==================== 觸發遭遇戰輔助 ====================
+function spawnEnemyEncounter(isAmbush = false) {
+  const curArea = GAME_DATA.areas.find(a => a.id === player.area);
+  const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
+
+  if (aiInArea.length > 0 && (Math.random() < 0.7 || isAmbush || restrictedAreas.size >= GAME_DATA.areas.length - 1)) {
+    const bot = aiInArea[Math.floor(Math.random() * aiInArea.length)];
+    activeEnemy = {
+      isAI: true,
+      ref: bot,
+      name: bot.name,
+      hp: bot.hp,
+      maxHp: bot.maxHp,
+      atk: bot.atk,
+      def: bot.def,
+      weaponName: bot.weaponName
+    };
+  } else {
+    const w = curArea.wild;
+    activeEnemy = {
+      isAI: false,
+      name: w.name,
+      hp: w.hp,
+      maxHp: w.maxHp,
+      atk: w.atk,
+      def: w.def,
+      exp: w.exp,
+      drop: w.drop
+    };
+  }
+
+  if (isAmbush) {
+    // 突襲先手扣血
+    const pDef = getPlayerDef();
+    const ambushDmg = Math.max(6, Math.round((activeEnemy.atk - pDef * 0.4) * 1.15));
+    player.hp = Math.max(0, player.hp - ambushDmg);
+    logMessage(`💥 突襲警報！你在毫無防備下遭到 [${activeEnemy.name}] 偷襲，承受 -${ambushDmg} HP！`, 'warn-msg');
+    renderCombatCard(`遭到 [${activeEnemy.name}] 先手突襲 (-${ambushDmg} HP)！請立即反擊或撤退！`);
+    if (player.hp <= 0) {
+      triggerGameOver(false, `在休息時遭到 [${activeEnemy.name}] 致命偷襲身亡。`);
+    }
+  } else {
+    logMessage(
+      activeEnemy.isAI
+        ? `🚨 遭遇敵方受試者 [${activeEnemy.name}] (持有:${activeEnemy.weaponName})！`
+        : `🐾 探索時驚動了野生生物 [${activeEnemy.name}]！`,
+      'combat-msg'
+    );
+    renderCombatCard('敵人正準備發動攻擊，請選擇交戰或撤退！');
+  }
+}
+
 // ==================== 探索與遭遇戰鬥 ====================
 function doSearch() {
   if (isGameOver) return;
@@ -601,52 +731,23 @@ function doSearch() {
 
   player.sp = Math.max(0, player.sp - 5);
   discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
   pendingFoundItem = null;
+  currentLootItems = [];
 
   const curArea = GAME_DATA.areas.find(a => a.id === player.area);
   const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
 
-  // 依據姿態計算遇敵機率
   let combatChance = 0.28;
   if (player.stance === 'aggressive') combatChance = 0.55;
   if (player.stance === 'stealth') combatChance = 0.12;
-  // 若剩餘安全區只有 1 個且有 AI，強制拉高遇敵率進行最終決戰
   if (restrictedAreas.size >= GAME_DATA.areas.length - 1 && aiInArea.length > 0) {
     combatChance = 0.75;
   }
 
   if (Math.random() < combatChance) {
-    // 觸發遭遇戰：若同區有 AI 倖存者，優先或隨機遭遇 AI，否則遭遇區域野生動物
-    if (aiInArea.length > 0 && (Math.random() < 0.65 || restrictedAreas.size >= GAME_DATA.areas.length - 1)) {
-      const bot = aiInArea[Math.floor(Math.random() * aiInArea.length)];
-      activeEnemy = {
-        isAI: true,
-        ref: bot,
-        name: bot.name,
-        hp: bot.hp,
-        maxHp: bot.maxHp,
-        atk: bot.atk,
-        def: bot.def,
-        weaponName: bot.weaponName
-      };
-      logMessage(`🚨 遭遇敵方受試者 [${bot.name}] (持有:${bot.weaponName})！`, 'combat-msg');
-    } else {
-      const w = curArea.wild;
-      activeEnemy = {
-        isAI: false,
-        name: w.name,
-        hp: w.hp,
-        maxHp: w.maxHp,
-        atk: w.atk,
-        def: w.def,
-        exp: w.exp,
-        drop: w.drop
-      };
-      logMessage(`🐾 探索時驚動了野生生物 [${w.name}]！`, 'combat-msg');
-    }
-    renderCombatCard('敵人正準備發動攻擊，請選擇交戰或撤退！');
+    spawnEnemyEncounter(false);
   } else {
-    // 發現區域物資
     const foundId = curArea.items[Math.floor(Math.random() * curArea.items.length)];
     const itemData = GAME_DATA.items[foundId];
     pendingFoundItem = { id: foundId, ...itemData };
@@ -681,7 +782,6 @@ function doAttack() {
   const pAtk = getPlayerAtk();
   const pDef = getPlayerDef();
 
-  // 玩家攻擊敵人
   const isCrit = Math.random() < (player.stance === 'aggressive' ? 0.25 : 0.15);
   const rawDmg = Math.max(6, pAtk - Math.floor(activeEnemy.def * 0.45) + Math.floor(Math.random() * 5));
   const dmgToEnemy = isCrit ? Math.round(rawDmg * 1.4) : rawDmg;
@@ -691,11 +791,10 @@ function doAttack() {
     activeEnemy.ref.hp = activeEnemy.hp;
   }
 
-  // 增加武器熟練度與經驗
   player.masteryExp += 8;
   gainExp(12);
 
-  // 檢查敵人是否被擊殺
+  // 擊殺判定：開啟「屍體戰利品搜刮區 (Loot Box)」
   if (activeEnemy.hp <= 0) {
     const defeated = activeEnemy;
     activeEnemy = null;
@@ -710,17 +809,21 @@ function doAttack() {
         updateUI();
         return;
       }
+      // 產生 AI 屍體的多樣遺物 (3~4 樣)
+      currentLootItems = [...(defeated.ref.bag || [])];
+      lootTitle.innerText = `💀 [${defeated.name}] 的遺物箱 (${currentLootItems.length} 件)`;
+      renderLootCard();
     } else {
-      // 野怪掉落戰利品
-      const dropId = defeated.drop[Math.floor(Math.random() * defeated.drop.length)];
-      const dropItem = GAME_DATA.items[dropId];
-      logMessage(`⚔️ 擊斃了 [${defeated.name}] (造成 ${dmgToEnemy} 傷害)！搜出戰利品 [${dropItem.name}]！`, 'gain-msg');
+      // 產生野怪屍體的多樣戰利品 (2~3 樣)
+      const drops = [...defeated.drop];
+      // 隨機取 2~3 個掉落物
+      const count = Math.min(drops.length, 2 + (Math.random() < 0.45 ? 1 : 0));
+      currentLootItems = drops.sort(() => Math.random() - 0.5).slice(0, count);
+      logMessage(`⚔️ 擊斃了 [${defeated.name}] (造成 ${dmgToEnemy} 傷害)！可從屍體搜刮 ${currentLootItems.length} 件戰利品！`, 'gain-msg');
       gainExp(defeated.exp || 25);
 
-      pendingFoundItem = { id: dropId, ...dropItem };
-      discItemName.innerText = dropItem.name;
-      discItemDesc.innerText = `狩獵戰利品：${dropItem.desc}`;
-      discoveryCard.classList.remove('hidden');
+      lootTitle.innerText = `🐾 [${defeated.name}] 狩獵戰利品 (${currentLootItems.length} 件)`;
+      renderLootCard();
     }
 
     advanceWorldTick();
@@ -732,7 +835,7 @@ function doAttack() {
   const dmgToPlayer = Math.max(4, activeEnemy.atk - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4));
   player.hp = Math.max(0, player.hp - dmgToPlayer);
 
-  // 若是 AI 且殘血，AI 有機率逃跑
+  // AI 殘血逃跑判定
   if (activeEnemy.isAI && activeEnemy.hp < 25 && Math.random() < 0.45) {
     const safeAreaIds = GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id) && id !== player.area);
     if (safeAreaIds.length > 0) {
@@ -780,7 +883,7 @@ function gainExp(amount) {
   }
 }
 
-// ==================== 拾取、背包管理與合成 ====================
+// ==================== 拾取、背包管理、主動卸下裝備與合成 ====================
 function doPickup() {
   if (!pendingFoundItem) return;
 
@@ -805,17 +908,7 @@ function doDiscard() {
   }
 }
 
-function openItemModal(slotIdx) {
-  const itemId = player.inventory[slotIdx];
-  if (!itemId) return;
-
-  const it = GAME_DATA.items[itemId];
-  selectedSlotIdx = slotIdx;
-
-  itemModalTitle.innerText = it.name;
-  itemModalDesc.innerText = it.desc;
-
-  // 查詢此物品可參與的合成配方
+function renderItemRecipeHint(itemId) {
   const related = GAME_DATA.recipes.filter(r => r.materials.includes(itemId));
   if (related.length > 0) {
     const lines = related.map(r => {
@@ -824,13 +917,26 @@ function openItemModal(slotIdx) {
       const res = GAME_DATA.items[r.result];
       return `• ${m1} + ${m2} ➔ <strong style="color:#fde047;">${res.name}</strong>`;
     });
-    itemModalRecipes.innerHTML = `<div>🔨 <strong>可合成配方</strong>：</div>${lines.join('<br>')}`;
-    itemModalRecipes.style.display = 'block';
+    itemModalRecipes.innerHTML = `<div>🔨 <strong>可進階合成配方</strong>：</div>${lines.join('<br>')}`;
   } else {
-    itemModalRecipes.innerHTML = '此為最終成品或直接消耗品。';
-    itemModalRecipes.style.display = 'block';
+    itemModalRecipes.innerHTML = '此為頂級成品或直接消耗品。';
   }
+}
 
+// 點擊背包物品彈窗
+function openItemModal(slotIdx) {
+  const itemId = player.inventory[slotIdx];
+  if (!itemId) return;
+
+  const it = GAME_DATA.items[itemId];
+  selectedSlotIdx = slotIdx;
+  selectedEquipType = null;
+
+  itemModalTitle.innerText = it.name;
+  itemModalDesc.innerText = it.desc;
+  renderItemRecipeHint(itemId);
+
+  btnModalUnequip.style.display = 'none';
   if (it.type === 'material') {
     btnModalUse.style.display = 'none';
   } else {
@@ -841,19 +947,70 @@ function openItemModal(slotIdx) {
   itemModal.classList.remove('hidden');
 }
 
+// 點擊上方已穿戴裝備欄彈窗 (支援主動卸下至背包)
+function openEquipModal(equipSlot) {
+  const itemId = player.equipment[equipSlot];
+  if (!itemId) {
+    logMessage('該裝備槽目前為空。可從背包點擊武器或防具進行裝備。', 'sys-msg');
+    return;
+  }
+
+  const it = GAME_DATA.items[itemId];
+  selectedSlotIdx = null;
+  selectedEquipType = equipSlot;
+
+  itemModalTitle.innerText = `[已裝備] ${it.name}`;
+  itemModalDesc.innerText = it.desc;
+  renderItemRecipeHint(itemId);
+
+  btnModalUse.style.display = 'none';
+  btnModalUnequip.style.display = 'flex';
+  itemModal.classList.remove('hidden');
+}
+
 function closeItemModal() {
   selectedSlotIdx = null;
+  selectedEquipType = null;
   itemModal.classList.add('hidden');
 }
 
 btnModalCancel.onclick = closeItemModal;
 
+// 主動卸下裝備至背包
+btnModalUnequip.onclick = () => {
+  if (!selectedEquipType) return;
+  const itemId = player.equipment[selectedEquipType];
+  if (!itemId) return;
+
+  const emptyIdx = player.inventory.findIndex(s => s === null);
+  if (emptyIdx === -1) {
+    logMessage('⚠️ 背包已滿（6 格），無法卸下裝備！請先清理出至少 1 格背包空間。', 'warn-msg');
+    closeItemModal();
+    return;
+  }
+
+  const it = GAME_DATA.items[itemId];
+  player.equipment[selectedEquipType] = null;
+  player.inventory[emptyIdx] = itemId;
+  logMessage(`📥 已將 [${it.name}] 卸下並放回背包第 ${emptyIdx + 1} 格（攻防數值已更新）。`, 'sys-msg');
+  closeItemModal();
+  updateUI();
+};
+
+// 丟棄物品（支援背包或已穿戴裝備丟棄）
 btnModalDrop.onclick = () => {
   if (selectedSlotIdx !== null) {
     const itemId = player.inventory[selectedSlotIdx];
     const it = GAME_DATA.items[itemId];
     player.inventory[selectedSlotIdx] = null;
     logMessage(`🗑️ 丟棄了 [${it.name}]，清出了背包空間。`, 'warn-msg');
+    closeItemModal();
+    updateUI();
+  } else if (selectedEquipType !== null) {
+    const itemId = player.equipment[selectedEquipType];
+    const it = GAME_DATA.items[itemId];
+    player.equipment[selectedEquipType] = null;
+    logMessage(`🗑️ 卸下並丟棄了 [${it.name}]。`, 'warn-msg');
     closeItemModal();
     updateUI();
   }
@@ -892,42 +1049,100 @@ function useOrEquip(slotIdx) {
   updateUI();
 }
 
+// 合成（同時支援背包內材料、以及身上已穿戴裝備直接升級）
+function consumeMaterialForCraft(matId) {
+  const invIdx = player.inventory.indexOf(matId);
+  if (invIdx !== -1) {
+    player.inventory[invIdx] = null;
+    return { from: 'inventory', slot: invIdx };
+  }
+  for (const eqSlot of ['weapon', 'body', 'arm']) {
+    if (player.equipment[eqSlot] === matId) {
+      player.equipment[eqSlot] = null;
+      return { from: 'equip', slot: eqSlot };
+    }
+  }
+  return null;
+}
+
 function craftItem(resultId) {
   const recipe = GAME_DATA.recipes.find(r => r.result === resultId);
   if (!recipe) return;
 
+  const allOwned = getAllPlayerItemIds();
   const [mat1, mat2] = recipe.materials;
-  const idx1 = player.inventory.indexOf(mat1);
-  if (idx1 === -1) return;
-
-  player.inventory[idx1] = null;
-  const idx2 = player.inventory.indexOf(mat2);
-  if (idx2 === -1) {
-    player.inventory[idx1] = mat1;
-    return;
+  if (mat1 === mat2) {
+    if (allOwned.filter(id => id === mat1).length < 2) return;
+  } else {
+    if (!allOwned.includes(mat1) || !allOwned.includes(mat2)) return;
   }
-  player.inventory[idx2] = null;
 
-  const freeIdx = player.inventory.indexOf(null);
-  player.inventory[freeIdx] = resultId;
-  player.crafts += 1;
+  const c1 = consumeMaterialForCraft(mat1);
+  const c2 = consumeMaterialForCraft(mat2);
 
   const resItem = GAME_DATA.items[resultId];
-  logMessage(`🔨 成功合成出：[${resItem.name}]！(${resItem.desc})`, 'craft-msg');
+  player.crafts += 1;
+
+  // 若材料原本穿在身上，且合出來的成品剛好也是同類型裝備，直接自動裝備上陣並重算攻防！
+  const usedEquipSlot = (c1 && c1.from === 'equip') ? c1.slot : ((c2 && c2.from === 'equip') ? c2.slot : null);
+  let autoEquipped = false;
+
+  if (resItem.type === 'weapon' && (usedEquipSlot === 'weapon' || !player.equipment.weapon)) {
+    if (!player.equipment.weapon) {
+      player.equipment.weapon = resultId;
+      autoEquipped = true;
+    }
+  } else if (resItem.type === 'armor') {
+    const targetSlot = resItem.subType === 'body' ? 'body' : 'arm';
+    if (!player.equipment[targetSlot]) {
+      player.equipment[targetSlot] = resultId;
+      autoEquipped = true;
+    }
+  }
+
+  if (!autoEquipped) {
+    const freeIdx = player.inventory.indexOf(null);
+    if (freeIdx !== -1) {
+      player.inventory[freeIdx] = resultId;
+    }
+  }
+
+  logMessage(
+    `🔨 成功合成出：[${resItem.name}]！${autoEquipped ? '(已自動裝備上陣並更新攻防)' : `(${resItem.desc})`}`,
+    'craft-msg'
+  );
   gainExp(25);
   updateUI();
 }
 
-// ==================== 休息、姿態與地圖移動 ====================
+// ==================== 休息（含被發現突襲檢定）、姿態與地圖移動 ====================
 function doRest() {
   if (isGameOver) return;
   if (activeEnemy) {
     logMessage('⚠️ 戰鬥中無法休息！請先交戰或撤退！', 'warn-msg');
     return;
   }
-  player.hp = Math.min(player.maxHp, player.hp + 22);
-  player.sp = Math.min(player.maxSp, player.sp + 25);
-  logMessage('💤 在掩體短暫調息 (+22 HP, +25 SP)。', 'gain-msg');
+
+  discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
+  pendingFoundItem = null;
+  currentLootItems = [];
+
+  const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
+  // 若同區域有其他受試者，休息時有較高機率被發現並遭到突襲！
+  let ambushChance = aiInArea.length > 0 ? 0.38 : 0.10;
+  if (player.stance === 'aggressive') ambushChance += 0.15;
+  if (player.stance === 'stealth') ambushChance *= 0.4; // 潛行姿態大幅降低休息被偷襲率
+
+  if (Math.random() < ambushChance) {
+    player.sp = Math.min(player.maxSp, player.sp + 10);
+    spawnEnemyEncounter(true);
+  } else {
+    player.hp = Math.min(player.maxHp, player.hp + 22);
+    player.sp = Math.min(player.maxSp, player.sp + 25);
+    logMessage('💤 在掩體安全調息，未被敵人發現 (+22 HP, +25 SP)。', 'gain-msg');
+  }
+
   advanceWorldTick();
   updateUI();
 }
@@ -939,7 +1154,7 @@ btnStance.onclick = () => {
   const labels = {
     normal: '⚖️ 切換為【均衡姿態】：標準探索與戰鬥平衡。',
     aggressive: '⚔️ 切換為【進攻姿態】：遇敵率大幅提升，總攻擊力 +15%！',
-    stealth: '🥷 切換為【潛行姿態】：大幅降低遇敵率，適合專心搜刮材料與合成！'
+    stealth: '🥷 切換為【潛行姿態】：大幅降低遇敵率與休息被偷襲率，適合搜刮與合成！'
   };
   logMessage(labels[next], 'sys-msg');
   updateUI();
@@ -979,10 +1194,20 @@ btnOpenMap.onclick = () => {
       player.area = a.id;
       activeEnemy = null;
       pendingFoundItem = null;
+      currentLootItems = [];
       combatCard.classList.add('hidden');
       discoveryCard.classList.add('hidden');
+      lootCard.classList.add('hidden');
       mapModal.classList.add('hidden');
       logMessage(`🗺️ 已移動至 [${a.name}]。`, 'sys-msg');
+
+      // 移動進入有受試者的區域時，若非潛行姿態，有小機率剛踏入就遭遇敵人
+      const aiHere = aiBots.filter(b => b.alive && b.area === a.id);
+      const moveEncounterChance = player.stance === 'stealth' ? 0.05 : (player.stance === 'aggressive' ? 0.35 : 0.18);
+      if (aiHere.length > 0 && Math.random() < moveEncounterChance) {
+        spawnEnemyEncounter(false);
+      }
+
       advanceWorldTick();
       updateUI();
     };
@@ -1001,7 +1226,7 @@ function renderCodex(tab = 'all') {
   });
 
   codexList.innerHTML = '';
-  const inv = player.inventory.filter(Boolean);
+  const allOwned = getAllPlayerItemIds();
 
   GAME_DATA.recipes.forEach(r => {
     const resItem = GAME_DATA.items[r.result];
@@ -1013,19 +1238,18 @@ function renderCodex(tab = 'all') {
     const [m1, m2] = r.materials;
     const item1 = GAME_DATA.items[m1];
     const item2 = GAME_DATA.items[m2];
-    const has1 = inv.includes(m1);
-    const has2 = inv.includes(m2);
+    const has1 = allOwned.includes(m1);
+    const has2 = allOwned.includes(m2);
 
     const drop1 = findItemDropAreas(m1).join('/') || '合成取得';
     const drop2 = findItemDropAreas(m2).join('/') || '合成取得';
 
-    let statStr = resItem.desc;
     const card = document.createElement('div');
     card.className = 'codex-card';
     card.innerHTML = `
       <div class="codex-card-top">
         <span class="codex-res-name">${resItem.name}</span>
-        <span class="codex-res-stat">${statStr}</span>
+        <span class="codex-res-stat">${resItem.desc}</span>
       </div>
       <div class="codex-mats">
         <span class="mat-badge ${has1 ? 'owned' : ''}">${has1 ? '✓ ' : ''}${item1.name} <small>(${drop1})</small></span>
@@ -1065,14 +1289,15 @@ window.addEventListener('keydown', (e) => {
     if (!codexModal.classList.contains('hidden')) { codexModal.classList.add('hidden'); return; }
     if (!mapModal.classList.contains('hidden')) { mapModal.classList.add('hidden'); return; }
     if (activeEnemy) { doFlee(); return; }
+    if (!lootCard.classList.contains('hidden')) { btnCloseLoot.click(); return; }
     if (!discoveryCard.classList.contains('hidden')) { doDiscard(); return; }
   }
 
-  // 物品彈窗開啟時：Enter 使用/裝備，D 丟棄
   if (!itemModal.classList.contains('hidden')) {
-    if (e.key === 'Enter' && btnModalUse.style.display !== 'none') {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      btnModalUse.click();
+      if (btnModalUse.style.display !== 'none') btnModalUse.click();
+      else if (btnModalUnequip.style.display !== 'none') btnModalUnequip.click();
       return;
     }
     if (e.key.toLowerCase() === 'd') {
@@ -1082,7 +1307,6 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
-  // 戰鬥中：Space / Enter / A 攻擊
   if (activeEnemy) {
     if (e.key === ' ' || e.key === 'Enter' || e.key.toLowerCase() === 'a') {
       e.preventDefault();
@@ -1092,7 +1316,6 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
-  // 發現物品時：Space / Enter 拾取
   if (!discoveryCard.classList.contains('hidden')) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -1124,5 +1347,4 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// 啟動遊戲
 initGame();
