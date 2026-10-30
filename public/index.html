@@ -60,7 +60,7 @@
       <div class="inventory-section">
         <div class="section-title">
           <span>戰術背包 (6格)</span>
-          <span class="shortcut-tip">鍵盤 1~6 快捷使用/裝備</span>
+          <span class="shortcut-tip">點擊管理/丟棄物品</span>
         </div>
         <div class="grid-inventory" id="inventory-grid"></div>
       </div>
@@ -83,6 +83,19 @@
         <button id="btn-open-map" class="btn btn-action">🗺️ 移動 [M]</button>
       </div>
     </footer>
+
+    <!-- 物品操作彈窗 (使用/裝備/丟棄) -->
+    <div id="item-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <div class="item-action-title" id="item-modal-title">物品名稱</div>
+        <div class="item-action-desc" id="item-modal-desc">物品說明</div>
+        <div class="item-action-buttons">
+          <button id="btn-modal-use" class="btn btn-primary">使用 / 裝備</button>
+          <button id="btn-modal-drop" class="btn btn-danger">丟棄物品</button>
+          <button id="btn-modal-cancel" class="btn btn-secondary">取消</button>
+        </div>
+      </div>
+    </div>
 
     <!-- 地圖切換彈窗 -->
     <div id="map-modal" class="modal hidden">

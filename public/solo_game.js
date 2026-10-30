@@ -1,4 +1,4 @@
-// 基礎資料庫 (直接內嵌前端，免依賴後端伺服器)
+// 基礎資料庫
 const GAME_DATA = {
   areas: [
     { id: "school", name: "學校", desc: "荒廢的教學大樓，散落著文具與急救物資", items: ["branch", "bandage", "lighter", "pen", "water"] },
@@ -39,7 +39,7 @@ const GAME_DATA = {
   ]
 };
 
-// 單人玩家狀態
+// 玩家狀態
 const player = {
   name: "受試者 #01",
   hp: 100,
@@ -54,6 +54,7 @@ const player = {
 };
 
 let pendingFoundItem = null;
+let selectedSlotIdx = null; // 當前選中要操作的背包格子
 
 // DOM 元素快取
 const hudName = document.getElementById('hud-name');
@@ -73,6 +74,14 @@ const discItemDesc = document.getElementById('disc-item-desc');
 const mapModal = document.getElementById('map-modal');
 const areaSelector = document.getElementById('area-selector');
 
+// 物品彈窗
+const itemModal = document.getElementById('item-modal');
+const itemModalTitle = document.getElementById('item-modal-title');
+const itemModalDesc = document.getElementById('item-modal-desc');
+const btnModalUse = document.getElementById('btn-modal-use');
+const btnModalDrop = document.getElementById('btn-modal-drop');
+const btnModalCancel = document.getElementById('btn-modal-cancel');
+
 const btnSearch = document.getElementById('btn-search');
 const btnRest = document.getElementById('btn-rest');
 const btnPickup = document.getElementById('btn-pickup');
@@ -80,7 +89,6 @@ const btnDiscard = document.getElementById('btn-discard');
 const btnOpenMap = document.getElementById('btn-open-map');
 const btnCloseMap = document.getElementById('btn-close-map');
 
-// 訊息記錄
 function logMessage(text, type = 'sys-msg') {
   const entry = document.createElement('div');
   entry.className = `log-entry ${type}`;
@@ -89,7 +97,6 @@ function logMessage(text, type = 'sys-msg') {
   combatLog.scrollTop = combatLog.scrollHeight;
 }
 
-// 取得可用配方
 function getAvailableRecipes() {
   const inv = player.inventory.filter(Boolean);
   const available = [];
@@ -118,7 +125,6 @@ function getAvailableRecipes() {
   return available;
 }
 
-// 刷新介面
 function updateUI() {
   hudName.innerText = player.name;
   hudLevel.innerText = `Lv.${player.level}`;
@@ -131,7 +137,7 @@ function updateUI() {
   spBar.style.width = `${spPct}%`;
   spText.innerText = `${player.sp} / ${player.maxSp}`;
 
-  // 渲染背包
+  // 渲染背包 6 格
   inventoryGrid.innerHTML = '';
   for (let i = 0; i < 6; i++) {
     const slot = document.createElement('div');
@@ -148,7 +154,7 @@ function updateUI() {
       else tagText = '素材';
 
       slot.innerHTML = `<strong>${it.name}</strong><span class="slot-tag">${tagText}</span>`;
-      slot.onclick = () => useOrEquip(i);
+      slot.onclick = () => openItemModal(i);
     } else {
       slot.innerHTML = `<span style="color:#475569; font-size:0.7rem;">[${i+1}]</span>`;
     }
@@ -178,6 +184,55 @@ function updateUI() {
   }
 }
 
+// 開啟物品操作彈窗 (使用/裝備/丟棄)
+function openItemModal(slotIdx) {
+  const itemId = player.inventory[slotIdx];
+  if (!itemId) return;
+
+  const it = GAME_DATA.items[itemId];
+  selectedSlotIdx = slotIdx;
+
+  itemModalTitle.innerText = it.name;
+  itemModalDesc.innerText = it.desc;
+
+  if (it.type === 'material') {
+    btnModalUse.style.display = 'none'; // 素材無法使用
+  } else {
+    btnModalUse.style.display = 'block';
+    btnModalUse.innerText = it.type === 'consumable' ? '使用 (恢復)' : '裝備上陣';
+  }
+
+  itemModal.classList.remove('hidden');
+}
+
+function closeItemModal() {
+  selectedSlotIdx = null;
+  itemModal.classList.add('hidden');
+}
+
+btnModalCancel.onclick = closeItemModal;
+
+// 丟棄物品
+btnModalDrop.onclick = () => {
+  if (selectedSlotIdx !== null) {
+    const itemId = player.inventory[selectedSlotIdx];
+    const it = GAME_DATA.items[itemId];
+    player.inventory[selectedSlotIdx] = null;
+    logMessage(`丟棄了 [${it.name}]，清出了背包空間。`, 'warn-msg');
+    closeItemModal();
+    updateUI();
+  }
+};
+
+// 使用/裝備
+btnModalUse.onclick = () => {
+  if (selectedSlotIdx !== null) {
+    const slot = selectedSlotIdx;
+    closeItemModal();
+    useOrEquip(slot);
+  }
+};
+
 // 探索
 function doSearch() {
   if (player.sp < 5) {
@@ -205,7 +260,7 @@ function doPickup() {
 
   const emptyIdx = player.inventory.findIndex(s => s === null);
   if (emptyIdx === -1) {
-    logMessage('背包已滿（最多 6 格），無法拾取！', 'warn-msg');
+    logMessage('背包已滿（最多 6 格），無法拾取！請先點擊背包物品進行丟棄。', 'warn-msg');
     return;
   }
 
@@ -216,7 +271,6 @@ function doPickup() {
   updateUI();
 }
 
-// 略過
 function doDiscard() {
   if (pendingFoundItem) {
     logMessage(`無視了 [${pendingFoundItem.name}]。`, 'sys-msg');
@@ -246,9 +300,6 @@ function useOrEquip(slotIdx) {
     player.equipment.arm = itemId;
     player.inventory[slotIdx] = old;
     logMessage(`裝備了防具：[${it.name}] (防禦力 +${it.def})！`, 'gain-msg');
-  } else {
-    logMessage(`[${it.name}] 是合成材料，無法直接使用。`, 'warn-msg');
-    return;
   }
   updateUI();
 }
@@ -265,16 +316,14 @@ function craftItem(resultId) {
   player.inventory[idx1] = null;
   const idx2 = player.inventory.indexOf(mat2);
   if (idx2 === -1) {
-    player.inventory[idx1] = mat1; // 還原
+    player.inventory[idx1] = mat1;
     return;
   }
   player.inventory[idx2] = null;
 
-  // 放入成品
   const freeIdx = player.inventory.indexOf(null);
   player.inventory[freeIdx] = resultId;
 
-  // 經驗值
   player.exp += 25;
   if (player.exp >= player.level * 50) {
     player.level += 1;
@@ -331,6 +380,10 @@ btnRest.onclick = doRest;
 // 鍵盤快速鍵
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    if (!itemModal.classList.contains('hidden')) {
+      closeItemModal();
+      return;
+    }
     if (!mapModal.classList.contains('hidden')) {
       mapModal.classList.add('hidden');
       return;
@@ -366,7 +419,7 @@ window.addEventListener('keydown', (e) => {
   }
 
   if (e.key >= '1' && e.key <= '6') {
-    useOrEquip(parseInt(e.key) - 1);
+    openItemModal(parseInt(e.key) - 1);
     return;
   }
 
@@ -377,6 +430,5 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// 初始化畫面
 updateUI();
-logMessage('歡迎來到 Project Lumia 試驗場，點擊「探索」尋找第一把武器或素材吧！');
+logMessage('歡迎來到 Project Lumia 試驗場，點擊背包物品可選擇「使用/裝備/丟棄」。');

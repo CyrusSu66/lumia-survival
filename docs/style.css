@@ -31,7 +31,6 @@ body {
   min-height: 100dvh;
 }
 
-/* 核心容器：桌機自適應寬度，手機全螢幕 */
 #app {
   width: 100%;
   max-width: 500px;
@@ -47,7 +46,6 @@ body {
   overflow: hidden;
 }
 
-/* 桌機優化：寬螢幕時微調陰影與圓角 */
 @media (min-width: 768px) {
   #app {
     max-height: 900px;
@@ -56,7 +54,6 @@ body {
   }
 }
 
-/* 頂部 HUD */
 .hud-header {
   padding: 10px 14px;
   background: #13171f;
@@ -122,7 +119,6 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
-/* 中央主舞台 */
 .main-viewport {
   flex: 1;
   display: flex;
@@ -155,7 +151,6 @@ body {
   margin-top: 3px;
 }
 
-/* 探索發現卡片 (大尺寸拇指熱區) */
 .discovery-card {
   background: rgba(18, 22, 31, 0.96);
   border: 1px solid #475569;
@@ -180,7 +175,6 @@ body {
   gap: 10px;
 }
 
-/* 戰鬥與訊息 Log */
 .log-panel {
   height: 85px;
   background: #090a0d;
@@ -199,7 +193,6 @@ body {
 .log-entry.craft-msg { color: #fde047; }
 .log-entry.warn-msg { color: #f87171; }
 
-/* 底部操作面板 */
 .interaction-dock {
   background: #13171f;
   padding: 10px 12px;
@@ -223,7 +216,6 @@ body {
   font-size: 0.65rem;
 }
 
-/* 6格背包：網格觸控面積放大，大於 50px */
 .grid-inventory {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -264,7 +256,6 @@ body {
   margin-top: 2px;
 }
 
-/* 快速合成欄：橫向滑動卡片 */
 .recipe-list {
   display: flex;
   gap: 8px;
@@ -295,7 +286,6 @@ body {
 .recipe-chip:active { transform: scale(0.96); }
 .no-recipe { font-size: 0.75rem; color: #475569; line-height: 38px; }
 
-/* 底部三核心動作按鈕 */
 .actions-dock {
   display: grid;
   grid-template-columns: 2fr 1.2fr 1.2fr;
@@ -323,6 +313,7 @@ body {
 
 .btn-primary { background: var(--success); color: #fff; flex: 1.5; font-size: 0.95rem; }
 .btn-secondary { background: #334155; color: #fff; flex: 1; }
+.btn-danger { background: #dc2626; color: #fff; }
 .btn-action { background: #1e293b; color: #e2e8f0; font-size: 0.85rem; border: 1px solid var(--border-color); }
 .search-btn {
   background: linear-gradient(135deg, var(--primary), var(--primary-hover));
@@ -332,7 +323,6 @@ body {
   box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
 }
 
-/* 彈窗樣式 */
 .modal {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -353,6 +343,29 @@ body {
   border-radius: 10px;
   width: 90%;
   max-width: 400px;
+}
+
+.item-action-dialog {
+  text-align: center;
+}
+
+.item-action-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.item-action-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.item-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .area-grid {
