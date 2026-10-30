@@ -1,0 +1,37 @@
+[
+  {
+    "result": "boiled_water",
+    "materials": ["water", "lighter"],
+    "amount": 2
+  },
+  {
+    "result": "herbal_tea",
+    "materials": ["boiled_water", "herb"],
+    "amount": 2
+  },
+  {
+    "result": "first_aid_kit",
+    "materials": ["bandage", "pills"],
+    "amount": 1
+  },
+  {
+    "result": "steel",
+    "materials": ["scrap_metal", "iron_ore"],
+    "amount": 2
+  },
+  {
+    "result": "war_hammer",
+    "materials": ["hammer", "steel"],
+    "amount": 1
+  },
+  {
+    "result": "steel_blade",
+    "materials": ["scalpel", "steel"],
+    "amount": 1
+  },
+  {
+    "result": "turtle_shield",
+    "materials": ["turtle_shell", "steel"],
+    "amount": 1
+  }
+]

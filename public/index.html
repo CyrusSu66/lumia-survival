@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Project Lumia - 黑色倖存 (純網頁單機版)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 頂部 HUD -->
+    <header class="hud-header">
+      <div class="user-meta">
+        <span class="player-name" id="hud-name">受試者 #01</span>
+        <span class="player-lvl" id="hud-level">Lv.1</span>
+      </div>
+      <div class="vital-bars">
+        <div class="bar-wrap">
+          <div class="bar-fill hp-bar" id="hp-bar" style="width: 100%;"></div>
+          <span class="bar-label" id="hp-text">100 / 100</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill sp-bar" id="sp-bar" style="width: 100%;"></div>
+          <span class="bar-label" id="sp-text">80 / 80</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主遊戲中央區域 -->
+    <main class="main-viewport">
+      <!-- 區域背景與場景狀態 -->
+      <section class="area-banner">
+        <div class="area-info">
+          <h2 id="area-title">學校</h2>
+          <p id="area-desc">荒廢的教學大樓，散落著文具與急救物資</p>
+        </div>
+        <!-- 探索發現通知窗 -->
+        <div id="discovery-card" class="discovery-card hidden">
+          <div class="card-header">探索發現！</div>
+          <div class="item-preview">
+            <span id="disc-item-name" class="highlight-name">物品名稱</span>
+            <p id="disc-item-desc">物品說明</p>
+          </div>
+          <div class="discovery-actions">
+            <button id="btn-pickup" class="btn btn-primary">放入背包 [Space/Enter]</button>
+            <button id="btn-discard" class="btn btn-secondary">無視 [Esc]</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 戰鬥與訊息 Log -->
+      <section class="log-panel" id="combat-log">
+        <div class="log-entry sys-msg">已進入單人試驗模式（免伺服器，純前端離線運算）。</div>
+      </section>
+    </main>
+
+    <!-- 下半部：背包與配方 -->
+    <footer class="interaction-dock">
+      <!-- 6格背包 -->
+      <div class="inventory-section">
+        <div class="section-title">
+          <span>戰術背包 (6格)</span>
+          <span class="shortcut-tip">鍵盤 1~6 快捷使用/裝備</span>
+        </div>
+        <div class="grid-inventory" id="inventory-grid"></div>
+      </div>
+
+      <!-- 可用合成配方列表 -->
+      <div class="craft-section">
+        <div class="section-title">
+          <span>快速合成</span>
+          <span class="shortcut-tip">鍵盤 C 鍵一鍵合成</span>
+        </div>
+        <div class="recipe-list" id="recipe-list">
+          <div class="no-recipe">背包內無可合成組合</div>
+        </div>
+      </div>
+
+      <!-- 操作按鈕列 -->
+      <div class="actions-dock">
+        <button id="btn-search" class="btn btn-action search-btn">🔍 探索 [Space/S]</button>
+        <button id="btn-rest" class="btn btn-action">💤 休息 [R]</button>
+        <button id="btn-open-map" class="btn btn-action">🗺️ 移動 [M]</button>
+      </div>
+    </footer>
+
+    <!-- 地圖切換彈窗 -->
+    <div id="map-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>選擇移動目標區域 (消耗 3 SP)</h3>
+        <div class="area-grid" id="area-selector"></div>
+        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 15px; width: 100%;">關閉 [Esc]</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="solo_game.js"></script>
+</body>
+</html>

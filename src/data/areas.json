@@ -1,0 +1,7 @@
+[
+  { "id": "school", "name": "學校", "desc": "荒廢的教學大樓，散落著文具與急救物資", "items": ["branch", "bandage", "lighter", "pen", "water"] },
+  { "id": "hospital", "name": "醫院", "desc": "充滿消毒水氣味的診所，有豐富的醫療藥品", "items": ["bandage", "scalpel", "pills", "needle", "water"] },
+  { "id": "factory", "name": "工廠", "desc": "廢棄重工業區，能找到各類金屬零件與工具", "items": ["scrap_metal", "hammer", "iron_ore", "wire", "oil"] },
+  { "id": "forest", "name": "森林", "desc": "島嶼中央的繁茂樹林，適合採集天然素材與草藥", "items": ["branch", "stone", "herb", "flower", "water"] },
+  { "id": "beach", "name": "海灘", "desc": "被海浪沖刷的海岸線，有貝殼、水與漂流廢鐵", "items": ["scrap_metal", "stone", "water", "turtle_shell", "fish"] }
+]

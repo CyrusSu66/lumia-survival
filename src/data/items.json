@@ -1,0 +1,21 @@
+{
+  "branch": { "name": "樹枝", "type": "material", "desc": "隨處可見的堅韌樹枝" },
+  "stone": { "name": "石頭", "type": "material", "desc": "硬質鵝卵石" },
+  "bandage": { "name": "繃帶", "type": "consumable", "heal_hp": 20, "desc": "乾淨的布條，可回復 20 HP" },
+  "pills": { "name": "止痛藥", "type": "consumable", "heal_hp": 35, "desc": "強效止痛藥，可回復 35 HP" },
+  "water": { "name": "生水", "type": "consumable", "heal_sp": 25, "desc": "甘甜的清水，可回復 25 SP" },
+  "lighter": { "name": "打火機", "type": "material", "desc": "可以生火或加熱液體" },
+  "scrap_metal": { "name": "廢鐵", "type": "material", "desc": "粗糙的鐵塊組件" },
+  "hammer": { "name": "鐵鎚", "type": "weapon", "subType": "blunt", "atk": 12, "desc": "簡易鈍器 (+12 攻擊)" },
+  "scalpel": { "name": "手術刀", "type": "weapon", "subType": "blade", "atk": 14, "desc": "鋒利的手術刀 (+14 攻擊)" },
+  "iron_ore": { "name": "鐵礦石", "type": "material", "desc": "純淨的鐵礦" },
+  "herb": { "name": "草藥", "type": "consumable", "heal_hp": 15, "desc": "清涼草藥 (+15 HP)" },
+  "turtle_shell": { "name": "龜殼", "type": "material", "desc": "硬實的防禦素材" },
+  "steel": { "name": "鋼鐵", "type": "material", "desc": "精煉鋼材" },
+  "boiled_water": { "name": "熱水", "type": "consumable", "heal_sp": 40, "desc": "剛煮沸的水 (+40 SP)" },
+  "herbal_tea": { "name": "草本茶", "type": "consumable", "heal_sp": 65, "heal_hp": 15, "desc": "舒緩身心的草藥茶 (+65 SP, +15 HP)" },
+  "first_aid_kit": { "name": "急救包", "type": "consumable", "heal_hp": 70, "desc": "專業戰地醫療包 (+70 HP)" },
+  "war_hammer": { "name": "戰鎚", "type": "weapon", "subType": "blunt", "atk": 32, "desc": "沉重且致命的重錘 (+32 攻擊)" },
+  "steel_blade": { "name": "精鋼短刀", "type": "weapon", "subType": "blade", "atk": 36, "desc": "冷光凜冽的鍛造短刀 (+36 攻擊)" },
+  "turtle_shield": { "name": "龜甲盾", "type": "armor", "subType": "arm", "def": 22, "desc": "防護力極佳的臂甲 (+22 防禦)" }
+}
