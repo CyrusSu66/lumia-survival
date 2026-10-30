@@ -863,10 +863,50 @@ function doAttack() {
 
 function doFlee() {
   if (!activeEnemy || isGameOver) return;
-  player.sp = Math.max(0, player.sp - 4);
-  logMessage(`🏃 你掩護撤退，成功擺脫了 [${activeEnemy.name}] (-4 SP)。`, 'sys-msg');
+  const pDef = getPlayerDef();
+
+  // 若精力不足 5 SP，撤退失敗且遭敵人免費追擊重創
+  if (player.sp < 5) {
+    const failDmg = Math.max(5, Math.round((activeEnemy.atk - pDef * 0.45) * 0.85));
+    player.hp = Math.max(0, player.hp - failDmg);
+    const failMsg = `⚠️ 精力不足（需 5 SP）導致突圍失敗！遭 [${activeEnemy.name}] 趁隙追砍 (-${failDmg} HP)！`;
+    logMessage(failMsg, 'warn-msg');
+    renderCombatCard(failMsg);
+    if (player.hp <= 0) {
+      triggerGameOver(false, `因體力透支無法逃脫，遭 [${activeEnemy.name}] 追擊身亡。`);
+      return;
+    }
+    advanceWorldTick();
+    updateUI();
+    return;
+  }
+
+  // 消耗 5 SP 進行突圍撤退檢定
+  player.sp = Math.max(0, player.sp - 5);
+  const enemyRefName = activeEnemy.name;
+
+  // 背部追擊擦傷機率（進攻姿態破綻大 55%、均衡 40%、潛行姿態掩護佳僅 18%）
+  let pursuitChance = 0.40;
+  if (player.stance === 'aggressive') pursuitChance = 0.55;
+  if (player.stance === 'stealth') pursuitChance = 0.18;
+
+  if (Math.random() < pursuitChance) {
+    const pursuitDmg = Math.max(3, Math.round((activeEnemy.atk - pDef * 0.5) * 0.6));
+    player.hp = Math.max(0, player.hp - pursuitDmg);
+    logMessage(`🏃 你強行突圍擺脫了 [${enemyRefName}] (-5 SP)，但轉身時遭追擊擦傷 (-${pursuitDmg} HP)！`, 'combat-msg');
+    if (player.hp <= 0) {
+      activeEnemy = null;
+      combatCard.classList.add('hidden');
+      triggerGameOver(false, `在強行突圍時遭 [${enemyRefName}] 追擊重傷身亡。`);
+      return;
+    }
+  } else {
+    logMessage(`🏃 你利用地形掩護撤退，成功無傷擺脫了 [${enemyRefName}] (-5 SP)。`, 'sys-msg');
+  }
+
   activeEnemy = null;
   combatCard.classList.add('hidden');
+  advanceWorldTick();
   updateUI();
 }
 
@@ -1161,6 +1201,11 @@ btnStance.onclick = () => {
 };
 
 btnOpenMap.onclick = () => {
+  if (isGameOver) return;
+  if (activeEnemy) {
+    logMessage('⚠️ 正在交戰中，被敵人纏住無法直接移動地區！請先擊敗敵人，或點擊「🏃 強行撤退」突圍！', 'warn-msg');
+    return;
+  }
   areaSelector.innerHTML = '';
   GAME_DATA.areas.forEach(a => {
     const btn = document.createElement('button');
