@@ -7,7 +7,7 @@
   "stone": {
     "name": "石頭",
     "type": "material",
-    "desc": "硬質鵝卵石，可打磨或加固"
+    "desc": "硬質鵝卵石"
   },
   "lighter": {
     "name": "打火機",
@@ -28,13 +28,6 @@
     "name": "龜殼",
     "type": "material",
     "desc": "硬實的甲殼防禦素材"
-  },
-  "pen": {
-    "name": "鋼筆",
-    "type": "weapon",
-    "subType": "blade",
-    "atk": 8,
-    "desc": "金屬筆尖的鋼筆 (+8 攻擊)"
   },
   "needle": {
     "name": "縫合針",
@@ -76,6 +69,40 @@
     "type": "material",
     "desc": "醫療消毒與燃燒溶劑"
   },
+  "gunpowder": {
+    "name": "火藥",
+    "type": "material",
+    "desc": "可製作彈藥或爆裂物"
+  },
+  "steel": {
+    "name": "鋼鐵",
+    "type": "material",
+    "desc": "由廢鐵與鐵礦精煉的高硬度鋼材"
+  },
+  "mithril": {
+    "name": "秘銀",
+    "type": "material",
+    "rare": true,
+    "desc": "★傳說金屬，僅能從空投或 Boss 取得"
+  },
+  "meteorite": {
+    "name": "隕石",
+    "type": "material",
+    "rare": true,
+    "desc": "★天外隕鐵，僅能從空投或 Boss 取得"
+  },
+  "tree_of_life": {
+    "name": "生命之樹",
+    "type": "material",
+    "rare": true,
+    "desc": "★蘊含生命力的神木枝，僅能從空投或 Boss 取得"
+  },
+  "vf_blood": {
+    "name": "VF 血液",
+    "type": "material",
+    "rare": true,
+    "desc": "★變異體血液樣本，僅能擊敗 Wickeline 取得"
+  },
   "bandage": {
     "name": "繃帶",
     "type": "consumable",
@@ -104,32 +131,13 @@
     "name": "生鮮海魚",
     "type": "consumable",
     "heal_hp": 15,
-    "desc": "剛捕獲的海魚，直接吃回復 15 HP，烤熟效果極佳"
+    "desc": "生吃回復 15 HP，烤熟效果極佳"
   },
   "meat": {
     "name": "生獸肉",
     "type": "consumable",
     "heal_hp": 20,
-    "desc": "新鮮野獸肉，烤熟後可大幅恢復體力"
-  },
-  "hammer": {
-    "name": "鐵鎚",
-    "type": "weapon",
-    "subType": "blunt",
-    "atk": 13,
-    "desc": "工業重鐵鎚 (+13 攻擊)"
-  },
-  "scalpel": {
-    "name": "手術刀",
-    "type": "weapon",
-    "subType": "blade",
-    "atk": 15,
-    "desc": "鋒利的外科手術刀 (+15 攻擊)"
-  },
-  "steel": {
-    "name": "鋼鐵",
-    "type": "material",
-    "desc": "由廢鐵與鐵礦精煉的高硬度鋼材"
+    "desc": "生吃回復 20 HP，烤熟後大幅恢復"
   },
   "boiled_water": {
     "name": "熱水",
@@ -178,88 +186,289 @@
     "heal_sp": 15,
     "desc": "酒精消毒強效繃帶 (+55 HP, +15 SP)"
   },
+  "kitchen_knife": {
+    "name": "菜刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 12,
+    "desc": "廚房用菜刀 (劈砍 +12)"
+  },
+  "pen": {
+    "name": "鋼筆",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 8,
+    "desc": "金屬筆尖的鋼筆 (劈砍 +8)"
+  },
+  "scalpel": {
+    "name": "手術刀",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 15,
+    "desc": "鋒利的外科手術刀 (劈砍 +15)"
+  },
   "poison_scalpel": {
     "name": "精密刺針刀",
     "type": "weapon",
     "subType": "blade",
     "atk": 26,
-    "desc": "結合縫合針改造的暗殺刀 (+26 攻擊)"
-  },
-  "spiked_club": {
-    "name": "狼牙木棒",
-    "type": "weapon",
-    "subType": "blunt",
-    "atk": 24,
-    "desc": "纏繞鐵絲與尖針的木棒 (+24 攻擊)"
+    "desc": "結合縫合針改造的暗殺刀 (劈砍 +26)"
   },
   "feather_dagger": {
     "name": "黑羽飛刀",
     "type": "weapon",
     "subType": "blade",
     "atk": 27,
-    "desc": "裝配鴉羽尾翼的高速利刃 (+27 攻擊)"
-  },
-  "war_hammer": {
-    "name": "戰鎚",
-    "type": "weapon",
-    "subType": "blunt",
-    "atk": 34,
-    "desc": "沉重且致命的鋼製重錘 (+34 攻擊)"
+    "desc": "裝配鴉羽尾翼的高速利刃 (劈砍 +27)"
   },
   "steel_blade": {
     "name": "精鋼短刀",
     "type": "weapon",
     "subType": "blade",
     "atk": 38,
-    "desc": "冷光凜冽的鍛造短刀 (+38 攻擊)"
+    "desc": "冷光凜冽的鍛造短刀 (劈砍 +38)"
   },
   "flame_blade": {
     "name": "烈焰魔劍",
     "type": "weapon",
     "subType": "blade",
     "atk": 54,
-    "desc": "塗滿燃油並點火的致命傳奇長刃 (+54 攻擊)"
+    "desc": "塗滿燃油並點火的長刃 (劈砍 +54)"
+  },
+  "mithril_blade": {
+    "name": "秘銀聖刃",
+    "type": "weapon",
+    "subType": "blade",
+    "atk": 72,
+    "desc": "★傳說級秘銀鍛造聖劍 (劈砍 +72)"
+  },
+  "hammer": {
+    "name": "鐵鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 13,
+    "desc": "工業重鐵鎚 (鈍器 +13)"
+  },
+  "spiked_club": {
+    "name": "狼牙木棒",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 24,
+    "desc": "纏繞鐵絲的木棒 (鈍器 +24)"
+  },
+  "war_hammer": {
+    "name": "戰鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 34,
+    "desc": "沉重的鋼製重錘 (鈍器 +34)"
   },
   "thor_hammer": {
     "name": "雷霆粉碎鎚",
     "type": "weapon",
     "subType": "blunt",
     "atk": 52,
-    "desc": "纏繞高壓電線的重型戰鎚 (+52 攻擊)"
+    "desc": "纏繞高壓電線的戰鎚 (鈍器 +52)"
+  },
+  "meteor_hammer": {
+    "name": "隕星破滅鎚",
+    "type": "weapon",
+    "subType": "blunt",
+    "atk": 70,
+    "desc": "★傳說級隕鐵巨鎚 (鈍器 +70)"
+  },
+  "pistol": {
+    "name": "警用手槍",
+    "type": "weapon",
+    "subType": "gun",
+    "atk": 14,
+    "desc": "制式小口徑手槍 (槍械 +14)"
+  },
+  "magnum": {
+    "name": "麥格農左輪",
+    "type": "weapon",
+    "subType": "gun",
+    "atk": 36,
+    "desc": "填裝強裝藥的大口徑左輪 (槍械 +36)"
+  },
+  "railgun": {
+    "name": "電磁軌道槍",
+    "type": "weapon",
+    "subType": "gun",
+    "atk": 70,
+    "desc": "★傳說級秘銀線圈電磁砲 (槍械 +70)"
+  },
+  "short_bow": {
+    "name": "短弓",
+    "type": "weapon",
+    "subType": "bow",
+    "atk": 13,
+    "desc": "輕便的狩獵短弓 (弓箭 +13)"
+  },
+  "composite_bow": {
+    "name": "複合長弓",
+    "type": "weapon",
+    "subType": "bow",
+    "atk": 35,
+    "desc": "鋼製弓臂的複合弓 (弓箭 +35)"
+  },
+  "eros_bow": {
+    "name": "生命神弓",
+    "type": "weapon",
+    "subType": "bow",
+    "atk": 68,
+    "desc": "★傳說級生命之樹神弓 (弓箭 +68)"
+  },
+  "brass_knuckles": {
+    "name": "指虎",
+    "type": "weapon",
+    "subType": "hand",
+    "atk": 12,
+    "desc": "包覆皮革的鐵製指虎 (拳套 +12)"
+  },
+  "steel_gauntlet": {
+    "name": "鋼鐵拳套",
+    "type": "weapon",
+    "subType": "hand",
+    "atk": 34,
+    "desc": "鋼板強化的格鬥拳套 (拳套 +34)"
+  },
+  "meteor_fist": {
+    "name": "隕星拳套",
+    "type": "weapon",
+    "subType": "hand",
+    "atk": 66,
+    "desc": "★傳說級隕鐵拳套 (拳套 +66)"
+  },
+  "cap": {
+    "name": "鴨舌帽",
+    "type": "armor",
+    "subType": "head",
+    "def": 4,
+    "desc": "普通的布帽 (防禦 +4)"
+  },
+  "helmet": {
+    "name": "工地安全帽",
+    "type": "armor",
+    "subType": "head",
+    "def": 9,
+    "desc": "硬殼安全帽 (防禦 +9)"
+  },
+  "tactical_helmet": {
+    "name": "戰術頭盔",
+    "type": "armor",
+    "subType": "head",
+    "def": 18,
+    "desc": "鋼板強化軍用頭盔 (防禦 +18)"
+  },
+  "mithril_helmet": {
+    "name": "秘銀頭冠",
+    "type": "armor",
+    "subType": "head",
+    "def": 30,
+    "desc": "★傳說級秘銀頭冠 (防禦 +30)"
   },
   "leather_vest": {
     "name": "獵人皮衣",
     "type": "armor",
     "subType": "body",
     "def": 14,
-    "desc": "縫合布料與皮革的防具 (+14 防禦)"
+    "desc": "縫合布料與皮革 (防禦 +14)"
   },
   "chain_armor": {
     "name": "鋼鐵鎖子甲",
     "type": "armor",
     "subType": "body",
     "def": 28,
-    "desc": "以鋼鐵與鐵絲編織的重甲 (+28 防禦)"
+    "desc": "鋼鐵與鐵絲編織的重甲 (防禦 +28)"
   },
   "combat_suit": {
     "name": "特種防彈衣",
     "type": "armor",
     "subType": "body",
     "def": 32,
-    "desc": "皮革強化鋼板的頂級戰術護甲 (+32 防禦)"
+    "desc": "皮革強化鋼板的戰術護甲 (防禦 +32)"
+  },
+  "vf_armor": {
+    "name": "VF 生體裝甲",
+    "type": "armor",
+    "subType": "body",
+    "def": 46,
+    "desc": "★傳說級變異生體護甲 (防禦 +46)"
   },
   "turtle_shield": {
     "name": "龜甲盾",
     "type": "armor",
     "subType": "arm",
     "def": 22,
-    "desc": "防護力極佳的龜殼鋼盾 (+22 防禦)"
+    "desc": "龜殼鋼盾 (防禦 +22)"
   },
   "spiked_shield": {
     "name": "荊棘臂盾",
     "type": "armor",
     "subType": "arm",
     "def": 30,
-    "desc": "鑲嵌鐵絲尖刺的合金重盾 (+30 防禦)"
+    "desc": "鑲嵌尖刺的合金重盾 (防禦 +30)"
+  },
+  "slippers": {
+    "name": "拖鞋",
+    "type": "armor",
+    "subType": "leg",
+    "def": 3,
+    "desc": "聊勝於無的拖鞋 (防禦 +3)"
+  },
+  "running_shoes": {
+    "name": "運動鞋",
+    "type": "armor",
+    "subType": "leg",
+    "def": 6,
+    "desc": "輕便的運動鞋 (防禦 +6)"
+  },
+  "combat_boots": {
+    "name": "軍用戰靴",
+    "type": "armor",
+    "subType": "leg",
+    "def": 15,
+    "desc": "皮革強化的軍靴 (防禦 +15)"
+  },
+  "meteor_boots": {
+    "name": "隕鐵戰靴",
+    "type": "armor",
+    "subType": "leg",
+    "def": 26,
+    "desc": "★傳說級隕鐵戰靴 (防禦 +26)"
+  },
+  "watch": {
+    "name": "手錶",
+    "type": "accessory",
+    "atk": 3,
+    "def": 2,
+    "desc": "精準計時的手錶 (攻 +3 / 防 +2)"
+  },
+  "feather_charm": {
+    "name": "鴉羽護符",
+    "type": "accessory",
+    "atk": 7,
+    "def": 3,
+    "desc": "以鐵絲編織的羽毛護符 (攻 +7 / 防 +3)"
+  },
+  "life_pendant": {
+    "name": "生命墜飾",
+    "type": "accessory",
+    "atk": 12,
+    "def": 8,
+    "desc": "★生命之樹雕刻墜飾 (攻 +12 / 防 +8)"
+  },
+  "bear_trap": {
+    "name": "捕獸夾",
+    "type": "trap",
+    "dmg": 35,
+    "desc": "埋設於區域，路過的受試者踩中受 35 傷害"
+  },
+  "landmine": {
+    "name": "土製地雷",
+    "type": "trap",
+    "dmg": 65,
+    "desc": "埋設於區域，路過的受試者踩中受 65 傷害"
   }
 }

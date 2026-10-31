@@ -8,11 +8,11 @@
 </head>
 <body>
   <div id="app">
-    <!-- 頂部 HUD：存活人數、禁區倒數、生命精力、攻防裝備 -->
+    <!-- 頂部 HUD -->
     <header class="hud-header">
       <div class="user-meta">
         <div class="meta-left">
-          <span class="player-name" id="hud-name">受試者 #01</span>
+          <span class="player-name" id="hud-name">受試者</span>
           <span class="player-lvl" id="hud-level">Lv.1</span>
           <button id="btn-stance" class="stance-badge stance-normal" title="點擊切換探索姿態 [T]">⚖️ 均衡姿態</button>
         </div>
@@ -22,7 +22,6 @@
         </div>
       </div>
 
-      <!-- HP / SP 條 -->
       <div class="vital-bars">
         <div class="bar-wrap">
           <div class="bar-fill hp-bar" id="hp-bar" style="width: 100%;"></div>
@@ -34,17 +33,21 @@
         </div>
       </div>
 
-      <!-- 攻防屬性與已穿戴裝備列 (點擊可主動卸下) -->
       <div class="equip-status-bar">
         <div class="stat-chips">
-          <span class="stat-chip atk-chip">⚔️ 攻擊 <strong id="hud-atk">12</strong></span>
-          <span class="stat-chip def-chip">🛡️ 防禦 <strong id="hud-def">5</strong></span>
-          <span class="stat-chip mas-chip" id="hud-mastery">熟練 F (0%)</span>
+          <span class="stat-chip atk-chip">⚔️ 攻 <strong id="hud-atk">12</strong></span>
+          <span class="stat-chip def-chip">🛡️ 防 <strong id="hud-def">5</strong></span>
+          <span class="stat-chip skill-chip" id="hud-skill" title="角色技能狀態">✨ 技能就緒</span>
+          <span class="stat-chip mas-chip" id="hud-mastery">劈砍 F (0%)</span>
         </div>
+        <!-- 6 格裝備欄 (點擊可卸下) -->
         <div class="equipped-slots">
-          <div class="eq-slot" id="eq-weapon" title="點擊檢視或卸下武器">🗡️ <span>空手</span></div>
-          <div class="eq-slot" id="eq-body" title="點擊檢視或卸下防具">👕 <span>無衣服</span></div>
-          <div class="eq-slot" id="eq-arm" title="點擊檢視或卸下臂甲">🛡️ <span>無臂甲</span></div>
+          <div class="eq-slot" id="eq-weapon"></div>
+          <div class="eq-slot" id="eq-head"></div>
+          <div class="eq-slot" id="eq-body"></div>
+          <div class="eq-slot" id="eq-arm"></div>
+          <div class="eq-slot" id="eq-leg"></div>
+          <div class="eq-slot" id="eq-accessory"></div>
         </div>
       </div>
     </header>
@@ -58,15 +61,14 @@
               <h2 id="area-title">學校</h2>
               <span id="area-zone-tag" class="zone-tag safe">安全區</span>
             </div>
-            <p id="area-desc">荒廢的教學大樓，散落著文具與急救物資</p>
+            <p id="area-desc"></p>
           </div>
           <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 配方圖鑑</button>
         </div>
 
-        <!-- 區域出沒資訊提示 -->
         <div class="area-drops-hint" id="area-drops-hint"></div>
 
-        <!-- 探索發現單一物資通知窗 -->
+        <!-- 探索發現單一物資 -->
         <div id="discovery-card" class="discovery-card hidden">
           <div class="card-header">📦 探索發現物資！</div>
           <div class="item-preview">
@@ -79,11 +81,11 @@
           </div>
         </div>
 
-        <!-- 擊殺後屍體戰利品搜尋區 (Loot Box) -->
+        <!-- 戰利品搜刮區 (屍體 / 空投) -->
         <div id="loot-card" class="discovery-card loot-card hidden">
           <div class="loot-header">
             <span id="loot-title" class="card-header" style="color:#fde047;">💀 戰利品搜刮區</span>
-            <span class="shortcut-tip">點擊物品放入背包（可隨時整理下方背包）</span>
+            <span class="shortcut-tip">點擊物品放入背包</span>
           </div>
           <div id="loot-grid" class="loot-grid"></div>
           <div class="discovery-actions" style="margin-top:8px;">
@@ -91,7 +93,7 @@
           </div>
         </div>
 
-        <!-- 遭遇戰鬥卡片 (野生動物 / AI 倖存者) -->
+        <!-- 遭遇戰鬥 -->
         <div id="combat-card" class="discovery-card combat-card hidden">
           <div class="combat-header">
             <span id="enemy-tag" class="enemy-type-badge">⚠️ 遭遇敵襲</span>
@@ -106,47 +108,42 @@
           </div>
           <p id="combat-round-desc" class="combat-desc">敵人正虎視眈眈地盯著你！</p>
           <div class="discovery-actions">
-            <button id="btn-attack" class="btn btn-danger" style="flex:1.5;">⚔️ 揮擊交戰 [Space/A]</button>
-            <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 強行撤退 (-5 SP) [Esc]</button>
+            <button id="btn-attack" class="btn btn-danger" style="flex:1.3;">⚔️ 攻擊 [A]</button>
+            <button id="btn-skill" class="btn btn-skill" style="flex:1.3;">✨ 技能 [Q]</button>
+            <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 撤退 [Esc]</button>
           </div>
         </div>
       </section>
 
-      <!-- 戰鬥與廣播訊息 Log -->
       <section class="log-panel" id="combat-log"></section>
     </main>
 
     <!-- 下半部：背包與配方 -->
     <footer class="interaction-dock">
-      <!-- 6格背包 -->
       <div class="inventory-section">
         <div class="section-title">
           <span>戰術背包 (6格)</span>
-          <span class="shortcut-tip">點擊背包或上方裝備欄管理</span>
+          <span class="shortcut-tip">點擊物品或按 1~6 管理</span>
         </div>
         <div class="grid-inventory" id="inventory-grid"></div>
       </div>
 
-      <!-- 可用合成配方列表 -->
       <div class="craft-section">
         <div class="section-title">
-          <span>🔨 可立即合成 (支援含已裝備物品合成)</span>
-          <span class="shortcut-tip">鍵盤 C 鍵快速合成</span>
+          <span>🔨 可立即合成 (含已裝備物品)</span>
+          <span class="shortcut-tip">鍵盤 C 快速合成</span>
         </div>
-        <div class="recipe-list" id="recipe-list">
-          <div class="no-recipe">湊齊材料自動浮現（可點右上「📖 配方圖鑑」查詢）</div>
-        </div>
+        <div class="recipe-list" id="recipe-list"></div>
       </div>
 
-      <!-- 操作按鈕列 -->
       <div class="actions-dock">
         <button id="btn-search" class="btn btn-action search-btn">🔍 探索 (-5 SP) [S]</button>
-        <button id="btn-rest" class="btn btn-action" title="有人在同區域時休息可能遭突襲">💤 休息 [R]</button>
+        <button id="btn-rest" class="btn btn-action" title="同區有人時休息可能遭突襲">💤 休息 [R]</button>
         <button id="btn-open-map" class="btn btn-action">🗺️ 移動 [M]</button>
       </div>
     </footer>
 
-    <!-- 物品與已穿戴裝備操作彈窗 -->
+    <!-- 物品 / 裝備操作彈窗 -->
     <div id="item-modal" class="modal hidden">
       <div class="modal-content item-action-dialog">
         <div class="item-action-title" id="item-modal-title">物品名稱</div>
@@ -161,43 +158,54 @@
       </div>
     </div>
 
-    <!-- 地圖切換彈窗 -->
+    <!-- 地圖 -->
     <div id="map-modal" class="modal hidden">
       <div class="modal-content">
         <div class="modal-header-row">
           <h3>🗺️ 選擇移動區域 (消耗 3 SP)</h3>
-          <span id="map-zone-hint" class="shortcut-tip">注意避開紅/黃色禁區</span>
+          <span class="shortcut-tip">📦空投 👹Boss 🪤你的陷阱</span>
         </div>
         <div class="area-grid" id="area-selector"></div>
         <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉地圖 [Esc]</button>
       </div>
     </div>
 
-    <!-- 合成圖鑑彈窗 -->
+    <!-- 合成圖鑑 -->
     <div id="codex-modal" class="modal hidden">
       <div class="modal-content codex-dialog">
         <div class="modal-header-row">
-          <h3>📖 裝備與補給合成圖鑑</h3>
-          <span class="shortcut-tip">綠字代表背包或身上已持有</span>
+          <h3>📖 合成圖鑑</h3>
+          <span class="shortcut-tip">綠字＝已持有</span>
         </div>
         <div class="codex-tabs">
           <button class="codex-tab active" data-tab="all">全部</button>
           <button class="codex-tab" data-tab="weapon">🗡️ 武器</button>
-          <button class="codex-tab" data-tab="armor">🛡️ 防具</button>
-          <button class="codex-tab" data-tab="consumable">💊 補給/素材</button>
+          <button class="codex-tab" data-tab="armor">🛡️ 防具/飾品</button>
+          <button class="codex-tab" data-tab="consumable">💊 補給/陷阱</button>
         </div>
         <div class="codex-list" id="codex-list"></div>
         <button id="btn-close-codex" class="btn btn-secondary" style="margin-top: 12px; width: 100%;">關閉圖鑑 [Esc]</button>
       </div>
     </div>
 
-    <!-- 遊戲勝負結算彈窗 -->
+    <!-- 角色選擇 -->
+    <div id="char-modal" class="modal">
+      <div class="modal-content char-dialog">
+        <div class="modal-header-row">
+          <h3>🧬 選擇你的受試者</h3>
+          <span class="shortcut-tip">專屬武器系、被動與主動技能</span>
+        </div>
+        <div class="char-grid" id="char-grid"></div>
+      </div>
+    </div>
+
+    <!-- 結算 -->
     <div id="gameover-modal" class="modal hidden">
       <div class="modal-content item-action-dialog">
         <h2 id="gameover-title" style="margin-bottom: 8px; font-size: 1.5rem;">實驗結束</h2>
         <p id="gameover-desc" style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 14px;"></p>
         <div id="gameover-stats" class="gameover-stats-box"></div>
-        <button id="btn-restart" class="btn btn-primary" style="width: 100%; margin-top: 14px; font-size: 1rem;">🔄 重新開始新一局實驗</button>
+        <button id="btn-restart" class="btn btn-primary" style="width: 100%; margin-top: 14px; font-size: 1rem;">🔄 重新選角開始新一局</button>
       </div>
     </div>
   </div>

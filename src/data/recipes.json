@@ -63,24 +63,10 @@
     ]
   },
   {
-    "result": "spiked_club",
-    "materials": [
-      "branch",
-      "wire"
-    ]
-  },
-  {
     "result": "feather_dagger",
     "materials": [
       "scalpel",
       "feather"
-    ]
-  },
-  {
-    "result": "war_hammer",
-    "materials": [
-      "hammer",
-      "steel"
     ]
   },
   {
@@ -98,10 +84,101 @@
     ]
   },
   {
+    "result": "mithril_blade",
+    "materials": [
+      "flame_blade",
+      "mithril"
+    ]
+  },
+  {
+    "result": "spiked_club",
+    "materials": [
+      "branch",
+      "wire"
+    ]
+  },
+  {
+    "result": "war_hammer",
+    "materials": [
+      "hammer",
+      "steel"
+    ]
+  },
+  {
     "result": "thor_hammer",
     "materials": [
       "war_hammer",
       "wire"
+    ]
+  },
+  {
+    "result": "meteor_hammer",
+    "materials": [
+      "thor_hammer",
+      "meteorite"
+    ]
+  },
+  {
+    "result": "magnum",
+    "materials": [
+      "pistol",
+      "gunpowder"
+    ]
+  },
+  {
+    "result": "railgun",
+    "materials": [
+      "magnum",
+      "mithril"
+    ]
+  },
+  {
+    "result": "composite_bow",
+    "materials": [
+      "short_bow",
+      "steel"
+    ]
+  },
+  {
+    "result": "eros_bow",
+    "materials": [
+      "composite_bow",
+      "tree_of_life"
+    ]
+  },
+  {
+    "result": "brass_knuckles",
+    "materials": [
+      "scrap_metal",
+      "leather"
+    ]
+  },
+  {
+    "result": "steel_gauntlet",
+    "materials": [
+      "brass_knuckles",
+      "steel"
+    ]
+  },
+  {
+    "result": "meteor_fist",
+    "materials": [
+      "steel_gauntlet",
+      "meteorite"
+    ]
+  },
+  {
+    "result": "tactical_helmet",
+    "materials": [
+      "helmet",
+      "steel"
+    ]
+  },
+  {
+    "result": "mithril_helmet",
+    "materials": [
+      "tactical_helmet",
+      "mithril"
     ]
   },
   {
@@ -126,6 +203,13 @@
     ]
   },
   {
+    "result": "vf_armor",
+    "materials": [
+      "combat_suit",
+      "vf_blood"
+    ]
+  },
+  {
     "result": "turtle_shield",
     "materials": [
       "turtle_shell",
@@ -137,6 +221,48 @@
     "materials": [
       "turtle_shield",
       "wire"
+    ]
+  },
+  {
+    "result": "combat_boots",
+    "materials": [
+      "running_shoes",
+      "leather"
+    ]
+  },
+  {
+    "result": "meteor_boots",
+    "materials": [
+      "combat_boots",
+      "meteorite"
+    ]
+  },
+  {
+    "result": "feather_charm",
+    "materials": [
+      "feather",
+      "wire"
+    ]
+  },
+  {
+    "result": "life_pendant",
+    "materials": [
+      "feather_charm",
+      "tree_of_life"
+    ]
+  },
+  {
+    "result": "bear_trap",
+    "materials": [
+      "scrap_metal",
+      "wire"
+    ]
+  },
+  {
+    "result": "landmine",
+    "materials": [
+      "gunpowder",
+      "scrap_metal"
     ]
   }
 ]

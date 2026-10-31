@@ -2,14 +2,18 @@
   {
     "id": "school",
     "name": "學校",
-    "desc": "荒廢的教學大樓，散落著文具、布料與急救物資",
+    "desc": "荒廢的教學大樓，散落著文具、布料與運動用品",
     "items": [
       "branch",
       "bandage",
       "lighter",
       "pen",
       "water",
-      "cloth"
+      "cloth",
+      "cap",
+      "running_shoes",
+      "watch",
+      "kitchen_knife"
     ],
     "wild": {
       "name": "變異烏鴉",
@@ -28,14 +32,16 @@
   {
     "id": "hospital",
     "name": "醫院",
-    "desc": "充滿消毒水氣味的診所，有豐富的醫療藥品與銳器",
+    "desc": "充滿消毒水氣味的診所，有醫療藥品、銳器與警衛配槍",
     "items": [
       "bandage",
       "scalpel",
       "pills",
       "needle",
       "water",
-      "alcohol"
+      "alcohol",
+      "pistol",
+      "watch"
     ],
     "wild": {
       "name": "狂暴實驗犬",
@@ -54,14 +60,16 @@
   {
     "id": "factory",
     "name": "工廠",
-    "desc": "廢棄重工業區，能找到各類金屬零件、鐵絲與工具",
+    "desc": "廢棄重工業區，能找到金屬零件、火藥與工地裝備",
     "items": [
       "scrap_metal",
       "hammer",
       "iron_ore",
       "wire",
       "oil",
-      "cloth"
+      "cloth",
+      "helmet",
+      "gunpowder"
     ],
     "wild": {
       "name": "巡邏機械犬",
@@ -73,21 +81,23 @@
       "drop": [
         "scrap_metal",
         "steel",
-        "wire"
+        "wire",
+        "gunpowder"
       ]
     }
   },
   {
     "id": "forest",
     "name": "森林",
-    "desc": "島嶼中央的繁茂樹林，適合採集天然素材、毛皮與草藥",
+    "desc": "島嶼中央的繁茂樹林，適合採集天然素材、毛皮與獵弓",
     "items": [
       "branch",
       "stone",
       "herb",
       "flower",
       "water",
-      "leather"
+      "leather",
+      "short_bow"
     ],
     "wild": {
       "name": "叢林山豬",
@@ -113,7 +123,8 @@
       "water",
       "turtle_shell",
       "fish",
-      "lighter"
+      "lighter",
+      "slippers"
     ],
     "wild": {
       "name": "巨型寄居蟹",
