@@ -456,9 +456,12 @@ function initGame(charId) {
   const mastery = { blade: 0, blunt: 0, gun: 0, bow: 0, hand: 0 };
   mastery[ch.weaponType] = 25; // 專精武器起始 E 級
 
+  // 隨機選擇玩家初始區域
+  const startArea = rand(GAME_DATA.areas).id;
+
   player = {
     char: ch,
-    name: `${ch.code} ${ch.name}`,
+    name: ch.name,
     hp: ch.hp, maxHp: ch.hp,
     sp: ch.sp, maxSp: ch.sp,
     baseAtk: ch.atk, baseDef: ch.def,
@@ -467,7 +470,7 @@ function initGame(charId) {
     skillCd: 0,
     kills: 0, crafts: 0,
     stance: "normal",
-    area: "school",
+    area: startArea,
     equipment: { weapon: ch.startWeapon, head: null, body: null, arm: null, leg: null, accessory: null },
     inventory: ["water", "bandage", null, null, null, null]
   };
@@ -484,7 +487,9 @@ function initGame(charId) {
     alive: true
   }));
 
-  warningAreas.add("beach");
+  // 隨機選擇第一個預告禁區
+  const initialWarningArea = rand(GAME_DATA.areas).id;
+  warningAreas.add(initialWarningArea);
 
   combatLog.innerHTML = '';
   discoveryCard.classList.add('hidden');
@@ -493,9 +498,9 @@ function initGame(charId) {
   gameoverModal.classList.add('hidden');
   charModal.classList.add('hidden');
 
-  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始！你是受試者 ${player.name}。`, 'sys-msg');
+  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
   logMessage(`🧬 專精：${WEAPON_TYPES[ch.weaponType]}｜被動【${ch.passive.name}】｜技能【${ch.skill.name}】(戰鬥中按 Q)`, 'craft-msg');
-  logMessage('⚠️ 第一階段禁區預告：[海灘] 將於 12 次行動後封鎖！', 'warn-msg');
+  logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 12 次行動後封鎖！`, 'warn-msg');
   updateUI();
 }
 
