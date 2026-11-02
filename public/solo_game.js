@@ -253,18 +253,68 @@ const CHARACTERS = [
   }
 ];
 
-// AI 受試者池（排除玩家所選角色後取 9 名）
+// AI 受試者池（排除玩家所選角色後取 9 名，每位具備真實裝備欄、專屬技能與畢業合成路線）
 const AI_ROSTER = [
-  { id: "jackie", name: "06M-RF18 傑琪", weapon: "雙刀", atk: 15, def: 6, bag: ["scalpel", "bandage", "leather"] },
-  { id: "aya", name: "14M-RFT02 阿雅", weapon: "左輪手槍", atk: 16, def: 5, bag: ["pistol", "gunpowder", "boiled_water"] },
-  { id: "hyunwoo", name: "14M-RFT04 玄佑", weapon: "皮手套", atk: 14, def: 8, bag: ["brass_knuckles", "turtle_shell", "water"] },
-  { id: "fiora", name: "14M-RFT03 菲歐拉", weapon: "西洋劍", atk: 16, def: 6, bag: ["poison_scalpel", "herb", "steel"] },
-  { id: "nadine", name: "14M-RFT07 娜汀", weapon: "獵弓", atk: 15, def: 5, bag: ["short_bow", "meat", "lighter"] },
-  { id: "yuki", name: "15M-RFT16 雪", weapon: "太刀", atk: 16, def: 7, bag: ["steel_blade", "bandage", "flower_tea"] },
-  { id: "rosalio", name: "14M-RFT10 羅薩里奧", weapon: "球棒", atk: 17, def: 6, bag: ["war_hammer", "pills", "wire"] },
-  { id: "sissela", name: "15M-RFT18 席瑟拉", weapon: "暗器", atk: 14, def: 5, bag: ["feather_dagger", "first_aid_kit", "oil"] },
-  { id: "magnus", name: "14M-RFT06 馬格努斯", weapon: "鐵管", atk: 15, def: 9, bag: ["spiked_club", "turtle_shield", "med_alcohol"] },
-  { id: "leon", name: "15M-RFT20 里昂", weapon: "拳套", atk: 15, def: 8, bag: ["helmet", "running_shoes", "grilled_fish"] }
+  {
+    id: "jackie", name: "傑琪", startWeapon: "kitchen_knife", hp: 100, atk: 13, def: 5,
+    bag: ["scalpel", "bandage"],
+    skill: { name: "血祭狂斬", mult: 1.5, cd: 4 },
+    buildTargets: ["flame_blade", "chain_armor", "tactical_helmet", "first_aid_kit"]
+  },
+  {
+    id: "aya", name: "阿雅", startWeapon: "pistol", hp: 95, atk: 12, def: 4,
+    bag: ["gunpowder", "boiled_water"],
+    skill: { name: "二連射", mult: 1.45, cd: 4 },
+    buildTargets: ["magnum", "combat_suit", "feather_charm", "med_alcohol"]
+  },
+  {
+    id: "hyunwoo", name: "玄佑", startWeapon: "brass_knuckles", hp: 115, atk: 11, def: 8,
+    bag: ["turtle_shell", "water"],
+    skill: { name: "先發制人", mult: 1.35, cd: 4 },
+    buildTargets: ["steel_gauntlet", "turtle_shield", "tactical_helmet", "steak"]
+  },
+  {
+    id: "fiora", name: "菲歐拉", startWeapon: "scalpel", hp: 100, atk: 13, def: 6,
+    bag: ["needle", "herb"],
+    skill: { name: "極速突刺", mult: 1.45, cd: 4 },
+    buildTargets: ["steel_blade", "poison_scalpel", "chain_armor", "herbal_tea"]
+  },
+  {
+    id: "nadine", name: "娜汀", startWeapon: "short_bow", hp: 95, atk: 12, def: 5,
+    bag: ["meat", "lighter"],
+    skill: { name: "穿心箭", mult: 1.5, cd: 5 },
+    buildTargets: ["composite_bow", "leather_vest", "combat_boots", "steak"]
+  },
+  {
+    id: "yuki", name: "雪", startWeapon: "kitchen_knife", hp: 100, atk: 13, def: 6,
+    bag: ["scrap_metal", "bandage"],
+    skill: { name: "拔刀斬", mult: 1.5, cd: 4 },
+    buildTargets: ["steel_blade", "leather_vest", "feather_charm", "flower_tea"]
+  },
+  {
+    id: "rosalio", name: "羅薩里奧", startWeapon: "hammer", hp: 105, atk: 14, def: 6,
+    bag: ["iron_ore", "pills"],
+    skill: { name: "全壘打", mult: 1.55, cd: 5 },
+    buildTargets: ["thor_hammer", "turtle_shield", "combat_boots", "first_aid_kit"]
+  },
+  {
+    id: "sissela", name: "席瑟拉", startWeapon: "scalpel", hp: 90, atk: 13, def: 5,
+    bag: ["feather", "pills"],
+    skill: { name: "苦痛釋放", mult: 1.45, cd: 4 },
+    buildTargets: ["feather_dagger", "spiked_shield", "leather_vest", "first_aid_kit"]
+  },
+  {
+    id: "magnus", name: "馬格努斯", startWeapon: "hammer", hp: 115, atk: 12, def: 8,
+    bag: ["wire", "bandage"],
+    skill: { name: "重機衝撞", mult: 1.45, cd: 5 },
+    buildTargets: ["war_hammer", "spiked_club", "chain_armor", "med_alcohol"]
+  },
+  {
+    id: "leon", name: "里昂", startWeapon: "brass_knuckles", hp: 105, atk: 12, def: 7,
+    bag: ["helmet", "running_shoes"],
+    skill: { name: "潛流連擊", mult: 1.4, cd: 4 },
+    buildTargets: ["steel_gauntlet", "tactical_helmet", "combat_boots", "grilled_fish"]
+  }
 ];
 
 // ==================== 遊戲狀態 ====================
@@ -476,16 +526,28 @@ function initGame(charId) {
   };
 
   const roster = AI_ROSTER.filter(r => r.id !== ch.id).slice(0, 9);
-  aiBots = roster.map((tpl, idx) => ({
-    id: `ai_${idx}`,
-    name: tpl.name,
-    weaponName: tpl.weapon,
-    hp: 95, maxHp: 95,
-    atk: tpl.atk, def: tpl.def,
-    bag: [...tpl.bag],
-    area: GAME_DATA.areas[(idx + 1) % GAME_DATA.areas.length].id,
-    alive: true
-  }));
+  aiBots = roster.map((tpl, idx) => {
+    const bot = {
+      id: `ai_${idx}`,
+      charId: tpl.id,
+      name: tpl.name,
+      hp: tpl.hp, maxHp: tpl.hp,
+      baseAtk: tpl.atk, baseDef: tpl.def,
+      atk: tpl.atk, def: tpl.def,
+      masteryLv: 1,
+      stance: "stealth",
+      skill: { ...tpl.skill, curCd: 0 },
+      equipment: { weapon: tpl.startWeapon, head: null, body: null, arm: null, leg: null, accessory: null },
+      bag: [...tpl.bag],
+      buildTargets: [...tpl.buildTargets],
+      weaponName: GAME_DATA.items[tpl.startWeapon]?.name || "空手",
+      area: GAME_DATA.areas[Math.floor(Math.random() * GAME_DATA.areas.length)].id,
+      alive: true
+    };
+    aiAutoEquipBest(bot);
+    aiSyncStats(bot);
+    return bot;
+  });
 
   // 隨機選擇第一個預告禁區
   const initialWarningArea = rand(GAME_DATA.areas).id;
@@ -792,6 +854,220 @@ function checkEnemyTrap(baseChance) {
   return false;
 }
 
+// ==================== AI 擬真決策系統 (AI Brain v2.0：Level 1 路徑合成 + Level 2 智慧戰鬥) ====================
+function aiGetOwnedIds(bot) {
+  const list = [...bot.bag.filter(Boolean)];
+  EQUIP_SLOTS.forEach(s => { if (bot.equipment[s]) list.push(bot.equipment[s]); });
+  return list;
+}
+
+function aiSyncStats(bot) {
+  let atk = bot.baseAtk + bot.masteryLv * 3;
+  const wId = bot.equipment.weapon;
+  const wItem = wId ? GAME_DATA.items[wId] : null;
+  if (wItem) atk += wItem.atk || 0;
+  const accId = bot.equipment.accessory;
+  const accItem = accId ? GAME_DATA.items[accId] : null;
+  if (accItem) atk += accItem.atk || 0;
+  if (bot.stance === 'aggressive') atk = Math.round(atk * 1.1);
+
+  let def = bot.baseDef;
+  ['head', 'body', 'arm', 'leg', 'accessory'].forEach(slot => {
+    const id = bot.equipment[slot];
+    if (id && GAME_DATA.items[id]) def += GAME_DATA.items[id].def || 0;
+  });
+
+  bot.atk = atk;
+  bot.def = def;
+  bot.weaponName = wItem ? wItem.name : '空手';
+}
+
+function aiAutoEquipBest(bot) {
+  for (let i = bot.bag.length - 1; i >= 0; i--) {
+    const id = bot.bag[i];
+    const it = GAME_DATA.items[id];
+    if (!it) continue;
+    const slot = getEquipSlot(it);
+    if (!slot) continue;
+
+    const curId = bot.equipment[slot];
+    const curIt = curId ? GAME_DATA.items[curId] : null;
+    const newScore = (it.atk || 0) + (it.def || 0);
+    const curScore = curIt ? ((curIt.atk || 0) + (curIt.def || 0)) : -1;
+
+    if (newScore > curScore) {
+      bot.equipment[slot] = id;
+      bot.bag.splice(i, 1);
+      // 若換下來的舊裝備是未來合成原料則留著，否則淘汰避免塞滿背包
+      if (curId && GAME_DATA.recipes.some(r => r.materials.includes(curId)) && bot.bag.length < 6) {
+        bot.bag.push(curId);
+      }
+    }
+  }
+  aiSyncStats(bot);
+}
+
+// 遞迴拆解目標物品缺少的基礎採集材料 (Level 1 導航核心)
+function aiGetMissingLeafMaterials(bot, targetId, depth = 0) {
+  if (depth > 4) return [];
+  const owned = aiGetOwnedIds(bot);
+  if (owned.includes(targetId)) return [];
+
+  const recipe = GAME_DATA.recipes.find(r => r.result === targetId);
+  if (!recipe) return [targetId];
+
+  const missing = [];
+  recipe.materials.forEach(m => {
+    if (!owned.includes(m)) {
+      const sub = aiGetMissingLeafMaterials(bot, m, depth + 1);
+      missing.push(...(sub.length > 0 ? sub : [m]));
+    }
+  });
+  return missing;
+}
+
+function aiGetNeededMaterials(bot) {
+  for (const targetId of bot.buildTargets) {
+    const owned = aiGetOwnedIds(bot);
+    if (!owned.includes(targetId)) {
+      const leaves = aiGetMissingLeafMaterials(bot, targetId);
+      if (leaves.length > 0) return leaves;
+    }
+  }
+  return ['bandage', 'pills', 'meat', 'lighter'];
+}
+
+function aiConsumeItem(bot, matId) {
+  const bIdx = bot.bag.indexOf(matId);
+  if (bIdx !== -1) {
+    bot.bag.splice(bIdx, 1);
+    return true;
+  }
+  for (const s of EQUIP_SLOTS) {
+    if (bot.equipment[s] === matId) {
+      bot.equipment[s] = null;
+      return true;
+    }
+  }
+  return false;
+}
+
+// AI 自動檢查並執行裝備與補給合成
+function aiTryCraft(bot) {
+  let craftedAny = false;
+  for (let loop = 0; loop < 3; loop++) {
+    const owned = aiGetOwnedIds(bot);
+    const match = GAME_DATA.recipes.find(r => hasRecipeMaterials(r, owned));
+    if (!match) break;
+
+    aiConsumeItem(bot, match.materials[0]);
+    aiConsumeItem(bot, match.materials[1]);
+    bot.bag.push(match.result);
+    bot.masteryLv = Math.min(7, bot.masteryLv + 0.35);
+    craftedAny = true;
+
+    const resItem = GAME_DATA.items[match.result];
+    if (resItem && resItem.type === 'weapon' && resItem.atk >= 36 && Math.random() < 0.65) {
+      logMessage(`📡 [情報] 偵測到 ${bot.name} 已合成高階武器【${resItem.name}】！`, 'sys-msg');
+    }
+    aiAutoEquipBest(bot);
+  }
+  return craftedAny;
+}
+
+// Level 2：AI 自動吃藥回血決策
+function aiTryHeal(bot, inCombat = false) {
+  const threshold = inCombat ? 0.48 : 0.68;
+  if (bot.hp > bot.maxHp * threshold) return null;
+
+  let bestIdx = -1;
+  let bestHeal = 0;
+  bot.bag.forEach((id, idx) => {
+    const it = GAME_DATA.items[id];
+    if (it && it.type === 'consumable' && it.heal_hp && it.heal_hp > bestHeal) {
+      bestHeal = it.heal_hp;
+      bestIdx = idx;
+    }
+  });
+
+  if (bestIdx === -1) return null;
+  const itemId = bot.bag.splice(bestIdx, 1)[0];
+  const it = GAME_DATA.items[itemId];
+  bot.hp = Math.min(bot.maxHp, bot.hp + it.heal_hp);
+  return it;
+}
+
+// Level 2：AI 動態姿態切換
+function aiUpdateStance(bot) {
+  const wId = bot.equipment.weapon;
+  const wAtk = (wId && GAME_DATA.items[wId]) ? GAME_DATA.items[wId].atk : 0;
+  if (bot.hp < bot.maxHp * 0.45 || wAtk < 24) {
+    bot.stance = 'stealth';
+  } else if (bot.hp > bot.maxHp * 0.7 && wAtk >= 32) {
+    bot.stance = 'aggressive';
+  } else {
+    bot.stance = 'normal';
+  }
+  aiSyncStats(bot);
+}
+
+// Level 1：AI 目標導向區域導航
+function aiChooseNextArea(bot, safeIds) {
+  if (safeIds.length === 0) return bot.area;
+
+  // 1. 禁區或預告禁區強制撤離
+  const inDanger = restrictedAreas.has(bot.area) || warningAreas.has(bot.area);
+
+  // 2. 殘血時優先找安全區域避戰
+  if (bot.hp < bot.maxHp * 0.45) {
+    const quietSafe = safeIds.filter(id => id !== player.area && !warningAreas.has(id));
+    if (quietSafe.length > 0) return rand(quietSafe);
+  }
+
+  // 3. 空投爭奪（狀態良好且為進攻/均衡姿態）
+  if (airdrop && safeIds.includes(airdrop.area) && bot.hp > bot.maxHp * 0.65 && Math.random() < 0.45) {
+    return airdrop.area;
+  }
+
+  // 4. 目標合成材料導航
+  const needed = aiGetNeededMaterials(bot);
+  const curAreaObj = GAME_DATA.areas.find(a => a.id === bot.area);
+  // 若當前區域安全且正產出所需材料，70% 機率留在原地繼續搜刮
+  if (!inDanger && curAreaObj && needed.some(m => curAreaObj.items.includes(m)) && Math.random() < 0.7) {
+    return bot.area;
+  }
+
+  // 尋找有產出所需材料的安全區
+  const matchingAreas = safeIds.filter(aId => {
+    if (warningAreas.has(aId)) return false;
+    const aObj = GAME_DATA.areas.find(a => a.id === aId);
+    return aObj && needed.some(m => aObj.items.includes(m));
+  });
+  if (matchingAreas.length > 0) return rand(matchingAreas);
+
+  return inDanger ? rand(safeIds) : (Math.random() < 0.35 ? rand(safeIds) : bot.area);
+}
+
+// 取得 AI 死亡後的真實裝備與遺物清單
+function aiGetCorpseLoot(bot) {
+  const loot = [];
+  EQUIP_SLOTS.forEach(s => {
+    if (bot.equipment[s]) loot.push(bot.equipment[s]);
+  });
+  bot.bag.forEach(id => {
+    if (id && !loot.includes(id)) loot.push(id);
+  });
+  // 依稀有度與數值排序，取前 5 件最精華遺物
+  loot.sort((a, b) => {
+    const ia = GAME_DATA.items[a] || {};
+    const ib = GAME_DATA.items[b] || {};
+    const scoreA = (ia.rare ? 100 : 0) + (ia.atk || 0) + (ia.def || 0) + (ia.heal_hp || 0) * 0.5;
+    const scoreB = (ib.rare ? 100 : 0) + (ib.atk || 0) + (ib.def || 0) + (ib.heal_hp || 0) * 0.5;
+    return scoreB - scoreA;
+  });
+  return loot.slice(0, 5);
+}
+
 // ==================== 世界推進 ====================
 function advanceWorldTick() {
   if (isGameOver) return;
@@ -810,26 +1086,57 @@ function advanceWorldTick() {
 
   const safeIds = safeAreas();
 
-  // AI 移動、成長、埋陷阱
+  // AI 擬真行動循環：吃藥/休息 -> 目標導航移動 -> 採集目標材料 -> 合成與穿戴裝備 -> 切換姿態
   aiBots.forEach(bot => {
     if (!bot.alive) return;
-    if ((restrictedAreas.has(bot.area) || warningAreas.has(bot.area)) && safeIds.length > 0) {
-      bot.area = rand(safeIds);
-    } else if (Math.random() < 0.35 && safeIds.length > 0) {
-      bot.area = rand(safeIds);
+    if (bot.skill.curCd > 0) bot.skill.curCd--;
+
+    // 非戰鬥狀態下若受傷，優先吃補品或休息回血
+    if (bot.hp < bot.maxHp * 0.65) {
+      const healed = aiTryHeal(bot, false);
+      if (!healed && bot.hp < bot.maxHp * 0.5) {
+        bot.hp = Math.min(bot.maxHp, bot.hp + 18);
+      }
     }
 
-    if (actionCounter % 5 === 0) {
-      bot.atk += 2;
-      bot.def += 1;
-      bot.maxHp += 5;
-      bot.hp = Math.min(bot.maxHp, bot.hp + 10);
-      const areaObj = GAME_DATA.areas.find(a => a.id === bot.area);
-      if (areaObj && bot.bag.length < 5) bot.bag.push(rand(areaObj.items));
+    // 智慧移動導航
+    bot.area = aiChooseNextArea(bot, safeIds);
+
+    // 在所在區域進行目標導向採集
+    const areaObj = GAME_DATA.areas.find(a => a.id === bot.area);
+    if (areaObj) {
+      const needed = aiGetNeededMaterials(bot);
+      const targetMatInArea = areaObj.items.filter(id => needed.includes(id));
+      // 若該區有此 AI 合成路線所需的材料，高機率精準搜出該材料
+      const picked = (targetMatInArea.length > 0 && Math.random() < 0.72)
+        ? rand(targetMatInArea)
+        : rand(areaObj.items);
+
+      if (bot.bag.length >= 6) {
+        // 清理非合成路線的低階雜物
+        const dropIdx = bot.bag.findIndex(id => !needed.includes(id) && GAME_DATA.items[id]?.type === 'material');
+        if (dropIdx !== -1) bot.bag.splice(dropIdx, 1);
+        else bot.bag.shift();
+      }
+      bot.bag.push(picked);
     }
 
-    if (aiTraps.length < 4 && Math.random() < 0.04 && !restrictedAreas.has(bot.area)) {
-      aiTraps.push({ area: bot.area, dmg: 30, name: '捕獸夾', ownerName: bot.name });
+    // 嘗試合成裝備、擇優穿戴與更新姿態
+    aiTryCraft(bot);
+    aiAutoEquipBest(bot);
+    if (actionCounter % 6 === 0) {
+      bot.masteryLv = Math.min(7, bot.masteryLv + 0.5);
+      bot.maxHp += 4;
+      bot.hp = Math.min(bot.maxHp, bot.hp + 6);
+    }
+    aiUpdateStance(bot);
+
+    // 若 AI 合成出陷阱，自動埋設於當前區域
+    const trapIdx = bot.bag.findIndex(id => GAME_DATA.items[id]?.type === 'trap');
+    if (trapIdx !== -1 && aiTraps.length < 5 && !restrictedAreas.has(bot.area)) {
+      const trapId = bot.bag.splice(trapIdx, 1)[0];
+      const trapIt = GAME_DATA.items[trapId];
+      aiTraps.push({ area: bot.area, dmg: trapIt.dmg, name: trapIt.name, ownerName: bot.name });
     }
   });
 
@@ -852,18 +1159,35 @@ function advanceWorldTick() {
   });
   if (checkVictory()) return;
 
-  // AI 互相交戰
+  // AI 互相交戰（進攻姿態 AI 優先發起戰鬥，並支援吃藥與掠奪裝備）
   const aliveBots = aiBots.filter(b => b.alive);
-  if (aliveBots.length >= 2 && Math.random() < 0.28) {
-    const attacker = rand(aliveBots);
-    const others = aliveBots.filter(b => b.id !== attacker.id && (b.area === attacker.area || Math.random() < 0.35));
+  if (aliveBots.length >= 2 && Math.random() < 0.30) {
+    const aggressiveBots = aliveBots.filter(b => b.stance === 'aggressive');
+    const attacker = aggressiveBots.length > 0 ? rand(aggressiveBots) : rand(aliveBots);
+    const others = aliveBots.filter(b => b.id !== attacker.id && (b.area === attacker.area || Math.random() < 0.3));
     if (others.length > 0) {
       const victim = rand(others);
-      victim.hp -= Math.max(12, attacker.atk - Math.floor(victim.def * 0.5));
+      const useSkill = attacker.skill.curCd <= 0 && Math.random() < 0.5;
+      const mult = useSkill ? attacker.skill.mult : 1;
+      if (useSkill) attacker.skill.curCd = attacker.skill.cd;
+
+      const dmg = Math.max(12, Math.round((attacker.atk - victim.def * 0.45) * mult));
+      victim.hp -= dmg;
+      attacker.masteryLv = Math.min(7, attacker.masteryLv + 0.4);
+
+      if (victim.hp > 0 && victim.hp < victim.maxHp * 0.45) {
+        aiTryHeal(victim, true);
+      }
+
       if (victim.hp <= 0) {
         victim.alive = false;
-        if (victim.bag.length > 0 && attacker.bag.length < 6) attacker.bag.push(victim.bag[0]);
-        logMessage(`💀 [擊殺廣播] ${attacker.name} 在 [${areaName(victim.area)}] 擊殺了 ${victim.name}！(剩餘 ${getAliveCount()} 人)`, 'combat-msg');
+        // 擊殺者搜刮死者最佳遺物並自動換裝
+        const victimLoot = aiGetCorpseLoot(victim);
+        if (victimLoot.length > 0) {
+          attacker.bag.push(victimLoot[0]);
+          aiAutoEquipBest(attacker);
+        }
+        logMessage(`💀 [擊殺廣播] ${attacker.name} 以【${attacker.weaponName}】在 [${areaName(victim.area)}] 擊殺了 ${victim.name}！(剩餘 ${getAliveCount()} 人)`, 'combat-msg');
         if (checkVictory()) return;
       }
     }
@@ -876,12 +1200,12 @@ function advanceWorldTick() {
       airdrop = null;
     } else {
       const grabbers = aiBots.filter(b => b.alive && b.area === airdrop.area);
-      if (grabbers.length > 0 && Math.random() < 0.18) {
+      if (grabbers.length > 0 && Math.random() < 0.22) {
         const g = rand(grabbers);
         g.bag.push(...airdrop.items);
-        g.atk += 8;
-        g.def += 5;
-        logMessage(`📦 [空投廣播] ${g.name} 搶走了 [${areaName(airdrop.area)}] 的空投！實力大增！`, 'warn-msg');
+        aiTryCraft(g);
+        aiAutoEquipBest(g);
+        logMessage(`📦 [空投廣播] ${g.name} 奪取了 [${areaName(airdrop.area)}] 的空投補給！`, 'warn-msg');
         airdrop = null;
       }
     }
@@ -1003,9 +1327,15 @@ function renderCombatCard(descText) {
     combatCard.classList.add('hidden');
     return;
   }
-  if (activeEnemy.isBoss) enemyTag.innerText = '👹 首領級變異體';
-  else if (activeEnemy.isAI) enemyTag.innerText = `🚨 敵方受試者 (${activeEnemy.weaponName})`;
-  else enemyTag.innerText = '🐾 野生動物';
+  if (activeEnemy.isBoss) {
+    enemyTag.innerText = '👹 首領級變異體';
+  } else if (activeEnemy.isAI) {
+    const stMap = { aggressive: '⚔️進攻', stealth: '🥷潛行', normal: '⚖️均衡' };
+    const stLabel = activeEnemy.ref ? (stMap[activeEnemy.ref.stance] || '') : '';
+    enemyTag.innerText = `🚨 受試者｜手持：${activeEnemy.weaponName} ${stLabel}`;
+  } else {
+    enemyTag.innerText = '🐾 野生動物';
+  }
   enemyStats.innerText = `攻 ${activeEnemy.atk} / 防 ${activeEnemy.def}`;
   enemyName.innerText = activeEnemy.name;
   enemyHpText.innerText = `HP ${activeEnemy.hp}/${activeEnemy.maxHp}`;
@@ -1148,7 +1478,7 @@ function doAttack(useSkill = false) {
         updateUI();
         return;
       }
-      openLoot(`💀 [${defeated.name}] 的遺物箱`, defeated.ref.bag || []);
+      openLoot(`💀 [${defeated.name}] 的遺物箱`, aiGetCorpseLoot(defeated.ref));
     } else {
       let count = 2 + (Math.random() < 0.45 ? 1 : 0) + (ch.id === 'nadine' ? 1 : 0);
       const drops = [...defeated.drop].sort(() => Math.random() - 0.5);
@@ -1175,27 +1505,54 @@ function doAttack(useSkill = false) {
     return;
   }
 
-  // ---------- 敵人反擊 ----------
-  const pDef = getPlayerDef();
-  const dmgToPlayer = applyDamageToPlayer(Math.max(4, activeEnemy.atk - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4)));
+  // ---------- 敵人反擊 (含 Level 2 AI 智慧決策) ----------
+  let aiActionText = '';
+  let enemyAtkMult = 1.0;
 
-  if (activeEnemy.isAI && activeEnemy.hp < 25 && Math.random() < 0.45) {
-    const escapeIds = safeAreas().filter(id => id !== player.area);
-    if (escapeIds.length > 0) {
-      activeEnemy.ref.area = rand(escapeIds);
-      logMessage(`💥 你造成 ${total} 傷害（受反擊 -${dmgToPlayer} HP）！重傷的 [${activeEnemy.name}] 趁隙逃離了此區域！`, 'combat-msg');
-      activeEnemy = null;
-      combatCard.classList.add('hidden');
-      if (player.hp <= 0) {
-        triggerGameOver(false, '在交戰中力竭身亡。');
+  if (activeEnemy.isAI && activeEnemy.ref) {
+    const bot = activeEnemy.ref;
+    aiUpdateStance(bot);
+    activeEnemy.atk = bot.atk;
+    activeEnemy.def = bot.def;
+
+    // 1. 殘血緊急嗑藥 (HP <= 45%)
+    if (bot.hp <= bot.maxHp * 0.45) {
+      const healedIt = aiTryHeal(bot, true);
+      if (healedIt) {
+        activeEnemy.hp = bot.hp;
+        aiActionText = ` 💊[${bot.name}] 緊急服用 [${healedIt.name}] (+${healedIt.heal_hp} HP)！`;
+        logMessage(`💊 交戰中 [${bot.name}] 緊急服用了 [${healedIt.name}]，回復 ${healedIt.heal_hp} HP！`, 'warn-msg');
+      }
+    }
+
+    // 2. 重傷且無藥可吃時嘗試戰術撤退
+    if (activeEnemy.hp < 28 && Math.random() < 0.48) {
+      const escapeIds = safeAreas().filter(id => id !== player.area);
+      if (escapeIds.length > 0) {
+        bot.area = rand(escapeIds);
+        bot.stance = 'cautious';
+        logMessage(`💥 你造成 ${total} 傷害！重傷的 [${activeEnemy.name}] 切換謹慎姿態並緊急撤離了此區域！`, 'combat-msg');
+        activeEnemy = null;
+        combatCard.classList.add('hidden');
+        updateUI();
         return;
       }
-      updateUI();
-      return;
+    }
+
+    // 3. AI 主動技能施放
+    if (bot.skill && bot.skill.curCd <= 0 && Math.random() < 0.6) {
+      bot.skill.curCd = bot.skill.cd;
+      enemyAtkMult = bot.skill.mult || 1.3;
+      aiActionText += ` ⚡發動【${bot.skill.name}】！`;
+      logMessage(`⚡ [${bot.name}] 對你發動專屬技能【${bot.skill.name}】！`, 'warn-msg');
     }
   }
 
-  const roundMsg = `${critText}你對 [${activeEnemy.name}] 造成 ${total} 傷害，承受反擊 -${dmgToPlayer} HP！`;
+  const pDef = getPlayerDef();
+  const rawEnemyDmg = Math.max(4, Math.floor(activeEnemy.atk * enemyAtkMult) - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4));
+  const dmgToPlayer = applyDamageToPlayer(rawEnemyDmg);
+
+  const roundMsg = `${critText}你對 [${activeEnemy.name}] 造成 ${total} 傷害，承受反擊 -${dmgToPlayer} HP！${aiActionText}`;
   logMessage(roundMsg, 'combat-msg');
   renderCombatCard(roundMsg);
 
