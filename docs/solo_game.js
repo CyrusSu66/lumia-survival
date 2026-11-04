@@ -101,57 +101,57 @@ const GAME_DATA = {
     poison_scalpel: { name: "精密刺針刀", type: "weapon", subType: "blade", atk: 26, desc: "結合縫合針改造的暗殺刀 (劈砍 +26)" },
     feather_dagger: { name: "黑羽飛刀", type: "weapon", subType: "blade", atk: 27, desc: "裝配鴉羽尾翼的高速利刃 (劈砍 +27)" },
     steel_blade: { name: "精鋼短刀", type: "weapon", subType: "blade", atk: 38, desc: "冷光凜冽的鍛造短刀 (劈砍 +38)" },
-    flame_blade: { name: "烈焰魔劍", type: "weapon", subType: "blade", atk: 54, desc: "塗滿燃油並點火的長刃 (劈砍 +54)" },
-    mithril_blade: { name: "秘銀聖刃", type: "weapon", subType: "blade", atk: 72, desc: "★傳說級秘銀鍛造聖劍 (劈砍 +72)" },
+    flame_blade: { name: "烈焰魔劍", type: "weapon", subType: "blade", atk: 54, desc: "塗滿燃油並點火的長刃 (劈砍 +54)", passive: { id: "flame", name: "業火", desc: "每次攻擊額外附加 8 點真實燃燒傷害" } },
+    mithril_blade: { name: "秘銀聖刃", type: "weapon", subType: "blade", atk: 72, desc: "★傳說級秘銀鍛造聖劍 (劈砍 +72)", passive: { id: "pierce", name: "破甲", desc: "攻擊時必定無視目標 25% 防禦力" } },
 
     // ---------- 武器：鈍器 ----------
     hammer: { name: "鐵鎚", type: "weapon", subType: "blunt", atk: 13, desc: "工業重鐵鎚 (鈍器 +13)" },
     spiked_club: { name: "狼牙木棒", type: "weapon", subType: "blunt", atk: 24, desc: "纏繞鐵絲的木棒 (鈍器 +24)" },
     war_hammer: { name: "戰鎚", type: "weapon", subType: "blunt", atk: 34, desc: "沉重的鋼製重錘 (鈍器 +34)" },
     thor_hammer: { name: "雷霆粉碎鎚", type: "weapon", subType: "blunt", atk: 52, desc: "纏繞高壓電線的戰鎚 (鈍器 +52)" },
-    meteor_hammer: { name: "隕星破滅鎚", type: "weapon", subType: "blunt", atk: 70, desc: "★傳說級隕鐵巨鎚 (鈍器 +70)" },
+    meteor_hammer: { name: "隕星破滅鎚", type: "weapon", subType: "blunt", atk: 70, desc: "★傳說級隕鐵巨鎚 (鈍器 +70)", passive: { id: "crush", name: "重創", desc: "暴擊傷害倍率提升至 1.85 倍" } },
 
     // ---------- 武器：槍械 ----------
     pistol: { name: "警用手槍", type: "weapon", subType: "gun", atk: 14, desc: "制式小口徑手槍 (槍械 +14)" },
     magnum: { name: "麥格農左輪", type: "weapon", subType: "gun", atk: 36, desc: "填裝強裝藥的大口徑左輪 (槍械 +36)" },
-    railgun: { name: "電磁軌道槍", type: "weapon", subType: "gun", atk: 70, desc: "★傳說級秘銀線圈電磁砲 (槍械 +70)" },
+    railgun: { name: "電磁軌道槍", type: "weapon", subType: "gun", atk: 70, desc: "★傳說級秘銀線圈電磁砲 (槍械 +70)", passive: { id: "rail", name: "電磁貫穿", desc: "攻擊有 35% 機率超載，追加 +16 點傷害" } },
 
     // ---------- 武器：弓箭 ----------
     short_bow: { name: "短弓", type: "weapon", subType: "bow", atk: 13, desc: "輕便的狩獵短弓 (弓箭 +13)" },
     composite_bow: { name: "複合長弓", type: "weapon", subType: "bow", atk: 35, desc: "鋼製弓臂的複合弓 (弓箭 +35)" },
-    eros_bow: { name: "生命神弓", type: "weapon", subType: "bow", atk: 68, desc: "★傳說級生命之樹神弓 (弓箭 +68)" },
+    eros_bow: { name: "生命神弓", type: "weapon", subType: "bow", atk: 68, desc: "★傳說級生命之樹神弓 (弓箭 +68)", passive: { id: "vamp", name: "生命汲取", desc: "攻擊命中將造成傷害的 20% 轉化為自身 HP" } },
 
     // ---------- 武器：拳套 ----------
     brass_knuckles: { name: "指虎", type: "weapon", subType: "hand", atk: 12, desc: "包覆皮革的鐵製指虎 (拳套 +12)" },
     steel_gauntlet: { name: "鋼鐵拳套", type: "weapon", subType: "hand", atk: 34, desc: "鋼板強化的格鬥拳套 (拳套 +34)" },
-    meteor_fist: { name: "隕星拳套", type: "weapon", subType: "hand", atk: 66, desc: "★傳說級隕鐵拳套 (拳套 +66)" },
+    meteor_fist: { name: "隕星拳套", type: "weapon", subType: "hand", atk: 66, desc: "★傳說級隕鐵拳套 (拳套 +66)", passive: { id: "combo", name: "爆裂連擊", desc: "攻擊有 30% 機率追加一次打擊" } },
 
     // ---------- 防具：頭部 ----------
     cap: { name: "鴨舌帽", type: "armor", subType: "head", def: 4, desc: "普通的布帽 (防禦 +4)" },
     helmet: { name: "工地安全帽", type: "armor", subType: "head", def: 9, desc: "硬殼安全帽 (防禦 +9)" },
     tactical_helmet: { name: "戰術頭盔", type: "armor", subType: "head", def: 18, desc: "鋼板強化軍用頭盔 (防禦 +18)" },
-    mithril_helmet: { name: "秘銀頭冠", type: "armor", subType: "head", def: 30, desc: "★傳說級秘銀頭冠 (防禦 +30)" },
+    mithril_helmet: { name: "秘銀頭冠", type: "armor", subType: "head", def: 30, desc: "★傳說級秘銀頭冠 (防禦 +30)", passive: { id: "cooldown", name: "冷靜", desc: "主動技能冷卻 CD 減少 1 回合" } },
 
     // ---------- 防具：身體 ----------
     leather_vest: { name: "獵人皮衣", type: "armor", subType: "body", def: 14, desc: "縫合布料與皮革 (防禦 +14)" },
     chain_armor: { name: "鋼鐵鎖子甲", type: "armor", subType: "body", def: 28, desc: "鋼鐵與鐵絲編織的重甲 (防禦 +28)" },
     combat_suit: { name: "特種防彈衣", type: "armor", subType: "body", def: 32, desc: "皮革強化鋼板的戰術護甲 (防禦 +32)" },
-    vf_armor: { name: "VF 生體裝甲", type: "armor", subType: "body", def: 46, desc: "★傳說級變異生體護甲 (防禦 +46)" },
+    vf_armor: { name: "VF 生體裝甲", type: "armor", subType: "body", def: 46, desc: "★傳說級變異生體護甲 (防禦 +46)", passive: { id: "vf_barrier", name: "VF狂暴護盾", desc: "HP 低於 40% 時，承受的所有傷害減免 30%" } },
 
     // ---------- 防具：臂甲 ----------
     turtle_shield: { name: "龜甲盾", type: "armor", subType: "arm", def: 22, desc: "龜殼鋼盾 (防禦 +22)" },
-    spiked_shield: { name: "荊棘臂盾", type: "armor", subType: "arm", def: 30, desc: "鑲嵌尖刺的合金重盾 (防禦 +30)" },
+    spiked_shield: { name: "荊棘臂盾", type: "armor", subType: "arm", def: 30, desc: "鑲嵌尖刺的合金重盾 (防禦 +30)", passive: { id: "thorns", name: "尖刺荊棘", desc: "受到反擊時反彈 10 點傷害給敵人" } },
 
     // ---------- 防具：腿部 ----------
     slippers: { name: "拖鞋", type: "armor", subType: "leg", def: 3, desc: "聊勝於無的拖鞋 (防禦 +3)" },
     running_shoes: { name: "運動鞋", type: "armor", subType: "leg", def: 6, desc: "輕便的運動鞋 (防禦 +6)" },
     combat_boots: { name: "軍用戰靴", type: "armor", subType: "leg", def: 15, desc: "皮革強化的軍靴 (防禦 +15)" },
-    meteor_boots: { name: "隕鐵戰靴", type: "armor", subType: "leg", def: 26, desc: "★傳說級隕鐵戰靴 (防禦 +26)" },
+    meteor_boots: { name: "隕鐵戰靴", type: "armor", subType: "leg", def: 26, desc: "★傳說級隕鐵戰靴 (防禦 +26)", passive: { id: "swift", name: "疾行", desc: "探索消耗減少 1 SP" } },
 
     // ---------- 飾品 ----------
     watch: { name: "手錶", type: "accessory", atk: 3, def: 2, desc: "精準計時的手錶 (攻 +3 / 防 +2)" },
     feather_charm: { name: "鴉羽護符", type: "accessory", atk: 7, def: 3, desc: "以鐵絲編織的羽毛護符 (攻 +7 / 防 +3)" },
-    life_pendant: { name: "生命墜飾", type: "accessory", atk: 12, def: 8, desc: "★生命之樹雕刻墜飾 (攻 +12 / 防 +8)" },
+    life_pendant: { name: "生命墜飾", type: "accessory", atk: 12, def: 8, desc: "★生命之樹雕刻墜飾 (攻 +12 / 防 +8)", passive: { id: "regen", name: "生生不息", desc: "每次探索或休息額外恢復 4 HP" } },
 
     // ---------- 陷阱 ----------
     bear_trap: { name: "捕獸夾", type: "trap", dmg: 35, desc: "埋設於區域，路過的受試者踩中受 35 傷害" },
@@ -404,6 +404,11 @@ const gameoverDesc = $('gameover-desc');
 const gameoverStats = $('gameover-stats');
 const btnRestart = $('btn-restart');
 
+const careerModal = $('career-modal');
+const btnOpenCareer = $('btn-open-career');
+const btnCloseCareer = $('btn-close-career');
+const floatingLayer = $('floating-layer');
+
 const btnSearch = $('btn-search');
 const btnRest = $('btn-rest');
 const btnPickup = $('btn-pickup');
@@ -418,6 +423,185 @@ const btnCloseMap = $('btn-close-map');
 const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const areaName = (id) => GAME_DATA.areas.find(a => a.id === id)?.name || '未知區域';
 const safeAreas = () => GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id));
+
+// 檢查玩家目前穿戴的裝備是否持有指定被動 ID
+function playerHasPassive(passiveId) {
+  if (!player || !player.equipment) return false;
+  for (const slot of EQUIP_SLOTS) {
+    const itId = player.equipment[slot];
+    if (itId && GAME_DATA.items[itId]?.passive?.id === passiveId) return true;
+  }
+  return false;
+}
+
+// 畫面浮動數字動效
+function showFloatingText(text, type = 'dmg-out', targetEl = null) {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  const layer = document.getElementById('floating-layer');
+  if (!layer || typeof layer.appendChild !== 'function') return;
+
+  const floatEl = document.createElement('div');
+  floatEl.className = `dmg-float ${type}`;
+  floatEl.innerText = text;
+
+  let x = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth / 2 : 200;
+  let y = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight * 0.35 : 220;
+
+  if (targetEl && targetEl.getBoundingClientRect) {
+    const rect = targetEl.getBoundingClientRect();
+    x = rect.left + rect.width / 2 + (Math.random() * 24 - 12);
+    y = rect.top + rect.height * 0.35 + (Math.random() * 16 - 8);
+  } else {
+    x += (Math.random() * 30 - 15);
+    y += (Math.random() * 20 - 10);
+  }
+
+  floatEl.style.left = `${Math.round(x)}px`;
+  floatEl.style.top = `${Math.round(y)}px`;
+  layer.appendChild(floatEl);
+
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => {
+      if (floatEl.parentNode) floatEl.parentNode.removeChild(floatEl);
+    }, 1000);
+  }
+}
+
+// 震動回饋
+function triggerScreenShake() {
+  const app = document.getElementById('app');
+  if (!app || !app.classList) return;
+  app.classList.remove('screen-shake');
+  if (typeof app.offsetWidth !== 'undefined') void app.offsetWidth;
+  app.classList.add('screen-shake');
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => app.classList.remove('screen-shake'), 350);
+  }
+}
+
+function triggerEnemyShake() {
+  if (!combatCard || !combatCard.classList) return;
+  combatCard.classList.remove('enemy-shake');
+  if (typeof combatCard.offsetWidth !== 'undefined') void combatCard.offsetWidth;
+  combatCard.classList.add('enemy-shake');
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => combatCard.classList.remove('enemy-shake'), 300);
+  }
+}
+
+// ==================== 生涯戰績管理 ====================
+const CAREER_STORAGE_KEY = 'lumia_career_stats_v1';
+
+function getCareerStats() {
+  const def = {
+    games: 0,
+    wins: 0,
+    kills: 0,
+    bossKills: 0,
+    maxDmg: 0,
+    chars: {
+      jackie: { plays: 0, wins: 0, kills: 0 },
+      aya: { plays: 0, wins: 0, kills: 0 },
+      hyunwoo: { plays: 0, wins: 0, kills: 0 },
+      nadine: { plays: 0, wins: 0, kills: 0 },
+      magnus: { plays: 0, wins: 0, kills: 0 }
+    }
+  };
+  try {
+    if (typeof localStorage === 'undefined') return def;
+    const raw = localStorage.getItem(CAREER_STORAGE_KEY);
+    if (!raw) return def;
+    const parsed = JSON.parse(raw);
+    return {
+      ...def,
+      ...parsed,
+      chars: { ...def.chars, ...(parsed.chars || {}) }
+    };
+  } catch (e) {
+    return def;
+  }
+}
+
+function saveCareerStats(data) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(CAREER_STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch (e) {}
+}
+
+function recordGameResult(isWin, kills, bossKilled, maxDmg) {
+  const stats = getCareerStats();
+  stats.games += 1;
+  if (isWin) stats.wins += 1;
+  stats.kills += (kills || 0);
+  if (bossKilled) stats.bossKills += 1;
+  if ((maxDmg || 0) > stats.maxDmg) stats.maxDmg = maxDmg;
+
+  const charId = player?.char?.id;
+  if (charId) {
+    if (!stats.chars[charId]) stats.chars[charId] = { plays: 0, wins: 0, kills: 0 };
+    stats.chars[charId].plays += 1;
+    if (isWin) stats.chars[charId].wins += 1;
+    stats.chars[charId].kills += (kills || 0);
+  }
+  saveCareerStats(stats);
+  return stats;
+}
+
+function renderCareerModal() {
+  const stats = getCareerStats();
+  const winRate = stats.games > 0 ? Math.round((stats.wins / stats.games) * 100) : 0;
+  const kda = stats.games > 0 ? (stats.kills / stats.games).toFixed(1) : '0.0';
+  const content = document.getElementById('career-stats-content');
+  if (!content) return;
+
+  const charRows = CHARACTERS.map(c => {
+    const cs = stats.chars[c.id] || { plays: 0, wins: 0, kills: 0 };
+    const rate = cs.plays > 0 ? Math.round((cs.wins / cs.plays) * 100) : 0;
+    return `
+      <div class="career-char-row">
+        <span class="career-char-name">🧬 ${c.name} <small style="color:#94a3b8;font-weight:normal;">(${c.title})</small></span>
+        <span class="career-char-stats">出戰 ${cs.plays} 場 ｜ 吃雞 ${cs.wins} 次 (${rate}%) ｜ 擊殺 ${cs.kills}</span>
+      </div>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="career-metric-grid">
+      <div class="career-metric-card">
+        <div class="career-metric-label">總實驗場次</div>
+        <div class="career-metric-value">${stats.games}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">冠軍 (吃雞)</div>
+        <div class="career-metric-value" style="color:#22c55e;">${stats.wins}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">吃雞勝率</div>
+        <div class="career-metric-value">${winRate}%</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">累積擊殺</div>
+        <div class="career-metric-value" style="color:#f87171;">${stats.kills}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">場均淘汰 (K/G)</div>
+        <div class="career-metric-value">${kda}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">首領殺 / 最高傷</div>
+        <div class="career-metric-value" style="font-size:0.95rem;">${stats.bossKills} 殺 / ${stats.maxDmg}</div>
+      </div>
+    </div>
+    <div style="font-weight:bold; font-size:0.82rem; color:#cbd5e1; margin-top:6px;">🧬 各受試者實驗紀錄：</div>
+    <div class="career-char-list">${charRows}</div>
+  `;
+  if (careerModal) careerModal.classList.remove('hidden');
+}
+
+if (btnOpenCareer) btnOpenCareer.onclick = renderCareerModal;
+if (btnCloseCareer) btnCloseCareer.onclick = () => { if (careerModal) careerModal.classList.add('hidden'); };
 
 function getEquipSlot(it) {
   if (!it) return null;
@@ -446,11 +630,21 @@ function logMessage(text, type = 'sys-msg') {
   combatLog.scrollTop = combatLog.scrollHeight;
 }
 
-// 所有玩家受到的傷害統一經此處理（套用馬格努斯被動減傷）
+// 所有玩家受到的傷害統一經此處理（套用馬格努斯被動減傷、VF裝甲被動、飄字與震動）
 function applyDamageToPlayer(raw) {
   let dmg = Math.max(1, Math.round(raw));
-  if (player.char.id === 'magnus') dmg = Math.max(1, Math.round(dmg * 0.9));
+  if (player?.char?.id === 'magnus') dmg = Math.max(1, Math.round(dmg * 0.9));
+
+  // VF 生體裝甲被動【VF狂暴護盾】：HP 低於 40% 時減傷 30%
+  if (player && playerHasPassive('vf_barrier') && player.hp < player.maxHp * 0.4) {
+    dmg = Math.max(1, Math.round(dmg * 0.7));
+    showFloatingText('🛡️ VF護盾 -30%', 'dmg-passive');
+  }
+
   player.hp = Math.max(0, player.hp - dmg);
+  showFloatingText(`-${dmg}`, 'dmg-in');
+
+  if (dmg >= 15) triggerScreenShake();
   return dmg;
 }
 
@@ -519,6 +713,8 @@ function initGame(charId) {
     mastery,
     skillCd: 0,
     kills: 0, crafts: 0,
+    maxDmgHit: 0,
+    bossKilled: false,
     stance: "normal",
     area: startArea,
     equipment: { weapon: ch.startWeapon, head: null, body: null, arm: null, leg: null, accessory: null },
@@ -1267,6 +1463,9 @@ function triggerGameOver(isWin, reasonText) {
   gameoverTitle.style.color = isWin ? '#facc15' : '#ef4444';
   gameoverDesc.innerText = reasonText;
 
+  // 紀錄並同步本機生涯數據
+  const career = recordGameResult(isWin, player?.kills || 0, !!player?.bossKilled, player?.maxDmgHit || 0);
+
   const eqNames = EQUIP_SLOTS
     .map(s => player.equipment[s] ? GAME_DATA.items[player.equipment[s]].name : null)
     .filter(Boolean).join(' / ') || '無';
@@ -1274,9 +1473,12 @@ function triggerGameOver(isWin, reasonText) {
   gameoverStats.innerHTML = `
     <div>🧬 <strong>角色</strong>：${player.name}</div>
     <div>🎖️ <strong>最終排名</strong>：第 ${rank} 名 / 10 人</div>
-    <div>⚔️ <strong>擊殺</strong>：${player.kills} ｜ <strong>等級</strong>：Lv.${player.level} ｜ ${getMasteryLabel()}</div>
+    <div>⚔️ <strong>擊殺</strong>：${player.kills} ｜ <strong>單次最高傷</strong>：${player.maxDmgHit || 0} ｜ ${getMasteryLabel()}</div>
     <div>🔨 <strong>合成</strong>：${player.crafts} 次 ｜ <strong>總行動</strong>：${actionCounter} 動</div>
     <div>🛡️ <strong>最終裝備</strong>：${eqNames}</div>
+    <div style="margin-top:6px; padding-top:6px; border-top:1px dashed #334155; color:#94a3b8; font-size:0.75rem;">
+      🏆 生涯累計：共 ${career.games} 場 ｜ 吃雞 ${career.wins} 次 ｜ 總擊殺 ${career.kills} 人 (已自動保存)
+    </div>
   `;
   gameoverModal.classList.remove('hidden');
 }
@@ -1357,16 +1559,23 @@ function doSearch() {
     logMessage('⚠️ 正在遭遇敵襲！請先交戰或撤退！', 'warn-msg');
     return;
   }
-  if (player.sp < 5) {
-    logMessage('精力不足（需 5 SP），請休息或飲用飲料！', 'warn-msg');
+  const spCost = playerHasPassive('swift') ? 4 : 5;
+  if (player.sp < spCost) {
+    logMessage(`精力不足（需 ${spCost} SP），請休息或飲用飲料！`, 'warn-msg');
     return;
   }
 
-  player.sp = Math.max(0, player.sp - 5);
+  player.sp = Math.max(0, player.sp - spCost);
   discoveryCard.classList.add('hidden');
   lootCard.classList.add('hidden');
   pendingFoundItem = null;
   currentLootItems = [];
+
+  // 生命墜飾被動【生生不息】：行動額外回復 4 HP
+  if (playerHasPassive('regen') && player.hp < player.maxHp) {
+    player.hp = Math.min(player.maxHp, player.hp + 4);
+    showFloatingText('+4 HP 生命墜飾', 'dmg-heal');
+  }
 
   if (checkEnemyTrap(0.15)) return;
 
@@ -1416,7 +1625,10 @@ function doAttack(useSkill = false) {
       return;
     }
     player.sp -= ch.skill.cost;
-    player.skillCd = ch.skill.cd;
+    // 秘銀頭冠被動【冷靜】：主動技能 CD -1
+    const cdReduc = playerHasPassive('cooldown') ? 1 : 0;
+    player.skillCd = Math.max(2, ch.skill.cd - cdReduc);
+
     if (ch.id === 'jackie') mult = 1.8;
     if (ch.id === 'aya') { hits = 2; hitMult = 0.8; }
     if (ch.id === 'hyunwoo') { mult = 1.3; noCounter = true; }
@@ -1434,17 +1646,63 @@ function doAttack(useSkill = false) {
   let critRate = player.stance === 'aggressive' ? 0.25 : 0.15;
   if (ch.id === 'aya') critRate += 0.10;
 
+  // 隕星拳套被動【爆裂連擊】：30% 追加一次打擊
+  if (playerHasPassive('combo') && Math.random() < 0.3) {
+    hits += 1;
+    logMessage('🥊 隕星拳套【爆裂連擊】發動，追加一次打擊！', 'gain-msg');
+  }
+
   const pAtk = getPlayerAtk();
   let total = 0;
   let critAny = false;
+  const critMultiplier = playerHasPassive('crush') ? 1.85 : 1.4; // 隕星破滅鎚被動【重創】
+
   for (let h = 0; h < hits; h++) {
-    const defPart = ignoreDef ? 0 : Math.floor(activeEnemy.def * 0.45);
+    let defPart = ignoreDef ? 0 : Math.floor(activeEnemy.def * 0.45);
+    // 秘銀聖刃被動【破甲】：無視敵方 25% 防禦
+    if (playerHasPassive('pierce')) defPart = Math.floor(defPart * 0.75);
+
     let dmg = Math.max(6, pAtk - defPart + Math.floor(Math.random() * 5));
     if (Math.random() < critRate) {
-      dmg = Math.round(dmg * 1.4);
+      dmg = Math.round(dmg * critMultiplier);
       critAny = true;
     }
     total += Math.round(dmg * mult * hitMult * passiveMult);
+  }
+
+  // 烈焰魔劍被動【業火】：額外附加 8 點真實燃燒傷害
+  if (playerHasPassive('flame')) {
+    total += 8;
+    showFloatingText('🔥 業火 -8', 'dmg-passive');
+    logMessage('🔥 烈焰魔劍【業火】發動，附加 8 點真實燃燒傷害！', 'gain-msg');
+  }
+
+  // 電磁軌道槍被動【電磁貫穿】：35% 機率超載追加 16 傷害
+  if (playerHasPassive('rail') && Math.random() < 0.35) {
+    total += 16;
+    showFloatingText('⚡ 電磁超載 -16', 'dmg-passive');
+    logMessage('⚡ 電磁軌道槍【電磁超載】發動，追加 16 點貫穿傷害！', 'gain-msg');
+  }
+
+  // 生命神弓被動【生命汲取】：造成傷害的 20% 轉為自身生命
+  if (playerHasPassive('vamp')) {
+    const vampHeal = Math.max(1, Math.round(total * 0.2));
+    player.hp = Math.min(player.maxHp, player.hp + vampHeal);
+    showFloatingText(`+${vampHeal} HP 吸血`, 'dmg-heal');
+    logMessage(`🩸 生命神弓【生命汲取】發動，吸取 ${vampHeal} HP！`, 'gain-msg');
+  }
+
+  // 更新單次最高傷害紀錄
+  if (total > (player.maxDmgHit || 0)) player.maxDmgHit = total;
+
+  // 飄字與受擊震顫動效
+  triggerEnemyShake();
+  if (critAny) {
+    showFloatingText(`💥 -${total} 暴擊!`, 'dmg-crit');
+  } else if (useSkill) {
+    showFloatingText(`✨ -${total} [${ch.skill.name}]`, 'dmg-skill');
+  } else {
+    showFloatingText(`-${total}`, 'dmg-out');
   }
 
   activeEnemy.hp = Math.max(0, activeEnemy.hp - total);
@@ -1462,10 +1720,12 @@ function doAttack(useSkill = false) {
 
     if (ch.id === 'jackie') {
       player.hp = Math.min(player.maxHp, player.hp + 20);
+      showFloatingText('+20 HP 嗜血', 'dmg-heal');
       logMessage('🩸 被動【嗜血】發動，回復 20 HP！', 'gain-msg');
     }
 
     if (defeated.isBoss) {
+      player.bossKilled = true;
       defeated.ref.alive = false;
       logMessage(`🏆 [全島廣播] 你擊敗了 Wickeline 博士 (${total} 傷害)！`, 'craft-msg');
       gainExp(defeated.exp);
@@ -1551,6 +1811,23 @@ function doAttack(useSkill = false) {
   const pDef = getPlayerDef();
   const rawEnemyDmg = Math.max(4, Math.floor(activeEnemy.atk * enemyAtkMult) - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4));
   const dmgToPlayer = applyDamageToPlayer(rawEnemyDmg);
+
+  // 荊棘臂盾被動【尖刺荊棘】：受到反擊時反彈 10 點傷害
+  if (playerHasPassive('thorns')) {
+    activeEnemy.hp = Math.max(0, activeEnemy.hp - 10);
+    if (activeEnemy.ref) activeEnemy.ref.hp = activeEnemy.hp;
+    showFloatingText('🛡️ 荊棘 -10', 'dmg-passive');
+    logMessage('🛡️ 荊棘臂盾【尖刺荊棘】反彈 10 點傷害給敵人！', 'gain-msg');
+    if (activeEnemy.hp <= 0) {
+      logMessage(`💀 敵人在反擊中被荊棘尖刺刺死！`, 'craft-msg');
+      activeEnemy = null;
+      combatCard.classList.add('hidden');
+      player.kills += 1;
+      checkVictory();
+      updateUI();
+      return;
+    }
+  }
 
   const roundMsg = `${critText}你對 [${activeEnemy.name}] 造成 ${total} 傷害，承受反擊 -${dmgToPlayer} HP！${aiActionText}`;
   logMessage(roundMsg, 'combat-msg');
@@ -1661,7 +1938,11 @@ function openItemModal(slotIdx) {
   selectedEquipType = null;
 
   itemModalTitle.innerText = it.name;
-  itemModalDesc.innerText = it.desc;
+  let descText = it.desc;
+  if (it.passive) {
+    descText += `\n✨ 被動【${it.passive.name}】：${it.passive.desc}`;
+  }
+  itemModalDesc.innerText = descText;
   renderItemRecipeHint(itemId);
 
   btnModalUnequip.style.display = 'none';
@@ -1692,7 +1973,11 @@ function openEquipModal(equipSlot) {
   selectedSlotIdx = null;
   selectedEquipType = equipSlot;
   itemModalTitle.innerText = `[已裝備] ${it.name}`;
-  itemModalDesc.innerText = it.desc;
+  let descText = it.desc;
+  if (it.passive) {
+    descText += `\n✨ 被動【${it.passive.name}】：${it.passive.desc}`;
+  }
+  itemModalDesc.innerText = descText;
   renderItemRecipeHint(itemId);
   btnModalUse.style.display = 'none';
   btnModalUnequip.style.display = 'flex';
@@ -1856,9 +2141,12 @@ function doRest() {
     spawnEnemyEncounter(true);
     if (isGameOver) return;
   } else {
-    player.hp = Math.min(player.maxHp, player.hp + 22);
+    let healHp = 22;
+    if (playerHasPassive('regen')) healHp += 4;
+    player.hp = Math.min(player.maxHp, player.hp + healHp);
     player.sp = Math.min(player.maxSp, player.sp + 25);
-    logMessage('💤 在掩體安全調息，未被發現 (+22 HP, +25 SP)。', 'gain-msg');
+    showFloatingText(`+${healHp} HP`, 'dmg-heal');
+    logMessage(`💤 在掩體安全調息，未被發現 (+${healHp} HP, +25 SP)。`, 'gain-msg');
   }
   advanceWorldTick();
   updateUI();
@@ -1969,6 +2257,10 @@ function renderCodex(tab = 'all') {
     const drop1 = findItemDropAreas(m1).join('/') || '合成';
     const drop2 = findItemDropAreas(m2).join('/') || '合成';
 
+    const passiveHtml = resItem.passive
+      ? `<div style="font-size:0.7rem; color:#d8b4fe; margin-top:2px;">✨ 被動【${resItem.passive.name}】：${resItem.passive.desc}</div>`
+      : '';
+
     const card = document.createElement('div');
     card.className = 'codex-card';
     card.innerHTML = `
@@ -1976,6 +2268,7 @@ function renderCodex(tab = 'all') {
         <span class="codex-res-name">${resItem.name}</span>
         <span class="codex-res-stat">${getItemTag(resItem)}</span>
       </div>
+      ${passiveHtml}
       <div class="codex-mats">
         <span class="mat-badge ${has1 ? 'owned' : ''}">${has1 ? '✓ ' : ''}${item1.name} <small>(${drop1})</small></span>
         <span>+</span>
@@ -2011,6 +2304,7 @@ window.addEventListener('keydown', (e) => {
   const key = e.key.toLowerCase();
 
   if (e.key === 'Escape') {
+    if (careerModal && !careerModal.classList.contains('hidden')) { careerModal.classList.add('hidden'); return; }
     if (!itemModal.classList.contains('hidden')) { closeItemModal(); return; }
     if (!codexModal.classList.contains('hidden')) { codexModal.classList.add('hidden'); return; }
     if (!mapModal.classList.contains('hidden')) { mapModal.classList.add('hidden'); return; }

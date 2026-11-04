@@ -63,7 +63,10 @@
             </div>
             <p id="area-desc"></p>
           </div>
-          <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 配方圖鑑</button>
+          <div class="header-tools">
+            <button id="btn-open-career" class="btn-codex btn-career" title="查看生涯戰績">🏆 戰績</button>
+            <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 圖鑑</button>
+          </div>
         </div>
 
         <div class="area-drops-hint" id="area-drops-hint"></div>
@@ -185,6 +188,21 @@
         </div>
         <div class="codex-list" id="codex-list"></div>
         <button id="btn-close-codex" class="btn btn-secondary" style="margin-top: 12px; width: 100%;">關閉圖鑑 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 飄字層 (傷害、暴擊、治療動效) -->
+    <div id="floating-layer" class="floating-layer" pointer-events="none"></div>
+
+    <!-- 生涯戰績 -->
+    <div id="career-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <div class="modal-header-row">
+          <h3>🏆 生涯實驗戰績</h3>
+          <span class="shortcut-tip">本機統計數據</span>
+        </div>
+        <div id="career-stats-content" class="career-stats-box"></div>
+        <button id="btn-close-career" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉戰績 [Esc]</button>
       </div>
     </div>
 
