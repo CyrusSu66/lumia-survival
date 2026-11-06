@@ -404,6 +404,10 @@ const gameoverDesc = $('gameover-desc');
 const gameoverStats = $('gameover-stats');
 const btnRestart = $('btn-restart');
 
+const helpModal = $('help-modal');
+const btnOpenHelp = $('btn-open-help');
+const btnCloseHelp = $('btn-close-help');
+
 const careerModal = $('career-modal');
 const btnOpenCareer = $('btn-open-career');
 const btnCloseCareer = $('btn-close-career');
@@ -602,6 +606,8 @@ function renderCareerModal() {
 
 if (btnOpenCareer) btnOpenCareer.onclick = renderCareerModal;
 if (btnCloseCareer) btnCloseCareer.onclick = () => { if (careerModal) careerModal.classList.add('hidden'); };
+if (btnOpenHelp) btnOpenHelp.onclick = () => { if (helpModal) helpModal.classList.remove('hidden'); };
+if (btnCloseHelp) btnCloseHelp.onclick = () => { if (helpModal) helpModal.classList.add('hidden'); };
 
 function getEquipSlot(it) {
   if (!it) return null;
@@ -759,6 +765,7 @@ function initGame(charId) {
   logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
   logMessage(`🧬 專精：${WEAPON_TYPES[ch.weaponType]}｜被動【${ch.passive.name}】｜技能【${ch.skill.name}】(戰鬥中按 Q)`, 'craft-msg');
   logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 12 次行動後封鎖！`, 'warn-msg');
+  logMessage('💡 點擊頂部【❓ 指南】或按鍵盤 [H] 可隨時查看介面操作圖解與功能教學！', 'gain-msg');
   updateUI();
 }
 
@@ -2304,6 +2311,7 @@ window.addEventListener('keydown', (e) => {
   const key = e.key.toLowerCase();
 
   if (e.key === 'Escape') {
+    if (helpModal && !helpModal.classList.contains('hidden')) { helpModal.classList.add('hidden'); return; }
     if (careerModal && !careerModal.classList.contains('hidden')) { careerModal.classList.add('hidden'); return; }
     if (!itemModal.classList.contains('hidden')) { closeItemModal(); return; }
     if (!codexModal.classList.contains('hidden')) { codexModal.classList.add('hidden'); return; }
@@ -2311,6 +2319,11 @@ window.addEventListener('keydown', (e) => {
     if (activeEnemy) { doFlee(); return; }
     if (!lootCard.classList.contains('hidden')) { btnCloseLoot.click(); return; }
     if (!discoveryCard.classList.contains('hidden')) { doDiscard(); return; }
+  }
+
+  if (key === 'h' || e.key === '?') {
+    if (helpModal) helpModal.classList.toggle('hidden');
+    return;
   }
 
   if (!itemModal.classList.contains('hidden')) {

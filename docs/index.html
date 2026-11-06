@@ -17,6 +17,7 @@
           <button id="btn-stance" class="stance-badge stance-normal" title="點擊切換探索姿態 [T]">⚖️ 均衡姿態</button>
         </div>
         <div class="meta-right">
+          <button id="btn-open-help" class="btn-help-badge" title="查看操作教學與介面指南 [H]">❓ 指南</button>
           <span class="alive-badge" id="hud-alive" title="剩餘存活受試者">👤 10/10</span>
           <span class="zone-timer" id="hud-zone-timer" title="距離下次禁區封鎖">⏱️ 12 動</span>
         </div>
@@ -207,6 +208,77 @@
         </div>
         <div id="career-stats-content" class="career-stats-box"></div>
         <button id="btn-close-career" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉戰績 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 操作指南與介面教學 (Help Modal) -->
+    <div id="help-modal" class="modal hidden">
+      <div class="modal-content help-dialog">
+        <div class="modal-header-row">
+          <h3>🧭 盧米亞島操作與介面指南</h3>
+          <span class="shortcut-tip">[H] 或 [Esc] 關閉</span>
+        </div>
+        <div class="help-scroll-body">
+          <div class="help-image-wrap">
+            <img src="assets/guide_ui.png" alt="生存介面操作說明圖解" class="help-guide-img" />
+            <div class="help-img-caption">盧米亞島生存介面佈局示意圖</div>
+          </div>
+          <div class="help-guide-list">
+            <div class="help-guide-card">
+              <div class="help-card-title">⚖️ ① 探索姿態切換 (快捷鍵 T)</div>
+              <div class="help-card-desc">
+                點擊頂部姿態鈕可依戰況輪替切換：<br>
+                • <strong>⚖️ 均衡姿態</strong>：標準探索，攻防適中。<br>
+                • <strong>⚔️ 進攻姿態</strong>：攻擊力 +15%、暴擊率大幅提升，但防禦 -15%，遇敵率加倍（神裝成型後開啟主動獵殺！）。<br>
+                • <strong>🥷 潛行姿態</strong>：遇敵率大幅降低，專心搜尋所需材料或殘血安全調息。
+              </div>
+            </div>
+
+            <div class="help-guide-card">
+              <div class="help-card-title">🛡️ ② 6 格裝備槽管理</div>
+              <div class="help-card-desc">
+                • 包含「武器、頭部、身體、臂甲、腿部、飾品」6 格。<br>
+                • <strong>點擊已裝備的物品</strong>可「主動卸下」回背包，或檢視該裝備的★特殊被動技能（如烈焰魔劍業火、生命神弓吸血、荊棘盾反傷等）。
+              </div>
+            </div>
+
+            <div class="help-guide-card">
+              <div class="help-card-title">📖 ③ 配方圖鑑與戰績 (快捷鍵 B / 戰績)</div>
+              <div class="help-card-desc">
+                • <strong>📖 圖鑑 [B]</strong>：隨時查看全島 65+ 物品與 38+ 條合成樹。綠字「✓」代表身上已持有，並提示材料的掉落產區與野生動物。<br>
+                • <strong>🏆 戰績</strong>：即時查看本機生涯總場次、吃雞率、淘汰數與各角色專精勝率。
+              </div>
+            </div>
+
+            <div class="help-guide-card">
+              <div class="help-card-title">⚡ ④ 底部三大戰術行動</div>
+              <div class="help-card-desc">
+                • <strong>🔍 探索 (-5 SP) [S/Space]</strong>：搜索區域物資、觸發野生生物、拾取空投箱或遭遇敵方受試者。<br>
+                • <strong>💤 休息 [R]</strong>：調息回復 22 HP / 25 SP；若當前區域有其他受試者或 Boss，可能遭到先手偷襲！<br>
+                • <strong>🗺️ 移動 (-3 SP) [M]</strong>：移動至其他安全區域。避開倒數即將封鎖的黃色警報禁區與紅色致死禁區，或前往空投點/Boss 點。
+              </div>
+            </div>
+
+            <div class="help-guide-card">
+              <div class="help-card-title">🎒 ⑤ 戰術背包 [1~6] 與快速合成 [C]</div>
+              <div class="help-card-desc">
+                • <strong>戰術背包 (6格)</strong>：點擊背包物品可使用補品藥劑、裝備武器防具、埋設地雷陷阱或丟棄物品。<br>
+                • <strong>🔨 可立即合成</strong>：當背包或穿戴中的材料滿足配方時自動浮現，點擊或按 <code>C</code> 即可直接鍛造升級高階裝備！
+              </div>
+            </div>
+
+            <div class="help-guide-card">
+              <div class="help-card-title">⚔️ ⑥ 戰鬥操作與突圍撤退</div>
+              <div class="help-card-desc">
+                遭遇敵人時展開戰鬥面板：<br>
+                • <strong>⚔️ 攻擊 [A/Space]</strong>：普通打擊。<br>
+                • <strong>✨ 角色技能 [Q]</strong>：發動專屬主動技能（受冷卻 CD 與 SP 限制）。<br>
+                • <strong>🏃 撤退 (-5 SP) [Esc]</strong>：嘗試突圍逃往其他區域；若精力不足可能突圍失敗遭趁隙追砍。
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-close-help" class="btn btn-primary" style="margin-top: 10px; width: 100%;">我知道了，進入戰鬥！[Esc]</button>
       </div>
     </div>
 
