@@ -55,65 +55,69 @@
     <!-- 主遊戲中央區域 -->
     <main class="main-viewport">
       <section class="area-banner" id="area-banner">
-        <div class="area-top-row">
-          <div class="area-info">
-            <div class="area-title-wrap">
-              <h2 id="area-title">學校</h2>
-              <span id="area-zone-tag" class="zone-tag safe">安全區</span>
+        <div class="area-header-fixed">
+          <div class="area-top-row">
+            <div class="area-info">
+              <div class="area-title-wrap">
+                <h2 id="area-title">學校</h2>
+                <span id="area-zone-tag" class="zone-tag safe">安全區</span>
+              </div>
+              <p id="area-desc"></p>
             </div>
-            <p id="area-desc"></p>
+            <div class="header-tools">
+              <button id="btn-open-career" class="btn-codex btn-career" title="查看生涯戰績">🏆 戰績</button>
+              <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 圖鑑</button>
+            </div>
           </div>
-          <div class="header-tools">
-            <button id="btn-open-career" class="btn-codex btn-career" title="查看生涯戰績">🏆 戰績</button>
-            <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 圖鑑</button>
-          </div>
+
+          <div class="area-drops-hint" id="area-drops-hint"></div>
         </div>
 
-        <div class="area-drops-hint" id="area-drops-hint"></div>
+        <div class="area-cards-viewport">
+          <!-- 探索發現單一物資 -->
+          <div id="discovery-card" class="discovery-card hidden">
+            <div class="card-header">📦 探索發現物資！</div>
+            <div class="item-preview">
+              <span id="disc-item-name" class="highlight-name">物品名稱</span>
+              <p id="disc-item-desc">物品說明</p>
+            </div>
+            <div class="discovery-actions">
+              <button id="btn-pickup" class="btn btn-primary">放入背包 [Space]</button>
+              <button id="btn-discard" class="btn btn-secondary">略過 [Esc]</button>
+            </div>
+          </div>
 
-        <!-- 探索發現單一物資 -->
-        <div id="discovery-card" class="discovery-card hidden">
-          <div class="card-header">📦 探索發現物資！</div>
-          <div class="item-preview">
-            <span id="disc-item-name" class="highlight-name">物品名稱</span>
-            <p id="disc-item-desc">物品說明</p>
+          <!-- 戰利品搜刮區 (屍體 / 空投) -->
+          <div id="loot-card" class="discovery-card loot-card hidden">
+            <div class="loot-header">
+              <span id="loot-title" class="card-header" style="color:#fde047;">💀 戰利品搜刮區</span>
+              <span class="shortcut-tip">點擊物品放入背包</span>
+            </div>
+            <div id="loot-grid" class="loot-grid"></div>
+            <div class="discovery-actions" style="margin-top:8px;">
+              <button id="btn-close-loot" class="btn btn-secondary" style="width:100%;">🚪 離開現場（放棄剩餘物品）[Esc]</button>
+            </div>
           </div>
-          <div class="discovery-actions">
-            <button id="btn-pickup" class="btn btn-primary">放入背包 [Space]</button>
-            <button id="btn-discard" class="btn btn-secondary">略過 [Esc]</button>
-          </div>
-        </div>
 
-        <!-- 戰利品搜刮區 (屍體 / 空投) -->
-        <div id="loot-card" class="discovery-card loot-card hidden">
-          <div class="loot-header">
-            <span id="loot-title" class="card-header" style="color:#fde047;">💀 戰利品搜刮區</span>
-            <span class="shortcut-tip">點擊物品放入背包</span>
-          </div>
-          <div id="loot-grid" class="loot-grid"></div>
-          <div class="discovery-actions" style="margin-top:8px;">
-            <button id="btn-close-loot" class="btn btn-secondary" style="width:100%;">🚪 離開現場（放棄剩餘物品）[Esc]</button>
-          </div>
-        </div>
-
-        <!-- 遭遇戰鬥 -->
-        <div id="combat-card" class="discovery-card combat-card hidden">
-          <div class="combat-header">
-            <span id="enemy-tag" class="enemy-type-badge">⚠️ 遭遇敵襲</span>
-            <span id="enemy-stats" class="enemy-stats-text">攻 15 / 防 5</span>
-          </div>
-          <div class="enemy-info-row">
-            <span id="enemy-name" class="highlight-name">敵人名稱</span>
-            <span id="enemy-hp-text" class="enemy-hp-num">HP 60/60</span>
-          </div>
-          <div class="bar-wrap enemy-hp-wrap">
-            <div class="bar-fill hp-bar" id="enemy-hp-bar" style="width: 100%;"></div>
-          </div>
-          <p id="combat-round-desc" class="combat-desc">敵人正虎視眈眈地盯著你！</p>
-          <div class="discovery-actions">
-            <button id="btn-attack" class="btn btn-danger" style="flex:1.3;">⚔️ 攻擊 [A]</button>
-            <button id="btn-skill" class="btn btn-skill" style="flex:1.3;">✨ 技能 [Q]</button>
-            <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 撤退 [Esc]</button>
+          <!-- 遭遇戰鬥 -->
+          <div id="combat-card" class="discovery-card combat-card hidden">
+            <div class="combat-header">
+              <span id="enemy-tag" class="enemy-type-badge">⚠️ 遭遇敵襲</span>
+              <span id="enemy-stats" class="enemy-stats-text">攻 15 / 防 5</span>
+            </div>
+            <div class="enemy-info-row">
+              <span id="enemy-name" class="highlight-name">敵人名稱</span>
+              <span id="enemy-hp-text" class="enemy-hp-num">HP 60/60</span>
+            </div>
+            <div class="bar-wrap enemy-hp-wrap">
+              <div class="bar-fill hp-bar" id="enemy-hp-bar" style="width: 100%;"></div>
+            </div>
+            <p id="combat-round-desc" class="combat-desc">敵人正虎視眈眈地盯著你！</p>
+            <div class="discovery-actions">
+              <button id="btn-attack" class="btn btn-danger" style="flex:1.3;">⚔️ 攻擊 [A]</button>
+              <button id="btn-skill" class="btn btn-skill" style="flex:1.3;">✨ 技能 [Q]</button>
+              <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 撤退 [Esc]</button>
+            </div>
           </div>
         </div>
       </section>

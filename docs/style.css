@@ -4,6 +4,24 @@
   padding: 0;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+/* 全域自訂微型暗黑捲軸 (徹底消除 Windows 17px 原生白灰大捲軸) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 :root {
@@ -245,12 +263,12 @@ body {
 .area-banner {
   flex: 1;
   background: radial-gradient(circle at center, #1e2634 0%, #11151c 100%);
-  padding: 12px 14px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   position: relative;
-  overflow-y: auto;
+  overflow: hidden;
+  gap: 6px;
 }
 
 .area-banner.zone-warning-bg {
@@ -261,11 +279,20 @@ body {
   background: radial-gradient(circle at center, #421818 0%, #180c0c 100%);
 }
 
+/* 頂部固定地區資訊 (絕不隨捲動被頂出畫面或被物資框遮擋) */
+.area-header-fixed {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .area-top-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .area-title-wrap {
@@ -275,8 +302,9 @@ body {
 }
 
 .area-info h2 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   color: #facc15;
+  line-height: 1.2;
 }
 
 .zone-tag {
@@ -291,18 +319,19 @@ body {
 .zone-tag.restricted { background: rgba(239, 68, 68, 0.3); color: #f87171; border: 1px solid #dc2626; }
 
 .area-info p {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
-  margin-top: 3px;
+  margin-top: 2px;
+  line-height: 1.3;
 }
 
 .btn-codex {
   background: #1e293b;
   color: #93c5fd;
   border: 1px solid #3b82f6;
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: 6px;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: bold;
   cursor: pointer;
   white-space: nowrap;
@@ -313,12 +342,23 @@ body {
 .area-drops-hint {
   font-size: 0.72rem;
   color: #94a3b8;
-  background: rgba(15, 17, 21, 0.55);
+  background: rgba(15, 17, 21, 0.65);
   border: 1px solid #262f3f;
-  padding: 6px 8px;
+  padding: 5px 8px;
   border-radius: 6px;
-  margin: 6px 0;
-  line-height: 1.4;
+  line-height: 1.35;
+  flex-shrink: 0;
+}
+
+/* 中央互動卡片容器 (探索/戰鬥/遺物搜刮) */
+.area-cards-viewport {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+  position: relative;
 }
 
 /* 探索發現卡片與戰鬥卡片 */
@@ -326,10 +366,12 @@ body {
   background: rgba(18, 22, 31, 0.96);
   border: 1px solid #475569;
   border-radius: 10px;
-  padding: 11px 12px;
+  padding: 10px 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.65);
   animation: slideUp 0.16s ease-out;
   margin-top: auto;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .combat-card {
@@ -444,18 +486,20 @@ body {
   gap: 8px;
 }
 
-/* 戰鬥與廣播訊息 Log */
+/* 戰鬥與廣播訊息 Log (精緻緊湊排版，消除白色寬捲軸) */
 .log-panel {
-  height: 88px;
+  height: 80px;
   background: #090a0d;
-  padding: 6px 12px;
+  padding: 5px 8px 5px 10px;
   overflow-y: auto;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
+  line-height: 1.45;
   display: flex;
   flex-direction: column;
   gap: 3px;
   border-top: 1px solid var(--border-color);
   flex-shrink: 0;
+}
 }
 
 .log-entry.sys-msg { color: var(--text-muted); }
@@ -1097,4 +1141,118 @@ body {
 
 .career-char-stats {
   color: #94a3b8;
+}
+
+/* ==================== 筆電與低高度螢幕適配 (Compact Viewport Optimization) ==================== */
+@media (max-height: 820px) {
+  .hud-header {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+  .vital-bars {
+    gap: 6px;
+  }
+  .bar-wrap {
+    height: 15px;
+  }
+  .bar-label {
+    font-size: 0.65rem;
+    line-height: 15px;
+  }
+  .stat-chips {
+    gap: 4px;
+    font-size: 0.68rem;
+  }
+  .stat-chip {
+    padding: 1px 5px;
+  }
+  .equipped-slots {
+    gap: 4px;
+  }
+  .eq-slot {
+    padding: 2px 5px;
+    font-size: 0.68rem;
+  }
+  .area-banner {
+    padding: 8px 10px;
+    gap: 4px;
+  }
+  .area-info h2 {
+    font-size: 1.22rem;
+  }
+  .area-info p {
+    font-size: 0.72rem;
+  }
+  .area-drops-hint {
+    padding: 4px 6px;
+    font-size: 0.68rem;
+    line-height: 1.3;
+    margin: 3px 0;
+  }
+  .log-panel {
+    height: 72px;
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+  .interaction-dock {
+    padding: 6px 10px 8px;
+    gap: 5px;
+  }
+  .inv-slot {
+    min-height: 44px;
+    font-size: 0.68rem;
+    padding: 1px;
+  }
+  .slot-tag {
+    font-size: 0.58rem;
+  }
+  .actions-dock {
+    gap: 6px;
+  }
+  .btn-action {
+    padding: 9px 6px;
+    font-size: 0.85rem;
+  }
+  .discovery-card {
+    padding: 8px 10px;
+  }
+  .highlight-name {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-height: 700px) {
+  .hud-header {
+    padding: 5px 8px;
+    gap: 3px;
+  }
+  .equipped-slots {
+    gap: 3px;
+  }
+  .eq-slot {
+    padding: 1px 4px;
+    font-size: 0.65rem;
+  }
+  .area-banner {
+    padding: 6px 8px;
+  }
+  .area-info h2 {
+    font-size: 1.15rem;
+  }
+  .log-panel {
+    height: 62px;
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+  .interaction-dock {
+    padding: 5px 8px 6px;
+    gap: 4px;
+  }
+  .inv-slot {
+    min-height: 38px;
+  }
+  .btn-action {
+    padding: 7px 4px;
+    font-size: 0.8rem;
+  }
 }
