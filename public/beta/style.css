@@ -1617,17 +1617,44 @@ body {
   margin-bottom: 8px;
 }
 
+/* 彈窗層級控制：確保從首頁大廳開啟的教學、戰績、天賦與更新紀錄永遠浮於首頁之上 */
+#lobby-modal {
+  z-index: 95;
+}
+
+#help-modal,
+#career-modal,
+#perks-modal,
+#pvp-modal,
+#patch-modal,
+#char-modal,
+#map-modal,
+#codex-modal,
+#item-modal,
+#gameover-modal {
+  z-index: 200;
+}
+
 /* 3x3 戰術雷達相鄰地圖 */
 .radar-map-dialog {
-  max-width: 470px;
+  width: 96%;
+  max-width: 480px;
+  max-height: 92vh;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .radar-legend-bar {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
   font-size: 0.68rem;
-  color: #94a3b8;
+  font-weight: 700;
+  color: #cbd5e1;
   background: #0d1118;
+  border: 1px solid #1e293b;
   padding: 5px 8px;
   border-radius: 6px;
   margin-bottom: 8px;
@@ -1636,12 +1663,12 @@ body {
 .radar-board-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 0.86;
+  height: auto;
   background: radial-gradient(circle at center, #142030 0%, #090d14 100%);
   border: 1px solid #283548;
   border-radius: 10px;
-  padding: 10px;
-  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .radar-svg-lines {
@@ -1658,97 +1685,152 @@ body {
   position: relative;
   z-index: 2;
   width: 100%;
-  height: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
 }
 
+.radar-node,
 .radar-node-btn {
-  background: rgba(23, 31, 46, 0.92);
-  border: 1.5px solid #334155;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #1e293b;
+  border: 2px solid #334155;
   border-radius: 8px;
-  color: #e2e8f0;
-  padding: 4px 5px;
+  color: #f8fafc;
+  padding: 6px 4px;
+  min-height: 76px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 2px;
   cursor: pointer;
   font-family: inherit;
   transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
   position: relative;
+  box-sizing: border-box;
+  text-align: center;
 }
 
+.radar-node:active,
 .radar-node-btn:active {
   transform: scale(0.95);
 }
 
+.radar-node-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 100%;
+}
+
 .radar-node-name {
-  font-size: 0.84rem;
-  font-weight: 800;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-.radar-node-sub {
+.radar-node-badge {
   font-size: 0.62rem;
-  color: #94a3b8;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.radar-node-mid {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #e2e8f0;
   line-height: 1.15;
-  text-align: center;
 }
 
-.radar-node-badges {
-  font-size: 0.65rem;
-  min-height: 14px;
+.radar-node-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  padding: 2px 4px;
+  border-radius: 4px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.28);
 }
 
-/* 當前所在區域 */
+/* 🔵 當前所在區域 */
+.radar-node.node-current,
 .radar-node-btn.node-current {
-  border-color: #38bdf8;
-  background: rgba(14, 42, 68, 0.95);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  border-color: #38bdf8 !important;
+  background: linear-gradient(145deg, #1d4ed8 0%, #0f172a 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
 }
 
-/* 相鄰可直達安全區 */
+/* 🟢 相鄰可直達安全區 */
+.radar-node.node-adjacent,
 .radar-node-btn.node-adjacent {
-  border-color: #10b981;
-  background: rgba(16, 48, 40, 0.92);
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.28);
+  border-color: #10b981 !important;
+  background: linear-gradient(145deg, #047857 0%, #064e3b 100%) !important;
+  color: #ecfdf5 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.32);
 }
 
+.radar-node.node-adjacent:hover,
 .radar-node-btn.node-adjacent:hover {
-  border-color: #34d399;
-  background: rgba(20, 62, 52, 0.96);
+  border-color: #34d399 !important;
+  background: linear-gradient(145deg, #059669 0%, #065f46 100%) !important;
 }
 
-/* 相鄰即將封鎖區 */
+/* 🟠 相鄰即將封鎖區 */
+.radar-node.node-adj-warn,
 .radar-node-btn.node-adj-warn {
-  border-color: #f59e0b;
-  background: rgba(58, 38, 14, 0.92);
+  border-color: #f59e0b !important;
+  background: linear-gradient(145deg, #b45309 0%, #451a03 100%) !important;
+  color: #fef3c7 !important;
 }
 
-/* 已封鎖禁區 */
-.radar-node-btn.node-restricted {
-  border-color: #dc2626;
-  background: rgba(55, 16, 16, 0.88);
-  color: #fca5a5;
-}
-
-/* 非相鄰遠距區域 */
+/* ⚪ 非相鄰遠距區域（需跨區轉乘：明顯灰色底色） */
+.radar-node.node-distant,
 .radar-node-btn.node-distant {
-  opacity: 0.62;
-  border-style: dashed;
-  background: rgba(15, 20, 30, 0.85);
+  border: 1.5px dashed #64748b !important;
+  background: #272c35 !important;
+  color: #9ca3af !important;
+}
+.radar-node.node-distant .radar-node-mid,
+.radar-node.node-distant .radar-node-tag {
+  color: #9ca3af !important;
+}
+
+/* 🟣 中央研究中心安保鎖定期 */
+.radar-node.node-lab-locked,
+.radar-node-btn.node-lab-locked {
+  border: 1.5px dashed #a855f7 !important;
+  background: linear-gradient(145deg, #3b0764 0%, #1e1b4b 100%) !important;
+  color: #e9d5ff !important;
+}
+
+/* 🔴 已封鎖禁區（無論是否相鄰，一律高對比鮮明紅色底色） */
+.radar-node.node-restricted,
+.radar-node-btn.node-restricted {
+  border: 2px solid #ef4444 !important;
+  background: linear-gradient(145deg, #b91c1c 0%, #450a0a 100%) !important;
+  color: #fee2e2 !important;
+  box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.45);
+}
+.radar-node.node-restricted .radar-node-mid,
+.radar-node.node-restricted .radar-node-tag {
+  color: #fecaca !important;
 }
 
 .radar-route-hint {
   margin-top: 8px;
-  font-size: 0.74rem;
+  font-size: 0.73rem;
   color: #cbd5e1;
   background: #111622;
   border: 1px solid #263147;
   padding: 6px 9px;
   border-radius: 6px;
   text-align: center;
+  line-height: 1.4;
 }

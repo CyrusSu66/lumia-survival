@@ -14,7 +14,7 @@ const RARE_MATS = ['mithril', 'meteorite', 'tree_of_life'];
 const ACTIONS_PER_PHASE = 10;
 const BOSS_SPAWN_ACTION = 20;
 
-// ==================== 基礎遊戲資料庫 (v2.9 Beta：8 大區域 3x3 戰術雷達拓撲) ====================
+// ==================== 基礎遊戲資料庫 (v2.9 Beta：9 大區域 3x3 戰術雷達與中央研究中心) ====================
 const GAME_DATA = {
   areas: [
     {
@@ -32,7 +32,7 @@ const GAME_DATA = {
       name: "學校",
       icon: "🏫",
       row: 0, col: 1,
-      neighbors: ["alley", "hospital", "forest"],
+      neighbors: ["alley", "hospital", "lab"],
       desc: "荒廢的教學大樓，散落著文具、布料與運動用品",
       items: ["branch", "bandage", "lighter", "pen", "water", "cloth", "cap", "running_shoes", "watch", "kitchen_knife"],
       wild: { name: "變異烏鴉", hp: 45, maxHp: 45, atk: 13, def: 3, exp: 20, drop: ["feather", "herb", "meat"] }
@@ -42,7 +42,7 @@ const GAME_DATA = {
       name: "醫院",
       icon: "🏥",
       row: 0, col: 2,
-      neighbors: ["school", "forest", "factory"],
+      neighbors: ["school", "factory"],
       desc: "充滿消毒水氣味的診所，有醫療藥品、銳器與警衛配槍",
       items: ["bandage", "scalpel", "pills", "needle", "water", "alcohol", "pistol", "watch"],
       wild: { name: "狂暴實驗犬", hp: 65, maxHp: 65, atk: 18, def: 6, exp: 30, drop: ["leather", "bandage", "meat"] }
@@ -52,27 +52,28 @@ const GAME_DATA = {
       name: "教堂",
       icon: "⛪",
       row: 1, col: 0,
-      neighbors: ["alley", "forest", "beach"],
+      neighbors: ["alley", "beach", "lab"],
       desc: "莊嚴破敗的禮拜堂，能找到鎮靜藥劑、金屬線與羽翎",
       items: ["scalpel", "cloth", "wire", "water", "pills", "flower", "feather", "short_bow", "cap"],
       wild: { name: "變異蝙蝠", hp: 55, maxHp: 55, atk: 16, def: 5, exp: 25, drop: ["feather", "herb", "leather"] }
     },
     {
-      id: "forest",
-      name: "森林",
-      icon: "🌲",
+      id: "lab",
+      name: "研究中心",
+      icon: "🔬",
       row: 1, col: 1,
-      neighbors: ["school", "hospital", "church", "factory", "beach", "dock"],
-      desc: "島嶼中央交通樞紐，繁茂樹林適合採集天然素材、毛皮與獵弓",
-      items: ["branch", "stone", "herb", "flower", "water", "leather", "short_bow"],
-      wild: { name: "叢林山豬", hp: 90, maxHp: 90, atk: 24, def: 12, exp: 45, drop: ["meat", "leather", "herb"] }
+      isCenterLab: true,
+      neighbors: ["school", "church", "factory", "forest"],
+      desc: "亞格萊雅核心實驗室（3 禁區或第 20 動解鎖），連通四方且儲放高階精煉物資",
+      items: ["scrap_metal", "wire", "oil", "alcohol", "pills", "gunpowder", "steel", "first_aid_kit"],
+      wild: { name: "安保自律機兵", hp: 95, maxHp: 95, atk: 25, def: 14, exp: 55, drop: ["steel", "gunpowder", "first_aid_kit", "mithril"] }
     },
     {
       id: "factory",
       name: "工廠",
       icon: "🏭",
       row: 1, col: 2,
-      neighbors: ["hospital", "forest", "dock"],
+      neighbors: ["hospital", "dock", "lab"],
       desc: "廢棄重工業區，能找到金屬零件、火藥與工地裝備",
       items: ["scrap_metal", "hammer", "iron_ore", "wire", "oil", "cloth", "helmet", "gunpowder"],
       wild: { name: "巡邏機械犬", hp: 80, maxHp: 80, atk: 22, def: 10, exp: 40, drop: ["scrap_metal", "steel", "wire", "gunpowder"] }
@@ -82,17 +83,27 @@ const GAME_DATA = {
       name: "海灘",
       icon: "🏖️",
       row: 2, col: 0,
-      neighbors: ["church", "forest", "dock"],
+      neighbors: ["church", "forest"],
       desc: "被海浪沖刷的西南海岸，有龜殼、海魚與漂流廢鐵",
       items: ["scrap_metal", "stone", "water", "turtle_shell", "fish", "lighter", "slippers"],
       wild: { name: "巨型寄居蟹", hp: 75, maxHp: 75, atk: 19, def: 16, exp: 35, drop: ["turtle_shell", "fish", "water"] }
+    },
+    {
+      id: "forest",
+      name: "森林",
+      icon: "🌲",
+      row: 2, col: 1,
+      neighbors: ["beach", "dock", "lab"],
+      desc: "南端繁茂樹林，適合採集天然木材、草藥、毛皮與獵弓",
+      items: ["branch", "stone", "herb", "flower", "water", "leather", "short_bow"],
+      wild: { name: "叢林山豬", hp: 90, maxHp: 90, atk: 24, def: 12, exp: 45, drop: ["meat", "leather", "herb"] }
     },
     {
       id: "dock",
       name: "碼頭",
       icon: "⚓",
       row: 2, col: 2,
-      neighbors: ["factory", "forest", "beach"],
+      neighbors: ["factory", "forest"],
       desc: "東南貨櫃港區，儲放工具鐵鎚、廢五金、水產與防具零件",
       items: ["scrap_metal", "hammer", "turtle_shell", "fish", "water", "lighter", "wire", "pistol", "running_shoes"],
       wild: { name: "港口巨蟹", hp: 78, maxHp: 78, atk: 20, def: 15, exp: 38, drop: ["turtle_shell", "fish", "scrap_metal"] }
@@ -384,6 +395,7 @@ let aiTraps = [];          // { area, dmg, name, ownerName }
 let restrictedAreas = new Set();
 let warningAreas = new Set();
 let actionCounter = 0;
+let labUnlocked = false; // 中央【研究中心】開局封鎖，累積 3 個禁區或第 20 動後開放
 
 let pendingFoundItem = null;
 let currentLootItems = [];
@@ -794,6 +806,7 @@ function findShortestPath(fromId, toId, avoidRestricted = true) {
     const neighbors = areaObj?.neighbors || [];
 
     for (const nxt of neighbors) {
+      if (nxt === 'lab' && !labUnlocked && toId !== 'lab') continue;
       if (nxt === toId) return [...path, nxt];
       if (!visited.has(nxt) && (!avoidRestricted || !restrictedAreas.has(nxt))) {
         visited.add(nxt);
@@ -809,7 +822,7 @@ function findShortestPath(fromId, toId, avoidRestricted = true) {
 // ==================== 通用工具 ====================
 const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const areaName = (id) => GAME_DATA.areas.find(a => a.id === id)?.name || '未知區域';
-const safeAreas = () => GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id));
+const safeAreas = () => GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id) && (labUnlocked || id !== 'lab'));
 
 // 檢查玩家目前穿戴的裝備是否持有指定被動 ID
 function playerHasPassive(passiveId) {
@@ -1115,6 +1128,7 @@ function initGame(charId) {
   const ch = CHARACTERS.find(c => c.id === charId) || CHARACTERS[0];
   isGameOver = false;
   actionCounter = 0;
+  labUnlocked = false;
   restrictedAreas.clear();
   warningAreas.clear();
   pendingFoundItem = null;
@@ -1137,8 +1151,9 @@ function initGame(charId) {
   const initDef = ch.def + perkB.defBonus;
   const startInv = ["water", "bandage", perkB.startPills ? "pills" : null, null, null, null];
 
-  // 隨機選擇玩家初始區域
-  const startArea = rand(GAME_DATA.areas).id;
+  // 開局僅降落於外圍 8 區（中央【研究中心】開局封鎖）
+  const outerAreas = GAME_DATA.areas.filter(a => a.id !== 'lab');
+  const startArea = rand(outerAreas).id;
 
   player = {
     char: ch,
@@ -1174,7 +1189,7 @@ function initGame(charId) {
       bag: [...tpl.bag],
       buildTargets: [...tpl.buildTargets],
       weaponName: GAME_DATA.items[tpl.startWeapon]?.name || "空手",
-      area: GAME_DATA.areas[Math.floor(Math.random() * GAME_DATA.areas.length)].id,
+      area: rand(outerAreas).id,
       alive: true
     };
     aiAutoEquipBest(bot);
@@ -1182,8 +1197,8 @@ function initGame(charId) {
     return bot;
   });
 
-  // 隨機選擇第一個預告禁區
-  const initialWarningArea = rand(GAME_DATA.areas).id;
+  // 隨機選擇第一個預告禁區（從外圍 8 區挑選）
+  const initialWarningArea = rand(outerAreas).id;
   warningAreas.add(initialWarningArea);
 
   combatLog.innerHTML = '';
@@ -1194,10 +1209,10 @@ function initGame(charId) {
   charModal.classList.add('hidden');
   if (lobbyModal) lobbyModal.classList.add('hidden');
 
-  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始 (8 區相鄰移動模式)！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
-  logMessage(`🧬 專精：${WEAPON_TYPES[ch.weaponType]}｜被動【${ch.passive.name}】｜技能【${ch.skill.name}】(戰鬥中按 Q)`, 'craft-msg');
-  logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 12 次行動後封鎖！`, 'warn-msg');
-  logMessage('💡 點擊「🗺️ 移動 [M]」可開啟 3×3 戰術雷達圖（僅能移動至連線相鄰區域）！', 'gain-msg');
+  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始 (9 區九宮格雷達模式)！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
+  logMessage(`🔒 中央【🔬 研究中心】目前處於安保封鎖狀態，將於「累積 3 個禁區封鎖（或第 20 動）」後開放通行！`, 'craft-msg');
+  logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 ${ACTIONS_PER_PHASE} 次行動後封鎖！`, 'warn-msg');
+  logMessage('💡 點擊「🗺️ 移動 [M]」可開啟 3×3 戰術雷達圖（綠底＝相鄰可移、灰底＝需跨區轉乘、紅底＝禁區）！', 'gain-msg');
   updateUI();
 }
 
@@ -1876,9 +1891,17 @@ function advanceWorldTick() {
     });
     warningAreas.clear();
 
+    // 檢查中央【研究中心】是否達成解鎖條件（累積 3 個禁區封鎖 或 達第 20 動）
+    if (!labUnlocked && (restrictedAreas.size >= 3 || actionCounter >= BOSS_SPAWN_ACTION)) {
+      labUnlocked = true;
+      logMessage(`🔓 [安保解除] 禁區封鎖達標！島嶼中央【🔬 研究中心】防護大門已正式開啟！現可自由通行四方捷徑並搜刮高階物資！`, 'craft-msg');
+    }
+
     const remainingSafe = safeAreas();
     if (remainingSafe.length > 1) {
-      const nextWarn = rand(remainingSafe);
+      // 優先封鎖外圍區域，讓中央【研究中心】維持中後期樞紐地位
+      const outerSafe = remainingSafe.filter(id => id !== 'lab');
+      const nextWarn = outerSafe.length > 0 ? rand(outerSafe) : rand(remainingSafe);
       warningAreas.add(nextWarn);
       logMessage(`⚠️ [禁區預告] 下一個封鎖區域：[${areaName(nextWarn)}] (${ACTIONS_PER_PHASE} 動後)`, 'warn-msg');
       spawnAirdrop();
@@ -2673,19 +2696,24 @@ function renderRadarMap() {
         if (!b) return;
         const x2 = (b.col || 0) * 100 + 50;
         const y2 = (b.row || 0) * 100 + 50;
+        const touchesLabLocked = (!labUnlocked && (a.id === 'lab' || b.id === 'lab'));
         const touchesPlayer = (a.id === player.area || b.id === player.area);
         const otherId = a.id === player.area ? b.id : a.id;
         let stroke = '#475569';
         let width = '2';
         let dash = 'stroke-dasharray="4 4"';
-        if (touchesPlayer) {
+        if (touchesLabLocked) {
+          stroke = '#7e22ce';
+          width = '2';
+          dash = 'stroke-dasharray="3 3"';
+        } else if (touchesPlayer) {
           if (restrictedAreas.has(otherId)) {
             stroke = '#ef4444';
             width = '2.5';
             dash = 'stroke-dasharray="3 3"';
           } else {
             stroke = '#4ade80';
-            width = '3';
+            width = '3.5';
             dash = '';
           }
         }
@@ -2695,7 +2723,7 @@ function renderRadarMap() {
     radarSvg.innerHTML = lines.join('');
   }
 
-  // 2. 繪製 3x3 區域節點
+  // 2. 繪製 3x3 九宮格區域節點
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 3; c++) {
       const a = GAME_DATA.areas.find(x => x.row === r && x.col === c);
@@ -2711,35 +2739,38 @@ function renderRadarMap() {
       const isAdj = areAreasAdjacent(player.area, a.id);
       const isRestr = restrictedAreas.has(a.id);
       const isWarn = warningAreas.has(a.id);
+      const isLockedLab = (a.id === 'lab' && !labUnlocked);
 
       let cls = 'radar-node';
       let badgeText = '🟢 安全';
       let bottomTag = '';
 
-      if (isCur) {
+      if (isLockedLab) {
+        cls += ' node-lab-locked';
+        badgeText = `🔒 安保封鎖 (${restrictedAreas.size}/3)`;
+        bottomTag = '🔒 滿3禁區或20動開放';
+      } else if (isCur) {
         cls += ' node-current';
-        badgeText = isRestr ? '🚫 禁區' : (isWarn ? '⚠️ 預告' : '📍 當前');
-        bottomTag = '📍 當前所在區域';
-      } else if (isAdj && isRestr) {
+        badgeText = isRestr ? '🔴 禁區' : (isWarn ? '🟠 預告' : '🔵 當前位置');
+        bottomTag = '📍 你在此區域';
+      } else if (isRestr) {
+        // 無論是否相鄰，已封鎖禁區一律使用鮮明紅色底色 (.node-restricted)
         cls += ' node-restricted';
-        badgeText = '🚫 禁區';
-        bottomTag = '⚡ 強行穿越 (-8SP/-25HP)';
+        badgeText = '🔴 禁區封鎖';
+        bottomTag = isAdj ? '⚡ 強穿 (-8SP/-25HP)' : '🚫 遠距禁區';
       } else if (isAdj && isWarn) {
         cls += ' node-adj-warn';
-        badgeText = '⚠️ 預告';
-        bottomTag = '🟢 相鄰可移動 (-3 SP)';
+        badgeText = '🟠 預告禁區';
+        bottomTag = '🟢 相鄰可移 (-3 SP)';
       } else if (isAdj) {
         cls += ' node-adjacent';
-        badgeText = '🟢 可直達';
-        bottomTag = '🟢 相鄰可移動 (-3 SP)';
-      } else if (isRestr) {
-        cls += ' node-restricted node-distant';
-        badgeText = '🚫 禁區';
-        bottomTag = '🔒 非相鄰 (點擊查路線)';
+        badgeText = '🟢 相鄰可移';
+        bottomTag = '🟢 點擊移動 (-3 SP)';
       } else {
+        // 非相鄰區域（不在周圍一步可達範圍）一律使用灰色底色 (.node-distant)
         cls += ' node-distant';
-        badgeText = isWarn ? '⚠️ 預告' : '🔒 需轉乘';
-        bottomTag = '🧭 非相鄰 (點擊查路線)';
+        badgeText = isWarn ? '🟠 遠距預告' : '⚪ 需跨區';
+        bottomTag = '🧭 點擊查轉乘路線';
       }
 
       const aiCount = aiBots.filter(b => b.alive && b.area === a.id).length;
@@ -2755,7 +2786,7 @@ function renderRadarMap() {
           <span class="radar-node-name">${a.icon || ''} ${a.name}</span>
           <span class="radar-node-badge">${badgeText}</span>
         </div>
-        <div class="radar-node-mid">👤 ${aiCount} 人${icons}</div>
+        <div class="radar-node-mid">${isLockedLab ? '🛡️ 防護門緊閉' : `👤 ${aiCount} 人${icons}`}</div>
         <div class="radar-node-tag">${bottomTag}</div>
       `;
       btn.onclick = () => moveToArea(a);
@@ -2765,8 +2796,12 @@ function renderRadarMap() {
 
   if (radarRouteHint) {
     const curObj = GAME_DATA.areas.find(x => x.id === player.area);
-    const adjNames = (curObj?.neighbors || []).map(areaName).join('、');
-    radarRouteHint.innerHTML = `📍 當前位於 <strong>[${areaName(player.area)}]</strong> ｜ 可直達相鄰區域：<strong style="color:#4ade80;">${adjNames}</strong>`;
+    const adjNames = (curObj?.neighbors || [])
+      .filter(id => labUnlocked || id !== 'lab')
+      .map(areaName)
+      .join('、');
+    const labNote = !labUnlocked ? ` ｜ 🔒 研究中心(${restrictedAreas.size}/3禁區解鎖)` : ' ｜ 🔓 研究中心已開放';
+    radarRouteHint.innerHTML = `📍 當前：<strong>[${areaName(player.area)}]</strong> ➔ 可直達：<strong style="color:#4ade80;">${adjNames}</strong>${labNote}`;
   }
 }
 
@@ -2787,6 +2822,17 @@ function moveToArea(a) {
     return;
   }
 
+  // 檢查是否為尚未解鎖的中央【研究中心】
+  if (a.id === 'lab' && !labUnlocked) {
+    SFX.play('click');
+    const lockMsg = `🔒 中央【🔬 研究中心】目前處於安保封鎖狀態！需累積 3 個禁區封鎖（目前 ${restrictedAreas.size}/3）或達第 20 動後才會開放通行！`;
+    if (radarRouteHint) {
+      radarRouteHint.innerHTML = `<span style="color:#e9d5ff;">${lockMsg}</span>`;
+    }
+    logMessage(lockMsg, 'warn-msg');
+    return;
+  }
+
   // 檢查是否為相鄰區域
   if (!areAreasAdjacent(player.area, a.id)) {
     SFX.play('click');
@@ -2794,7 +2840,7 @@ function moveToArea(a) {
     const routeStr = path.map(areaName).join(' ➔ ');
     const nextStep = path.length > 1 ? areaName(path[1]) : a.name;
     if (radarRouteHint) {
-      radarRouteHint.innerHTML = `🧭 <strong>[${a.name}] 與當前區域不相鄰！</strong> 最短轉乘路線：<strong style="color:#fde047;">${routeStr}</strong>（請先點擊相鄰的 <strong>[${nextStep}]</strong>）`;
+      radarRouteHint.innerHTML = `🧭 <strong>[${a.name}] 為灰色非相鄰區域！</strong> 最短轉乘路線：<strong style="color:#fde047;">${routeStr}</strong>（請先點擊綠色的 <strong>[${nextStep}]</strong>）`;
     }
     logMessage(`🧭 [${a.name}] 非相鄰區域無法直接跨越！最短路線：${routeStr}`, 'warn-msg');
     return;

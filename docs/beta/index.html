@@ -172,21 +172,22 @@
     <div id="map-modal" class="modal hidden">
       <div class="modal-content radar-map-dialog">
         <div class="modal-header-row">
-          <h3>🗺️ 盧米亞島戰術雷達 (相鄰移動 -3 SP)</h3>
-          <span class="shortcut-tip">綠框=可直達 ｜ 暗框=需轉乘</span>
+          <h3>🗺️ 盧米亞島 9 區戰術雷達 (-3 SP)</h3>
+          <span class="shortcut-tip">綠底=可直達 ｜ 灰底=需轉乘</span>
         </div>
         <div class="radar-legend-bar">
-          <span>📍當前位置</span>
-          <span style="color:#4ade80;">🟢相鄰安全</span>
-          <span style="color:#fbbf24;">⚠️即將封鎖</span>
-          <span style="color:#f87171;">⛔禁區(強穿-25HP)</span>
+          <span style="color:#60a5fa;">🔵當前</span>
+          <span style="color:#4ade80;">🟢相鄰可移</span>
+          <span style="color:#9ca3af;">⚪非相鄰(灰)</span>
+          <span style="color:#fbbf24;">🟠預告</span>
+          <span style="color:#f87171;">🔴禁區(紅)</span>
         </div>
         <div class="radar-board-wrap">
           <svg class="radar-svg-lines" id="radar-svg" viewBox="0 0 300 300" preserveAspectRatio="none"></svg>
           <div class="radar-grid-3x3" id="area-selector"></div>
         </div>
-        <div id="radar-route-hint" class="radar-route-hint">💡 點擊發光連線的相鄰區域即可移動。</div>
-        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">關閉雷達地圖 [Esc]</button>
+        <div id="radar-route-hint" class="radar-route-hint">💡 點擊綠色相鄰區域即可移動；點擊灰色遠距區域可查詢最短轉乘路線。</div>
+        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 8px; width: 100%;">關閉雷達地圖 [Esc]</button>
       </div>
     </div>
 
@@ -245,11 +246,11 @@
               </div>
             </div>
             <div class="help-guide-card">
-              <div class="help-card-title">🗺️ ② 8 區戰術雷達與相鄰移動 (快捷鍵 M)</div>
+              <div class="help-card-title">🗺️ ② 9 區 3×3 戰術雷達與中央研究中心 (快捷鍵 M)</div>
               <div class="help-card-desc">
-                • 全島共 8 個區域，呈 3×3 九宮格連通（中央<strong>森林</strong>為交通樞紐）。<br>
-                • 每次移動僅能前往<strong>有線路相連的相鄰區域</strong>（消耗 3 SP）。<br>
-                • 若必經之路遭禁區封鎖，可選擇繞路，或冒險<strong>「⚡強行穿越禁區」</strong>（承受 25 HP 電擊並消耗 8 SP）。
+                • 全島共 <strong>9 大區域</strong>（外圍 8 區環狀連通 ＋ 中央<strong>【🔬 研究中心】</strong>）。<br>
+                • <strong>🟢 綠色節點</strong>代表與當前位置相鄰，可消耗 <code>3 SP</code> 直接移動；<strong>⚪ 灰色節點</strong>代表非相鄰，點擊會自動提示最短轉乘路線；<strong>🔴 紅色節點</strong>為已封鎖禁區。<br>
+                • <strong>🔬 中央研究中心解鎖機制</strong>：開局處於安保封鎖狀態，當<strong>「場上累積 3 個禁區封鎖（或第 20 動博士登場）」</strong>時自動開啟，提供高階實驗物資與十字中央捷徑！
               </div>
             </div>
             <div class="help-guide-card">
@@ -286,7 +287,7 @@
         <div class="lobby-hero">
           <div class="lobby-subtitle">AGLAIA SURVIVAL PROJECT</div>
           <h1 class="lobby-title">盧米亞島：黑色倖存</h1>
-          <p class="lobby-tagline">8 區戰術雷達 ‧ 擬真 AI 決策 ‧ 雙軌天賦養成</p>
+          <p class="lobby-tagline">9 區戰術雷達 ‧ 中央研究中心 ‧ 雙軌天賦養成</p>
         </div>
 
         <!-- 實驗室雙貨幣資源欄 -->
@@ -308,7 +309,7 @@
               <span class="lobby-btn-icon">⚔️</span>
               <div>
                 <div class="lobby-btn-title">開始遊戲：單人戰術演習</div>
-                <div class="lobby-btn-desc">7 名可選受試者 ‧ 8 區相鄰雷達 ‧ 挑戰高擬真 AI 與博士</div>
+                <div class="lobby-btn-desc">7 名受試者 ‧ 9 區九宮格雷達 ‧ 中央研究中心解鎖戰</div>
               </div>
             </div>
             <span class="lobby-arrow">➔</span>
@@ -407,11 +408,11 @@
         </div>
         <div class="help-scroll-body">
           <div class="help-guide-card" style="border-color:#f59e0b;">
-            <div class="help-card-title">🧪 v2.9 Beta（當前測試版）— 首頁大廳、8區雷達與戰術音效</div>
+            <div class="help-card-title">🧪 v2.9 Beta（當前測試版）— 首頁大廳、9區九宮格雷達與研究中心</div>
             <div class="help-card-desc">
-              • <strong>實驗室首頁大廳</strong>：新增主選單、雙版本切換（穩定版 ↔ Beta 測試服）、更新紀錄與多人預備室。<br>
-              • <strong>Web Audio 原生戰術音效</strong>：新增探索、打鐵合成、揮砍、暴擊、技能、警報與吃雞和弦音效（支援頂部一鍵靜音）。<br>
-              • <strong>8 區 3×3 戰術雷達相鄰地圖</strong>：擴充小巷、教堂、碼頭共 8 大區域；實裝 SVG 相鄰路徑連線、轉乘提示、強行穿毒機制與 AI 最短路徑尋路。<br>
+              • <strong>實驗室首頁大廳</strong>：新增主選單、雙版本切換（穩定版 ↔ Beta 測試服）、玩法教學、更新紀錄與多人預備室。<br>
+              • <strong>9 區 3×3 戰術雷達與中央【🔬 研究中心】</strong>：外圍 8 區（小巷、學校、醫院、教堂、工廠、海灘、森林、碼頭）環狀連通；中央為<strong>【🔬 研究中心】</strong>（開局安保封鎖，達成 3 個禁區或第 20 動後正式開放通行與高階物資）。<br>
+              • <strong>高對比雷達色標</strong>：🟢綠底＝相鄰可移動、⚪灰底＝非相鄰需轉乘、🟠橘底＝預告封鎖、🔴紅底＝已封鎖禁區、🟣紫底＝研究中心封鎖中。<br>
               • <strong>天賦研究所與新角色</strong>：實裝 4 大局外天賦（🔹碎片常規升級 + 💠核心晶片 5/10 級突破），並新增受試者<strong>【慧珍】</strong>與<strong>【秀雅】</strong>。
             </div>
           </div>
