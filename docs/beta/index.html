@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Project Lumia - 黑色倖存 (v2.9 Beta 測試服)</title>
-  <link rel="stylesheet" href="style.css?v=2.9.3">
+  <title>Project Lumia - 黑色倖存 (v2.9.5 Beta 測試服)</title>
+  <link rel="stylesheet" href="style.css?v=2.9.5">
 </head>
 <body>
   <div id="app">
@@ -268,8 +268,19 @@
             <div class="lobby-btn-left">
               <span class="lobby-btn-icon">🧬</span>
               <div>
-                <div class="lobby-btn-title">受試者培養：天賦研究所</div>
-                <div class="lobby-btn-desc">消耗數據碎片與核心晶片，強化初始體能、精力與戰術本能</div>
+                <div class="lobby-btn-title">受試者培養：天賦與專屬改造</div>
+                <div class="lobby-btn-desc">通用天賦樹 ‧ 7 名角色獨立 Lv.1~5 覺醒改造 ‧ 存檔引繼</div>
+              </div>
+            </div>
+            <span class="lobby-arrow">➔</span>
+          </button>
+
+          <button id="btn-menu-dossier" class="lobby-btn" style="border-color:#0284c7; background:linear-gradient(135deg, #0c1f33 0%, #0d1320 100%);">
+            <div class="lobby-btn-left">
+              <span class="lobby-btn-icon">📂</span>
+              <div>
+                <div class="lobby-btn-title">受試者情報檔案庫 <small class="pvp-tag" style="background:#0369a1; color:#e0f2fe;">立繪＆機密</small></div>
+                <div class="lobby-btn-desc">查看角色大頭照與全身立繪、實驗編號、主副專武與機密故事</div>
               </div>
             </div>
             <span class="lobby-arrow">➔</span>
@@ -345,12 +356,12 @@
       </div>
     </div>
 
-    <!-- ==================== 天賦研究所 (Perks Modal) ==================== -->
+    <!-- ==================== 天賦與角色專屬改造研究所 (Perks Modal) ==================== -->
     <div id="perks-modal" class="modal hidden" style="z-index: 250;">
       <div class="modal-content char-dialog">
         <div class="modal-header-row">
-          <h3>🧬 亞格萊雅天賦研究所</h3>
-          <span class="shortcut-tip">單人與多人共用加成</span>
+          <h3>🧬 亞格萊雅天賦與改造研究所</h3>
+          <span class="shortcut-tip">本機自動儲存</span>
         </div>
         <div class="lobby-currency-bar" style="margin-bottom:8px;">
           <div class="currency-item">
@@ -362,12 +373,53 @@
             <strong id="perks-chips-val" style="color:#c084fc;">0</strong>
           </div>
         </div>
-        <div class="chip-craft-bar">
+        <div class="codex-tabs" style="margin-bottom:8px;">
+          <button id="btn-ptab-global" class="codex-tab active">🌐 通用實驗室天賦 (4項)</button>
+          <button id="btn-ptab-char" class="codex-tab">🧬 受試者專屬改造 (7人)</button>
+        </div>
+        <div class="chip-craft-bar" id="chip-craft-bar">
           <span>⚗️ 實驗室晶片合成（150 🔹 碎片 ➔ 1 💠 晶片）</span>
           <button id="btn-synth-chip" class="btn-help-badge" style="background:#3b0764; border-color:#a855f7; color:#f3e8ff;">合成晶片</button>
         </div>
         <div id="perks-list" class="perks-list"></div>
-        <button id="btn-close-perks" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">返回首頁大廳 [Esc]</button>
+        <div class="save-transfer-bar">
+          <span>💾 跨裝置存檔引繼碼（備份／手機電腦轉移）</span>
+          <div style="display:flex; gap:6px;">
+            <button id="btn-export-save" class="btn-help-badge" style="background:#0f172a; border-color:#38bdf8; color:#bae6fd;">📤 匯出複製</button>
+            <button id="btn-import-save" class="btn-help-badge" style="background:#0f172a; border-color:#10b981; color:#a7f3d0;">📥 貼上匯入</button>
+          </div>
+        </div>
+        <button id="btn-close-perks" class="btn btn-secondary" style="margin-top: 8px; width: 100%;">返回首頁大廳 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- ==================== 受試者情報檔案庫 (Dossier Modal) ==================== -->
+    <div id="dossier-modal" class="modal hidden" style="z-index: 250;">
+      <div class="modal-content dossier-dialog">
+        <div class="modal-header-row">
+          <h3>📂 亞格萊雅受試者機密檔案庫</h3>
+          <span class="shortcut-tip">依出戰場次逐步解密</span>
+        </div>
+        <!-- 7 名受試者快速切換列 -->
+        <div id="dossier-char-tabs" class="dossier-char-tabs"></div>
+        <!-- 選中受試者之詳細檔案 -->
+        <div id="dossier-detail-box" class="dossier-detail-box"></div>
+        <button id="btn-close-dossier" class="btn btn-secondary" style="margin-top: 8px; width: 100%;">關閉檔案庫 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- ==================== 全身立繪放大檢視視窗 (Portrait Lightbox Modal) ==================== -->
+    <div id="portrait-modal" class="modal hidden" style="z-index: 320;">
+      <div class="modal-content portrait-dialog">
+        <div class="modal-header-row">
+          <h3 id="portrait-title">🖼️ 受試者全身立繪</h3>
+          <span class="shortcut-tip">點擊下方關閉</span>
+        </div>
+        <div class="portrait-img-wrap">
+          <img id="portrait-full-img" src="" alt="受試者全身立繪" class="portrait-full-img" />
+        </div>
+        <div id="portrait-caption" class="portrait-caption"></div>
+        <button id="btn-close-portrait" class="btn btn-primary" style="margin-top: 8px; width: 100%;">關閉立繪檢視 [Esc]</button>
       </div>
     </div>
 
@@ -465,6 +517,6 @@
     </div>
   </div>
 
-  <script src="solo_game.js?v=2.9.3"></script>
+  <script src="solo_game.js?v=2.9.5"></script>
 </body>
 </html>

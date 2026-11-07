@@ -276,48 +276,119 @@ const GAME_DATA = {
 };
 
 // ==================== 可選角色 ====================
+const WEAPON_TRAIT_DESC = {
+  blade: "斬擊鋒芒（暴擊率 +5%）",
+  blunt: "重擊破防（無視敵方 12% 防禦）",
+  gun: "火力壓制（最終傷害 +6%）",
+  bow: "致命狙擊（暴擊倍率 +0.15）",
+  hand: "格鬥卸力（承受反擊傷害 -10%）"
+};
+
 const CHARACTERS = [
   {
-    id: "jackie", name: "傑琪", code: "06M-RF18", title: "連續殺人魔",
-    weaponType: "blade", startWeapon: "kitchen_knife", hp: 100, sp: 80, atk: 13, def: 5,
-    passive: { name: "嗜血", desc: "擊殺任何目標後回復 20 HP" },
-    skill: { name: "血祭狂斬", desc: "造成 1.8 倍傷害", cost: 10, cd: 6 }
+    id: "jackie", name: "傑琪", code: "06M-RF01", title: "連續殺人魔",
+    weaponType: "blade", subWeaponType: "blunt", bonusMat: "scrap_metal",
+    avatar: "assets/chars/jackie.svg",
+    startWeapon: "kitchen_knife", hp: 100, sp: 80, atk: 13, def: 5,
+    passive: { name: "嗜血", desc: "擊殺任何目標後回復 20 HP（Lv.3 覺醒：回復 32 HP）" },
+    skill: { name: "血祭狂斬", desc: "造成 1.8 倍傷害（Lv.5 突破：2.07 倍且 CD-1）", cost: 10, cd: 6 },
+    dossier: {
+      age: "22 歲", origin: "英國・倫敦", job: "連環殺手（通緝代號：開膛手）",
+      tier1: "曾於倫敦街頭犯下超過二十起完美分屍案而未被捕獲。對鮮血與撕裂聲有著病態的執著，將盧米亞島視為無拘無束的狩獵樂園。",
+      tier2: "【亞格萊雅側寫】痛覺神經高度鈍化，見到血液時腎上腺素會暴增 300%。建議路線：主修【利刃】（烈焰魔劍／秘銀聖刃），或轉修副專精【鈍器】（釘頭槌／雷神之鎚）。",
+      tier3: "【VF 機密檔案】第 06 期核心觀測體。其「嗜血」實為早期 VF 細胞自癒突變，在連續殺戮狀態下幾乎不會感到疲勞。",
+      quote: "「捉迷藏結束囉……下一個輪到誰被切開呢？」"
+    }
   },
   {
-    id: "aya", name: "阿雅", code: "14M-RFT02", title: "前 FBI 探員",
-    weaponType: "gun", startWeapon: "pistol", hp: 95, sp: 85, atk: 12, def: 4,
-    passive: { name: "神射手", desc: "暴擊率 +10%" },
-    skill: { name: "二連射", desc: "連續射擊兩次（各 0.8 倍傷害，可各自暴擊）", cost: 10, cd: 5 }
+    id: "aya", name: "阿雅", code: "14M-RFT02", title: "正義女警",
+    weaponType: "gun", subWeaponType: "blade", bonusMat: "gunpowder",
+    avatar: "assets/chars/aya.svg",
+    startWeapon: "pistol", hp: 95, sp: 85, atk: 12, def: 4,
+    passive: { name: "神射手", desc: "暴擊率 +10%（Lv.3 覺醒：暴擊率 +16%）" },
+    skill: { name: "二連射", desc: "連續射擊兩次，各 0.8 倍傷害（Lv.5 突破：各 0.92 倍且 CD-1）", cost: 10, cd: 5 },
+    dossier: {
+      age: "26 歲", origin: "日本・東京", job: "前警視廳搜查一課警官",
+      tier1: "懷抱絕對正義感投身警界，卻因胞弟「鈴木翔」涉入無差別殺人案而陷入信仰崩潰。為追查弟弟失蹤真相而踏入亞格萊雅的陷阱。",
+      tier2: "【亞格萊雅側寫】射擊精準度極高，但面對無辜傷亡時容易產生心理動搖。建議路線：主修【槍械】（電磁軌道槍／馬格南），或副修【利刃】（劇毒手術刀／精鋼長刀）。",
+      tier3: "【VF 機密檔案】每輪實驗重置後，阿雅都會因親手擊斃其他受試者而崩潰，研究員需定期清洗其海馬迴記憶以維持高水準射擊表現。",
+      quote: "「別逼我開槍！我一定要活著找出真相！」"
+    }
   },
   {
     id: "hyunwoo", name: "玄佑", code: "14M-RFT04", title: "街頭格鬥家",
-    weaponType: "hand", startWeapon: "brass_knuckles", hp: 120, sp: 80, atk: 11, def: 9,
-    passive: { name: "鋼鐵之軀", desc: "生命上限與基礎防禦天生較高" },
-    skill: { name: "先發制人", desc: "1.3 倍傷害，並使敵人本回合無法反擊", cost: 8, cd: 5 }
+    weaponType: "hand", subWeaponType: "blunt", bonusMat: "iron_ore",
+    avatar: "assets/chars/hyunwoo.svg",
+    startWeapon: "brass_knuckles", hp: 120, sp: 80, atk: 11, def: 9,
+    passive: { name: "鋼鐵之軀", desc: "天生高生命與防禦（Lv.3 覺醒：承受傷害 -10% 且休息額外 +5 HP）" },
+    skill: { name: "先發制人", desc: "1.3 倍傷害並壓制敵人無法反擊（Lv.5 突破：1.5 倍且 CD-1）", cost: 8, cd: 5 },
+    dossier: {
+      age: "18 歲", origin: "韓國・首爾", job: "高中生（輟學邊緣）",
+      tier1: "從小在破碎家庭與街頭鬥毆中長大，對未來毫無期待，唯有揮拳時能感受到自己還活著。為了贏得巨額獎金償還賭債而被誘騙登島。",
+      tier2: "【亞格萊雅側寫】骨骼密度與抗擊打能力遠超常人，越是陷入絕境鬥志越旺盛。建議路線：主修【拳套】（隕星拳套／鋼鐵拳套），或副修【鈍器】（狼牙棒／雷神之鎚）。",
+      tier3: "【VF 機密檔案】第 14 期少數能與馬格努斯正面硬撼的近戰受試者，體內 VF 抗性極為穩定，具備極高進階改造價值。",
+      quote: "「少囉嗦，想活命的話就用拳頭說話吧！」"
+    }
   },
   {
     id: "nadine", name: "娜汀", code: "14M-RFT07", title: "荒野獵人",
-    weaponType: "bow", startWeapon: "short_bow", hp: 95, sp: 90, atk: 12, def: 4,
-    passive: { name: "狩獵本能", desc: "對野生動物與 Boss 傷害 +30%，狩獵戰利品 +1" },
-    skill: { name: "穿心箭", desc: "無視敵方防禦，造成 1.5 倍傷害", cost: 12, cd: 6 }
+    weaponType: "bow", subWeaponType: "blade", bonusMat: "feather",
+    avatar: "assets/chars/nadine.svg",
+    startWeapon: "short_bow", hp: 95, sp: 90, atk: 12, def: 4,
+    passive: { name: "狩獵本能", desc: "對野怪與 Boss 傷害 +30%、戰利品 +1（Lv.3 覺醒：傷害 +45%）" },
+    skill: { name: "穿心箭", desc: "無視敵方防禦，造成 1.5 倍傷害（Lv.5 突破：1.73 倍且 CD-1）", cost: 12, cd: 6 },
+    dossier: {
+      age: "21 歲", origin: "印尼・蘇門答臘", job: "叢林狩獵嚮導",
+      tier1: "幼年於山難中奇蹟生還並由野狼撫養數年，重返人類社會後仍保持著野獸般的敏銳直覺。能在百米外聽見獵物的心跳聲。",
+      tier2: "【亞格萊雅側寫】在自然地形（森林、海灘）具備壓倒性追蹤優勢，擅長獵殺高價值變異體。建議路線：主修【弓箭】（生命神弓／複合弓），或副修【利刃】（飛羽短劍）。",
+      tier3: "【VF 機密檔案】唯一能單獨追蹤並正面獵殺「Wickeline 博士」的高適應體，其視覺神經已與 VF 共振產生夜間熱感應能力。",
+      quote: "「風已經告訴我你的位置了……獵物是逃不掉的。」"
+    }
   },
   {
-    id: "magnus", name: "馬格努斯", code: "14M-RFT06", title: "機車黨老大",
-    weaponType: "blunt", startWeapon: "hammer", hp: 110, sp: 75, atk: 12, def: 7,
-    passive: { name: "硬漢", desc: "對受試者傷害 +15%，承受所有傷害 -10%" },
-    skill: { name: "重機衝撞", desc: "1.5 倍傷害並擊暈敵人（本回合無法反擊）", cost: 10, cd: 6 }
+    id: "magnus", name: "馬格努斯", code: "14M-RFT06", title: "暴走族首領",
+    weaponType: "blunt", subWeaponType: "hand", bonusMat: "wire",
+    avatar: "assets/chars/magnus.svg",
+    startWeapon: "hammer", hp: 110, sp: 75, atk: 12, def: 7,
+    passive: { name: "硬漢", desc: "對受試者傷害 +15%、承傷 -10%（Lv.3 覺醒：傷害 +22%、承傷 -16%）" },
+    skill: { name: "重機衝撞", desc: "1.5 倍傷害並擊暈敵人無法反擊（Lv.5 突破：1.73 倍且 CD-1）", cost: 10, cd: 6 },
+    dossier: {
+      age: "34 歲", origin: "美國・洛杉磯", job: "「死神之輪」暴走族總長",
+      tier1: "統率美國西岸最大飛車黨的狂暴巨漢，信奉弱肉強食的暴力美學。在一場幫派火拼受重傷後，於亞格萊雅的地下醫療船甦醒。",
+      tier2: "【亞格萊雅側寫】極具侵略性，偏好主動搜尋其他受試者進行輾壓。建議路線：主修【鈍器】（隕星破滅鎚／雷神之鎚），或副修【拳套】（鋼鐵拳套）。",
+      tier3: "【VF 機密檔案】肌肉纖維經 VF 強化後具備媲美裝甲車的衝擊力，曾徒手砸穿研究中心的防爆強化玻璃。",
+      quote: "「擋在老子路上的傢伙，全給我碾成廢鐵！」"
+    }
   },
   {
     id: "hyejin", name: "慧珍", code: "15M-RFT12", title: "符咒巫女",
-    weaponType: "bow", startWeapon: "short_bow", hp: 96, sp: 95, atk: 13, def: 5,
-    passive: { name: "三災", desc: "戰鬥中暴擊率 +8%，且施放技能時壓制敵人無法反擊" },
-    skill: { name: "吸靈符", desc: "1.45 倍傷害並恐懼壓制敵人，同時回復自身 12 HP", cost: 10, cd: 5 }
+    weaponType: "bow", subWeaponType: "blunt", bonusMat: "flower",
+    avatar: "assets/chars/hyejin.svg",
+    startWeapon: "short_bow", hp: 96, sp: 95, atk: 13, def: 5,
+    passive: { name: "三災", desc: "暴擊率 +8%，施放技能時壓制敵人無法反擊（Lv.3 覺醒：暴擊率 +14%）" },
+    skill: { name: "吸靈符", desc: "1.45 倍傷害並壓制反擊，回復 12 HP（Lv.5 突破：1.67 倍、回 16 HP、CD-1）", cost: 10, cd: 5 },
+    dossier: {
+      age: "18 歲", origin: "韓國・慶州", job: "千年巫堂世家繼承人",
+      tier1: "自幼背負「三災八難」凶兆降生的巫女，家族預言她將在十八歲迎來滅頂之災。為了斬斷宿命的枷鎖，她主動踏上了被詛咒的盧米亞島。",
+      tier2: "【亞格萊雅側寫】能將精神力灌注於符咒與箭矢之中，使受擊者產生強烈恐懼幻覺。建議路線：主修【弓箭】（複合弓／生命神弓），或副修【鈍器】（狼牙棒）。",
+      tier3: "【VF 機密檔案】其「吸靈符」展現出罕見的精神波長干涉現象，能短暫癱瘓敵方受試者的運動中樞並汲取生體能量。",
+      quote: "「若這也是命運的劫數……我便以符咒將它盡數祓除。」"
+    }
   },
   {
     id: "sua", name: "秀雅", code: "18M-RFT37", title: "圖書管理員",
-    weaponType: "blunt", startWeapon: "hammer", hp: 108, sp: 85, atk: 12, def: 7,
-    passive: { name: "心靈糧食", desc: "食用任何補品或飲料時，HP/SP 恢復效果額外 +25%" },
-    skill: { name: "青鳥之書", desc: "1.6 倍鈍器重擊，並立即回復自身 15 HP", cost: 10, cd: 5 }
+    weaponType: "blunt", subWeaponType: "blade", bonusMat: "lighter",
+    avatar: "assets/chars/sua.svg",
+    startWeapon: "hammer", hp: 108, sp: 85, atk: 12, def: 7,
+    passive: { name: "心靈糧食", desc: "食用補品或飲料時 HP/SP 恢復 +25%（Lv.3 覺醒：恢復 +40%）" },
+    skill: { name: "青鳥之書", desc: "1.6 倍重擊並回復自身 15 HP（Lv.5 突破：1.84 倍、回 20 HP、CD-1）", cost: 10, cd: 5 },
+    dossier: {
+      age: "25 歲", origin: "韓國・光州", job: "市立圖書館館員",
+      tier1: "溫柔恬靜、熱愛童話故事的圖書管理員，擁有過目不忘的絕對記憶力。總是隨身攜帶一本厚重的精裝書與書籤。",
+      tier2: "【亞格萊雅側寫】表面看似溫和無害，但當她將敵人幻化為童話中的惡龍時，揮舞重物的力道毫無憐憫。建議路線：主修【鈍器】（雷神之鎚／戰鎚），或副修【利刃】（精鋼長刀）。",
+      tier3: "【VF 機密檔案】極度危險的「認知濾鏡」精神狀態——在她眼中，盧米亞島的血腥殺戮只是一場尋找幸福青鳥的奇幻冒險。",
+      quote: "「請保持安靜喔……故事的下一頁，馬上就要開始了。」"
+    }
   }
 ];
 
@@ -493,6 +564,7 @@ const btnLobbySfx = $('btn-lobby-sfx');
 const btnMenuSolo = $('btn-menu-solo');
 const btnMenuPvp = $('btn-menu-pvp');
 const btnMenuPerks = $('btn-menu-perks');
+const btnMenuDossier = $('btn-menu-dossier');
 const btnMenuGuide = $('btn-menu-guide');
 const btnMenuCareer = $('btn-menu-career');
 const btnMenuPatch = $('btn-menu-patch');
@@ -505,6 +577,21 @@ const btnGameoverLobby = $('btn-gameover-lobby');
 const charPerkSummary = $('char-perk-summary');
 const radarSvg = $('radar-svg');
 const radarRouteHint = $('radar-route-hint');
+
+// v2.9.5 受試者專屬改造、存檔引繼、情報檔案庫與全身立繪 DOM
+const btnPtabGlobal = $('btn-ptab-global');
+const btnPtabChar = $('btn-ptab-char');
+const btnExportSave = $('btn-export-save');
+const btnImportSave = $('btn-import-save');
+const dossierModal = $('dossier-modal');
+const dossierCharTabs = $('dossier-char-tabs');
+const dossierDetailBox = $('dossier-detail-box');
+const btnCloseDossier = $('btn-close-dossier');
+const portraitModal = $('portrait-modal');
+const portraitTitle = $('portrait-title');
+const portraitFullImg = $('portrait-full-img');
+const portraitCaption = $('portrait-caption');
+const btnClosePortrait = $('btn-close-portrait');
 
 const btnSearch = $('btn-search');
 const btnRest = $('btn-rest');
@@ -655,11 +742,15 @@ const PERK_DEFS = [
   }
 ];
 
+let currentPerkTab = 'global';
+
 function getPerksData() {
   const def = {
     shards: 120, // 新手初始測試研究經費
     chips: 1,    // 新手初始贈送 1 顆核心晶片供體驗突破
-    levels: { vitality: 0, stamina: 0, smithing: 0, instinct: 0 }
+    levels: { vitality: 0, stamina: 0, smithing: 0, instinct: 0 },
+    charLevels: { jackie: 0, aya: 0, hyunwoo: 0, nadine: 0, magnus: 0, hyejin: 0, sua: 0 },
+    unlockedDossiers: {}
   };
   try {
     if (typeof localStorage === 'undefined') return def;
@@ -669,7 +760,9 @@ function getPerksData() {
     return {
       shards: typeof parsed.shards === 'number' ? parsed.shards : def.shards,
       chips: typeof parsed.chips === 'number' ? parsed.chips : def.chips,
-      levels: { ...def.levels, ...(parsed.levels || {}) }
+      levels: { ...def.levels, ...(parsed.levels || {}) },
+      charLevels: { ...def.charLevels, ...(parsed.charLevels || {}) },
+      unlockedDossiers: { ...(parsed.unlockedDossiers || {}) }
     };
   } catch (e) {
     return def;
@@ -704,6 +797,18 @@ function getPerkUpgradeCost(curLv) {
   return { max: false, shards: 20 + curLv * 15, chips: 0, isBreakthrough: false };
 }
 
+function getCharUpgradeCost(curLv) {
+  if (curLv >= 5) return { max: true, shards: 0, chips: 0, isBreakthrough: false };
+  const costs = [
+    { shards: 40, chips: 0, isBreakthrough: false },  // Lv.1
+    { shards: 70, chips: 0, isBreakthrough: false },  // Lv.2
+    { shards: 90, chips: 1, isBreakthrough: true },   // Lv.3 ★被動覺醒
+    { shards: 110, chips: 0, isBreakthrough: false }, // Lv.4 鍛造記憶
+    { shards: 150, chips: 1, isBreakthrough: true }   // Lv.5 ★★奧義突破
+  ];
+  return { max: false, ...costs[curLv] };
+}
+
 function upgradePerk(perkId) {
   const data = getPerksData();
   const curLv = data.levels[perkId] || 0;
@@ -715,7 +820,40 @@ function upgradePerk(perkId) {
   data.levels[perkId] = curLv + 1;
   savePerksData(data);
   SFX.play('craft');
-  renderPerksModal();
+  renderPerksModal('global');
+}
+
+function upgradeCharMastery(charId) {
+  const data = getPerksData();
+  const curLv = (data.charLevels && data.charLevels[charId]) || 0;
+  const cost = getCharUpgradeCost(curLv);
+  if (cost.max) return;
+  if (data.shards < cost.shards || data.chips < cost.chips) return;
+  data.shards -= cost.shards;
+  data.chips -= cost.chips;
+  if (!data.charLevels) data.charLevels = {};
+  data.charLevels[charId] = curLv + 1;
+  savePerksData(data);
+  SFX.play('craft');
+  renderPerksModal('char');
+}
+
+function getCharMasteryBonuses(charId) {
+  const data = getPerksData();
+  const lv = (data.charLevels && data.charLevels[charId]) || 0;
+  const ch = CHARACTERS.find(c => c.id === charId);
+  return {
+    lv,
+    masteryBonus: lv >= 1 ? 15 : 0,
+    startWepAtk: lv >= 1 ? 2 : 0,
+    hpBonus: lv >= 2 ? 12 : 0,
+    spBonus: lv >= 2 ? 10 : 0,
+    atkBonus: lv >= 2 ? 1 : 0,
+    defBonus: lv >= 2 ? 1 : 0,
+    passiveAwakened: lv >= 3,
+    bonusMat: lv >= 4 && ch ? ch.bonusMat : null,
+    skillAwakened: lv >= 5
+  };
 }
 
 function synthesizeChip() {
@@ -725,48 +863,128 @@ function synthesizeChip() {
   data.chips += 1;
   savePerksData(data);
   SFX.play('craft');
-  renderPerksModal();
+  renderPerksModal(currentPerkTab);
 }
 
-function renderPerksModal() {
+function renderPerksModal(tab = currentPerkTab) {
+  currentPerkTab = tab;
   const data = getPerksData();
   syncCurrencyUI(data);
   if (btnSynthChip) {
     btnSynthChip.disabled = data.shards < 150;
   }
+  if (btnPtabGlobal) btnPtabGlobal.classList.toggle('active', tab === 'global');
+  if (btnPtabChar) btnPtabChar.classList.toggle('active', tab === 'char');
+
   const listEl = $('perks-list');
   if (!listEl) return;
   listEl.innerHTML = '';
 
-  PERK_DEFS.forEach(p => {
-    const lv = data.levels[p.id] || 0;
-    const cost = getPerkUpgradeCost(lv);
-    const card = document.createElement('div');
-    card.className = 'perk-card';
+  if (tab === 'global') {
+    PERK_DEFS.forEach(p => {
+      const lv = data.levels[p.id] || 0;
+      const cost = getPerkUpgradeCost(lv);
+      const card = document.createElement('div');
+      card.className = 'perk-card';
 
-    let btnText = '已滿級 MAX';
-    let canAfford = false;
-    if (!cost.max) {
-      canAfford = data.shards >= cost.shards && data.chips >= cost.chips;
-      btnText = cost.isBreakthrough
-        ? `⚡ 突破 Lv.${lv + 1} (${cost.shards}🔹+${cost.chips}💠)`
-        : `升級 Lv.${lv + 1} (${cost.shards}🔹)`;
-    }
+      let btnText = '已滿級 MAX';
+      let canAfford = false;
+      if (!cost.max) {
+        canAfford = data.shards >= cost.shards && data.chips >= cost.chips;
+        btnText = cost.isBreakthrough
+          ? `⚡ 突破 Lv.${lv + 1} (${cost.shards}🔹+${cost.chips}💠)`
+          : `升級 Lv.${lv + 1} (${cost.shards}🔹)`;
+      }
 
-    card.innerHTML = `
-      <div class="perk-info">
-        <div class="perk-title">${p.icon} ${p.name} <span style="color:#38bdf8;">Lv.${lv}/10</span></div>
-        <div class="perk-desc">${p.desc(lv)}</div>
-      </div>
-      <button class="perk-btn ${cost.isBreakthrough ? 'breakthrough' : ''}" ${(!canAfford || cost.max) ? 'disabled' : ''}>${btnText}</button>
-    `;
-    const btn = card.querySelector('button');
-    if (btn && !cost.max) {
-      btn.onclick = () => upgradePerk(p.id);
-    }
-    listEl.appendChild(card);
-  });
+      card.innerHTML = `
+        <div class="perk-info">
+          <div class="perk-title">${p.icon} ${p.name} <span style="color:#38bdf8;">Lv.${lv}/10</span></div>
+          <div class="perk-desc">${p.desc(lv)}</div>
+        </div>
+        <button class="perk-btn ${cost.isBreakthrough ? 'breakthrough' : ''}" ${(!canAfford || cost.max) ? 'disabled' : ''}>${btnText}</button>
+      `;
+      const btn = card.querySelector('button');
+      if (btn && !cost.max) {
+        btn.onclick = () => upgradePerk(p.id);
+      }
+      listEl.appendChild(card);
+    });
+  } else {
+    CHARACTERS.forEach(ch => {
+      const lv = (data.charLevels && data.charLevels[ch.id]) || 0;
+      const cost = getCharUpgradeCost(lv);
+      const card = document.createElement('div');
+      card.className = 'perk-card';
+
+      const matName = GAME_DATA.items[ch.bonusMat]?.name || ch.bonusMat;
+      const tierBadges = [
+        `<span style="color:${lv >= 1 ? '#4ade80' : '#64748b'};">Lv.1 主副專武熟練+15/初武攻+2</span>`,
+        `<span style="color:${lv >= 2 ? '#4ade80' : '#64748b'};">Lv.2 HP+12/SP+10/攻防+1</span>`,
+        `<span style="color:${lv >= 3 ? '#facc15' : '#64748b'};">Lv.3 ★被動【${ch.passive.name}】覺醒</span>`,
+        `<span style="color:${lv >= 4 ? '#4ade80' : '#64748b'};">Lv.4 開局攜帶[${matName}]</span>`,
+        `<span style="color:${lv >= 5 ? '#d8b4fe' : '#64748b'};">Lv.5 ★★技能【${ch.skill.name}】CD-1且威力+15%</span>`
+      ].join(' ｜ ');
+
+      let btnText = '已滿級 MAX';
+      let canAfford = false;
+      if (!cost.max) {
+        canAfford = data.shards >= cost.shards && data.chips >= cost.chips;
+        btnText = cost.isBreakthrough
+          ? `⚡ 覺醒 Lv.${lv + 1} (${cost.shards}🔹+${cost.chips}💠)`
+          : `改造 Lv.${lv + 1} (${cost.shards}🔹)`;
+      }
+
+      card.innerHTML = `
+        <div class="perk-info">
+          <div class="perk-title">🧬 ${ch.name} <small style="color:#94a3b8;font-weight:normal;">(${WEAPON_TYPES[ch.weaponType]}主/${WEAPON_TYPES[ch.subWeaponType]}副)</small> <span style="color:#d8b4fe;">Lv.${lv}/5</span></div>
+          <div class="perk-desc" style="line-height:1.45;">${tierBadges}</div>
+        </div>
+        <button class="perk-btn ${cost.isBreakthrough ? 'breakthrough' : ''}" ${(!canAfford || cost.max) ? 'disabled' : ''}>${btnText}</button>
+      `;
+      const btn = card.querySelector('button');
+      if (btn && !cost.max) {
+        btn.onclick = () => upgradeCharMastery(ch.id);
+      }
+      listEl.appendChild(card);
+    });
+  }
   if (perksModal) perksModal.classList.remove('hidden');
+}
+
+function exportSaveCode() {
+  try {
+    const payload = {
+      perks: getPerksData(),
+      career: getCareerStats(),
+      ts: Date.now()
+    };
+    const jsonStr = JSON.stringify(payload);
+    const code = typeof btoa === 'function' ? btoa(encodeURIComponent(jsonStr)) : jsonStr;
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).catch(() => {});
+    }
+    if (typeof window !== 'undefined' && typeof window.prompt === 'function') {
+      window.prompt('💾 請複製下方【實驗室存檔引繼碼】（已嘗試自動複製至剪貼簿）：', code);
+    }
+  } catch (e) {}
+}
+
+function importSaveCode() {
+  try {
+    if (typeof window === 'undefined' || typeof window.prompt !== 'function') return;
+    const raw = window.prompt('📥 請貼上先前匯出的【實驗室存檔引繼碼】：');
+    if (!raw || !raw.trim()) return;
+    const decoded = typeof atob === 'function' ? decodeURIComponent(atob(raw.trim())) : raw.trim();
+    const parsed = JSON.parse(decoded);
+    if (parsed && parsed.perks) savePerksData(parsed.perks);
+    if (parsed && parsed.career) saveCareerStats(parsed.career);
+    SFX.play('craft');
+    renderPerksModal(currentPerkTab);
+  } catch (e) {
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert('⚠️ 引繼碼格式無效，請確認是否完整複製！');
+    }
+  }
 }
 
 function getActivePerkBonuses() {
@@ -904,7 +1122,9 @@ function getCareerStats() {
       aya: { plays: 0, wins: 0, kills: 0 },
       hyunwoo: { plays: 0, wins: 0, kills: 0 },
       nadine: { plays: 0, wins: 0, kills: 0 },
-      magnus: { plays: 0, wins: 0, kills: 0 }
+      magnus: { plays: 0, wins: 0, kills: 0 },
+      hyejin: { plays: 0, wins: 0, kills: 0 },
+      sua: { plays: 0, wins: 0, kills: 0 }
     }
   };
   try {
@@ -1000,14 +1220,173 @@ function renderCareerModal() {
   if (careerModal) careerModal.classList.remove('hidden');
 }
 
+// ==================== 受試者情報檔案庫 & 全身立繪檢視器 ====================
+let currentDossierCharId = 'jackie';
+
+function openPortraitModal(charId) {
+  const ch = CHARACTERS.find(c => c.id === charId) || CHARACTERS[0];
+  SFX.play('click');
+  if (portraitTitle) portraitTitle.innerText = `🖼️ ${ch.name} (${ch.code}) — ${ch.title}`;
+  if (portraitFullImg) {
+    portraitFullImg.src = ch.avatar;
+    portraitFullImg.alt = `${ch.name} 全身立繪`;
+  }
+  if (portraitCaption) {
+    portraitCaption.innerHTML = `<strong>🥇主專精：${WEAPON_TYPES[ch.weaponType]} ／ 🥈副專精：${WEAPON_TYPES[ch.subWeaponType]}</strong><br>${ch.dossier?.quote || ''}`;
+  }
+  if (portraitModal) portraitModal.classList.remove('hidden');
+}
+
+function isDossierTierUnlocked(charId, tier, cs, pData) {
+  const manual = pData.unlockedDossiers && pData.unlockedDossiers[`${charId}_${tier}`];
+  if (manual) return true;
+  if (tier === 1) return cs.plays >= 1;
+  if (tier === 2) return cs.plays >= 3;
+  if (tier === 3) return cs.plays >= 5 || cs.wins >= 1;
+  return true;
+}
+
+function unlockDossierWithShards(charId, tier) {
+  const pData = getPerksData();
+  if (pData.shards < 30) return;
+  pData.shards -= 30;
+  if (!pData.unlockedDossiers) pData.unlockedDossiers = {};
+  pData.unlockedDossiers[`${charId}_${tier}`] = true;
+  savePerksData(pData);
+  SFX.play('craft');
+  renderDossierModal(charId);
+}
+
+function renderDossierModal(charId = currentDossierCharId) {
+  currentDossierCharId = charId;
+  const ch = CHARACTERS.find(c => c.id === charId) || CHARACTERS[0];
+  const stats = getCareerStats();
+  const cs = stats.chars[ch.id] || { plays: 0, wins: 0, kills: 0 };
+  const pData = getPerksData();
+  const charLv = (pData.charLevels && pData.charLevels[ch.id]) || 0;
+
+  if (dossierCharTabs) {
+    dossierCharTabs.innerHTML = '';
+    CHARACTERS.forEach(c => {
+      const cStat = stats.chars[c.id] || { plays: 0, wins: 0 };
+      const u1 = isDossierTierUnlocked(c.id, 1, cStat, pData) ? 1 : 0;
+      const u2 = isDossierTierUnlocked(c.id, 2, cStat, pData) ? 1 : 0;
+      const u3 = isDossierTierUnlocked(c.id, 3, cStat, pData) ? 1 : 0;
+      const pct = Math.round(((1 + u1 + u2 + u3) / 4) * 100);
+
+      const tabBtn = document.createElement('button');
+      tabBtn.className = `dossier-char-tab ${c.id === ch.id ? 'active' : ''}`;
+      tabBtn.innerHTML = `
+        <img class="dossier-tab-thumb" src="${c.avatar}" alt="${c.name}" />
+        <span>${c.name} <small style="color:#94a3b8;">${pct}%</small></span>
+      `;
+      tabBtn.onclick = () => { SFX.play('click'); renderDossierModal(c.id); };
+      dossierCharTabs.appendChild(tabBtn);
+    });
+  }
+
+  if (dossierDetailBox) {
+    const u1 = isDossierTierUnlocked(ch.id, 1, cs, pData);
+    const u2 = isDossierTierUnlocked(ch.id, 2, cs, pData);
+    const u3 = isDossierTierUnlocked(ch.id, 3, cs, pData);
+    const canBuy = pData.shards >= 30;
+
+    dossierDetailBox.innerHTML = `
+      <div class="dossier-top-card">
+        <button class="dossier-avatar-btn" id="btn-dossier-zoom" title="點擊放大查看全身圖">
+          <img class="dossier-avatar-img" src="${ch.avatar}" alt="${ch.name}" />
+          <span class="dossier-zoom-badge">🔍 點擊全身圖</span>
+        </button>
+        <div class="dossier-meta">
+          <div class="dossier-name-row">
+            <span class="dossier-name">${ch.name} <small style="font-size:0.8rem;color:#94a3b8;font-weight:normal;">｜${ch.title}</small></span>
+            <span class="dossier-code">${ch.code}</span>
+          </div>
+          <div class="dossier-weapon-badges">
+            <span class="dossier-wbadge primary">🥇 主專武：${WEAPON_TYPES[ch.weaponType]} (開局 E 級)</span>
+            <span class="dossier-wbadge secondary">🥈 副專武：${WEAPON_TYPES[ch.subWeaponType]} (開局 E- 級)</span>
+          </div>
+          <div class="dossier-stat-line">
+            📊 <strong>實驗紀錄</strong>：出戰 <strong style="color:#38bdf8;">${cs.plays}</strong> 場 ｜ 吃雞 <strong style="color:#4ade80;">${cs.wins}</strong> 次 ｜ 擊殺 <strong style="color:#f87171;">${cs.kills}</strong> 人 ｜ 專屬改造 <strong style="color:#d8b4fe;">Lv.${charLv}/5</strong><br>
+            🪪 <strong>基本資料</strong>：${ch.dossier.age} ／ ${ch.dossier.origin} ／ ${ch.dossier.job}<br>
+            ⚔️ <strong>專武共鳴</strong>：手持【${WEAPON_TYPES[ch.weaponType]}】或【${WEAPON_TYPES[ch.subWeaponType]}】施放技能時，技能傷害額外 <strong>+10%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="dossier-sections">
+        <div class="dossier-sec-card unlocked">
+          <div class="dossier-sec-head">
+            <span class="dossier-sec-title">📂 [Tier 0] 基礎戰鬥規格與固有技能</span>
+            <span class="dossier-sec-status ok">✓ 已公開</span>
+          </div>
+          <div class="dossier-sec-body">
+            • <strong>基礎體質</strong>：HP ${ch.hp} ／ SP ${ch.sp} ／ 攻擊 ${ch.atk} ／ 防禦 ${ch.def}（初始武器：${GAME_DATA.items[ch.startWeapon]?.name}）<br>
+            • <strong>固有被動【${ch.passive.name}】</strong>：${ch.passive.desc}<br>
+            • <strong>主動奧義【${ch.skill.name}】</strong>：${ch.skill.desc}
+          </div>
+        </div>
+
+        <div class="dossier-sec-card ${u1 ? 'unlocked' : 'locked'}">
+          <div class="dossier-sec-head">
+            <span class="dossier-sec-title">📄 [Tier 1] 登島前背景履歷</span>
+            <span class="dossier-sec-status ${u1 ? 'ok' : 'lock'}">${u1 ? '✓ 已解密' : `🔒 需使用 ${ch.name} 出戰 1 場 (${cs.plays}/1)`}</span>
+          </div>
+          <div class="dossier-sec-body">
+            ${u1 ? ch.dossier.tier1 : '████████ 該受試者之過往履歷與登島動機處於加密狀態。請使用該角色出戰 1 場實驗，或消耗數據碎片直接解密。'}
+            ${!u1 ? `<div><button class="dossier-unlock-btn" data-tier="1" ${!canBuy ? 'disabled' : ''}>🔓 消耗 30 🔹 數據碎片提前解密 (持有:${pData.shards})</button></div>` : ''}
+          </div>
+        </div>
+
+        <div class="dossier-sec-card ${u2 ? 'unlocked' : 'locked'}">
+          <div class="dossier-sec-head">
+            <span class="dossier-sec-title">🧬 [Tier 2] 亞格萊雅心理側寫與主副專武推薦路線</span>
+            <span class="dossier-sec-status ${u2 ? 'ok' : 'lock'}">${u2 ? '✓ 已解密' : `🔒 需使用 ${ch.name} 出戰 3 場 (${cs.plays}/3)`}</span>
+          </div>
+          <div class="dossier-sec-body">
+            ${u2 ? ch.dossier.tier2 : '████████ 心理評估報告與最佳雙專武合成指南尚未解鎖。請累積出戰 3 場，或消耗數據碎片提前調閱。'}
+            ${!u2 ? `<div><button class="dossier-unlock-btn" data-tier="2" ${!canBuy ? 'disabled' : ''}>🔓 消耗 30 🔹 數據碎片提前解密 (持有:${pData.shards})</button></div>` : ''}
+          </div>
+        </div>
+
+        <div class="dossier-sec-card ${u3 ? 'unlocked' : 'locked'}">
+          <div class="dossier-sec-head">
+            <span class="dossier-sec-title">⚠️ [Tier 3] 最高機密：VF 適應性實驗真相與專屬語音</span>
+            <span class="dossier-sec-status ${u3 ? 'ok' : 'lock'}">${u3 ? '✓ 已解密' : `🔒 需出戰 5 場 (${cs.plays}/5) 或吃雞 1 次`}</span>
+          </div>
+          <div class="dossier-sec-body">
+            ${u3 ? `${ch.dossier.tier3}<br><span style="color:#fde047; font-weight:bold; display:inline-block; margin-top:4px;">🎙️ 觀測語音：${ch.dossier.quote}</span>` : '████████ 亞格萊雅最高權限機密（Level-S）。記載該受試者體內 VF 突變真相，需出戰 5 場或取得 1 次唯一倖存者後解鎖。'}
+            ${!u3 ? `<div><button class="dossier-unlock-btn" data-tier="3" ${!canBuy ? 'disabled' : ''}>🔓 消耗 30 🔹 數據碎片提前解密 (持有:${pData.shards})</button></div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+
+    const zoomBtn = $('btn-dossier-zoom');
+    if (zoomBtn) zoomBtn.onclick = () => openPortraitModal(ch.id);
+
+    dossierDetailBox.querySelectorAll('.dossier-unlock-btn').forEach(btn => {
+      btn.onclick = () => unlockDossierWithShards(ch.id, Number(btn.dataset.tier));
+    });
+  }
+
+  if (dossierModal) dossierModal.classList.remove('hidden');
+}
+
 if (btnOpenCareer) btnOpenCareer.onclick = renderCareerModal;
 if (btnCloseCareer) btnCloseCareer.onclick = () => { if (careerModal) careerModal.classList.add('hidden'); };
 if (btnOpenHelp) btnOpenHelp.onclick = () => { if (helpModal) helpModal.classList.remove('hidden'); };
 if (btnCloseHelp) btnCloseHelp.onclick = () => { if (helpModal) helpModal.classList.add('hidden'); };
 if (btnClosePerks) btnClosePerks.onclick = () => { if (perksModal) perksModal.classList.add('hidden'); };
 if (btnSynthChip) btnSynthChip.onclick = synthesizeChip;
+if (btnPtabGlobal) btnPtabGlobal.onclick = () => { SFX.play('click'); renderPerksModal('global'); };
+if (btnPtabChar) btnPtabChar.onclick = () => { SFX.play('click'); renderPerksModal('char'); };
+if (btnExportSave) btnExportSave.onclick = exportSaveCode;
+if (btnImportSave) btnImportSave.onclick = importSaveCode;
 if (btnClosePvp) btnClosePvp.onclick = () => { if (pvpModal) pvpModal.classList.add('hidden'); };
 if (btnClosePatch) btnClosePatch.onclick = () => { if (patchModal) patchModal.classList.add('hidden'); };
+if (btnCloseDossier) btnCloseDossier.onclick = () => { if (dossierModal) dossierModal.classList.add('hidden'); };
+if (btnClosePortrait) btnClosePortrait.onclick = () => { if (portraitModal) portraitModal.classList.add('hidden'); };
 
 function showLobby() {
   isGameOver = true;
@@ -1021,6 +1400,7 @@ function showLobby() {
 if (btnMenuSolo) btnMenuSolo.onclick = () => { SFX.play('click'); showCharSelect(); };
 if (btnMenuPvp) btnMenuPvp.onclick = () => { SFX.play('click'); if (pvpModal) pvpModal.classList.remove('hidden'); };
 if (btnMenuPerks) btnMenuPerks.onclick = () => { SFX.play('click'); renderPerksModal(); };
+if (btnMenuDossier) btnMenuDossier.onclick = () => { SFX.play('click'); renderDossierModal(currentDossierCharId); };
 if (btnMenuGuide) btnMenuGuide.onclick = () => { SFX.play('click'); if (helpModal) helpModal.classList.remove('hidden'); };
 if (btnMenuCareer) btnMenuCareer.onclick = () => { SFX.play('click'); renderCareerModal(); };
 if (btnMenuPatch) btnMenuPatch.onclick = () => { SFX.play('click'); if (patchModal) patchModal.classList.remove('hidden'); };
@@ -1055,10 +1435,21 @@ function logMessage(text, type = 'sys-msg') {
   combatLog.scrollTop = combatLog.scrollHeight;
 }
 
-// 所有玩家受到的傷害統一經此處理（套用馬格努斯被動減傷、VF裝甲被動、飄字與震動）
-function applyDamageToPlayer(raw) {
+// 所有玩家受到的傷害統一經此處理（套用馬格努斯/玄佑被動減傷、拳套卸力、VF裝甲被動、飄字與震動）
+function applyDamageToPlayer(raw, isCounterDmg = false) {
   let dmg = Math.max(1, Math.round(raw));
-  if (player?.char?.id === 'magnus') dmg = Math.max(1, Math.round(dmg * 0.9));
+  const charB = player?.char ? getCharMasteryBonuses(player.char.id) : { passiveAwakened: false };
+
+  if (player?.char?.id === 'magnus') {
+    dmg = Math.max(1, Math.round(dmg * (charB.passiveAwakened ? 0.84 : 0.9)));
+  }
+  if (player?.char?.id === 'hyunwoo' && charB.passiveAwakened) {
+    dmg = Math.max(1, Math.round(dmg * 0.9));
+  }
+  // 拳套固有特性【格鬥卸力】：交戰承受反擊傷害 -10%
+  if (isCounterDmg && player && getCurrentWeaponType() === 'hand') {
+    dmg = Math.max(1, Math.round(dmg * 0.9));
+  }
 
   // VF 生體裝甲被動【VF狂暴護盾】：HP 低於 40% 時減傷 30%
   if (player && playerHasPassive('vf_barrier') && player.hp < player.maxHp * 0.4) {
@@ -1091,30 +1482,32 @@ function showCharSelect() {
     if (b.expMult > 1) parts.push(`經驗 +${Math.round((b.expMult - 1) * 100)}%`);
     if (b.startPills) parts.push(`開局攜帶止痛藥`);
     charPerkSummary.innerHTML = parts.length > 0
-      ? `🧬 <strong>已套用實驗室潛能加成</strong>：${parts.join(' ｜ ')}`
-      : `🧬 <strong>實驗室潛能</strong>：尚未激活（可於首頁「天賦潛能實驗室」消耗碎片強化）`;
+      ? `🧬 <strong>已套用實驗室通用加成</strong>：${parts.join(' ｜ ')}（另依角色套用專屬改造 Lv.1~5）`
+      : `🧬 <strong>實驗室潛能</strong>：可於首頁「天賦研究所」強化通用天賦與各角色專屬改造`;
   }
 
   charGrid.innerHTML = '';
   CHARACTERS.forEach(ch => {
+    const cb = getCharMasteryBonuses(ch.id);
     const card = document.createElement('button');
     card.className = 'char-card';
     card.innerHTML = `
       <div class="char-card-top">
-        <span class="char-name">${ch.name} <small style="color:#94a3b8;font-weight:normal;">｜${ch.title}</small></span>
+        <span class="char-name">${ch.name} <small style="color:#94a3b8;font-weight:normal;">｜${ch.title}</small> ${cb.lv > 0 ? `<span style="color:#d8b4fe;font-size:0.74rem;">[改造 Lv.${cb.lv}]</span>` : ''}</span>
         <span class="char-code">${ch.code}</span>
       </div>
       <div class="char-tags">
-        <span class="char-tag">🗡️ ${WEAPON_TYPES[ch.weaponType]}專精</span>
-        <span class="char-tag">HP ${ch.hp}</span>
-        <span class="char-tag">SP ${ch.sp}</span>
-        <span class="char-tag">攻 ${ch.atk}</span>
-        <span class="char-tag">防 ${ch.def}</span>
-        <span class="char-tag">初始：${GAME_DATA.items[ch.startWeapon].name}</span>
+        <span class="char-tag" style="color:#fde047;border-color:rgba(250,204,21,0.4);">🥇主：${WEAPON_TYPES[ch.weaponType]}</span>
+        <span class="char-tag" style="color:#38bdf8;border-color:rgba(56,189,248,0.4);">🥈副：${WEAPON_TYPES[ch.subWeaponType]}</span>
+        <span class="char-tag">HP ${ch.hp + cb.hpBonus}</span>
+        <span class="char-tag">SP ${ch.sp + cb.spBonus}</span>
+        <span class="char-tag">攻 ${ch.atk + cb.atkBonus}</span>
+        <span class="char-tag">防 ${ch.def + cb.defBonus}</span>
+        <span class="char-tag">初武：${GAME_DATA.items[ch.startWeapon].name}${cb.startWepAtk ? `+${cb.startWepAtk}` : ''}</span>
       </div>
       <div class="char-skill">
-        🔹 <strong>被動【${ch.passive.name}】</strong>：${ch.passive.desc}<br>
-        ✨ <strong>技能【${ch.skill.name}】</strong>：${ch.skill.desc}（${ch.skill.cost} SP / 冷卻 ${ch.skill.cd} 回合）
+        🔹 <strong>被動【${ch.passive.name}】${cb.passiveAwakened ? '<span style="color:#facc15;">★已覺醒</span>' : ''}</strong>：${ch.passive.desc}<br>
+        ✨ <strong>技能【${ch.skill.name}】${cb.skillAwakened ? '<span style="color:#d8b4fe;">★★已突破</span>' : ''}</strong>：${ch.skill.desc}（${ch.skill.cost} SP / 冷卻 ${Math.max(2, ch.skill.cd - (cb.skillAwakened ? 1 : 0))} 回合）
       </div>
     `;
     card.onclick = () => { SFX.play('click'); initGame(ch.id); };
@@ -1141,15 +1534,27 @@ function initGame(charId) {
   playerTraps = [];
   aiTraps = [];
 
-  const mastery = { blade: 0, blunt: 0, gun: 0, bow: 0, hand: 0 };
-  mastery[ch.weaponType] = 25; // 專精武器起始 E 級
-
   const perkB = getActivePerkBonuses();
-  const initHp = ch.hp + perkB.hpBonus;
-  const initSp = ch.sp + perkB.spBonus;
-  const initAtk = ch.atk + perkB.atkBonus;
-  const initDef = ch.def + perkB.defBonus;
-  const startInv = ["water", "bandage", perkB.startPills ? "pills" : null, null, null, null];
+  const charB = getCharMasteryBonuses(ch.id);
+
+  const mastery = { blade: 0, blunt: 0, gun: 0, bow: 0, hand: 0 };
+  mastery[ch.weaponType] = 25 + charB.masteryBonus;     // 主專武起始 E 級 (Lv.1 改造後 +15)
+  if (ch.subWeaponType) {
+    mastery[ch.subWeaponType] = 15 + charB.masteryBonus; // 副專武起始 E- 級 (Lv.1 改造後 +15)
+  }
+
+  const initHp = ch.hp + perkB.hpBonus + charB.hpBonus;
+  const initSp = ch.sp + perkB.spBonus + charB.spBonus;
+  const initAtk = ch.atk + perkB.atkBonus + charB.atkBonus;
+  const initDef = ch.def + perkB.defBonus + charB.defBonus;
+  const startInv = [
+    "water",
+    "bandage",
+    perkB.startPills ? "pills" : null,
+    charB.bonusMat || null,
+    null,
+    null
+  ];
 
   // 開局僅降落於外圍 8 區（中央【研究中心】開局封鎖）
   const outerAreas = GAME_DATA.areas.filter(a => a.id !== 'lab');
@@ -1157,6 +1562,7 @@ function initGame(charId) {
 
   player = {
     char: ch,
+    charBonuses: charB,
     name: ch.name,
     hp: initHp, maxHp: initHp,
     sp: initSp, maxSp: initSp,
@@ -1209,10 +1615,12 @@ function initGame(charId) {
   charModal.classList.add('hidden');
   if (lobbyModal) lobbyModal.classList.add('hidden');
 
-  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始 (9 區九宮格雷達模式)！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
+  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始！你是受試者【${player.name}】（🥇主專武：${WEAPON_TYPES[ch.weaponType]} ／ 🥈副專武：${WEAPON_TYPES[ch.subWeaponType]}，降落於 [${areaName(startArea)}]）。`, 'sys-msg');
+  if (charB.lv > 0) {
+    logMessage(`🧬 [專屬改造 Lv.${charB.lv}] 已激活強化效果${charB.bonusMat ? `，開局額外配給 [${GAME_DATA.items[charB.bonusMat]?.name}]` : ''}！`, 'gain-msg');
+  }
   logMessage(`🔒 中央【🔬 研究中心】目前處於安保封鎖狀態，將於「累積 3 個禁區封鎖（或第 20 動）」後開放通行！`, 'craft-msg');
   logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 ${ACTIONS_PER_PHASE} 次行動後封鎖！`, 'warn-msg');
-  logMessage('💡 點擊「🗺️ 移動 [M]」可開啟 3×3 戰術雷達圖（綠底＝相鄰可移、灰底＝需跨區轉乘、紅底＝禁區）！', 'gain-msg');
   updateUI();
 }
 
@@ -1220,6 +1628,12 @@ function initGame(charId) {
 function getCurrentWeaponType() {
   const w = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
   return w ? w.subType : 'hand';
+}
+
+function isUsingSpecialtyWeapon() {
+  if (!player || !player.char) return false;
+  const t = getCurrentWeaponType();
+  return t === player.char.weaponType || t === player.char.subWeaponType;
 }
 
 function getMasteryLevel(type) {
@@ -1230,23 +1644,36 @@ function getMasteryLabel() {
   const t = getCurrentWeaponType();
   const lv = getMasteryLevel(t);
   const pct = lv >= MASTERY_RANKS.length - 1 ? 100 : (player.mastery[t] % 25) * 4;
-  return `${WEAPON_TYPES[t]} ${MASTERY_RANKS[lv]} (${pct}%)`;
+  const tag = t === player.char.weaponType ? '🥇' : (t === player.char.subWeaponType ? '🥈' : '');
+  return `${tag}${WEAPON_TYPES[t]} ${MASTERY_RANKS[lv]} (${pct}%)`;
 }
 
 function addMastery() {
   const t = getCurrentWeaponType();
   const before = getMasteryLevel(t);
-  player.mastery[t] += (t === player.char.weaponType) ? 12 : 8;
+  const w = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
+  let gain = 8;
+  if (t === player.char.weaponType) gain = 12;
+  else if (t === player.char.subWeaponType) gain = 10;
+  else if (w && (w.rare || (w.atk && w.atk >= 34))) gain = 10; // 傳說/高階非專武補償
+
+  player.mastery[t] += gain;
   const after = getMasteryLevel(t);
   if (after > before) {
-    logMessage(`📈 [${WEAPON_TYPES[t]}] 熟練度提升至 ${MASTERY_RANKS[after]} 級！攻擊力上升！`, 'craft-msg');
+    logMessage(`📈 [${WEAPON_TYPES[t]}] 熟練度提升至 ${MASTERY_RANKS[after]} 級！基礎攻擊力 +3！`, 'craft-msg');
   }
 }
 
 function getPlayerAtk() {
   let atk = player.baseAtk + getMasteryLevel(getCurrentWeaponType()) * 3;
-  const w = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
-  if (w) atk += w.atk || 0;
+  const wId = player.equipment.weapon;
+  const w = wId ? GAME_DATA.items[wId] : null;
+  if (w) {
+    atk += w.atk || 0;
+    if (wId === player.char.startWeapon && player.charBonuses?.startWepAtk) {
+      atk += player.charBonuses.startWepAtk;
+    }
+  }
   const acc = player.equipment.accessory ? GAME_DATA.items[player.equipment.accessory] : null;
   if (acc) atk += acc.atk || 0;
   if (player.stance === "aggressive") atk = Math.round(atk * 1.15);
@@ -2095,6 +2522,8 @@ function doSearch() {
 function doAttack(useSkill = false) {
   if (!activeEnemy || isGameOver) return;
   const ch = player.char;
+  const charB = player.charBonuses || getCharMasteryBonuses(ch.id);
+  const wType = getCurrentWeaponType();
 
   let mult = 1, ignoreDef = false, noCounter = false, hits = 1, hitMult = 1;
   if (useSkill) {
@@ -2107,8 +2536,8 @@ function doAttack(useSkill = false) {
       return;
     }
     player.sp -= ch.skill.cost;
-    // 秘銀頭冠被動【冷靜】：主動技能 CD -1
-    const cdReduc = playerHasPassive('cooldown') ? 1 : 0;
+    // 秘銀頭冠被動【冷靜】與 Lv.5 奧義突破：主動技能 CD -1
+    const cdReduc = (playerHasPassive('cooldown') ? 1 : 0) + (charB.skillAwakened ? 1 : 0);
     player.skillCd = Math.max(2, ch.skill.cd - cdReduc);
 
     if (ch.id === 'jackie') mult = 1.8;
@@ -2119,26 +2548,43 @@ function doAttack(useSkill = false) {
     if (ch.id === 'hyejin') {
       mult = 1.45;
       noCounter = true;
-      player.hp = Math.min(player.maxHp, player.hp + 12);
-      showFloatingText('+12 HP 吸靈符', 'dmg-heal');
+      const healVal = charB.skillAwakened ? 16 : 12;
+      player.hp = Math.min(player.maxHp, player.hp + healVal);
+      showFloatingText(`+${healVal} HP 吸靈符`, 'dmg-heal');
     }
     if (ch.id === 'sua') {
       mult = 1.6;
-      player.hp = Math.min(player.maxHp, player.hp + 15);
-      showFloatingText('+15 HP 青鳥之書', 'dmg-heal');
+      const healVal = charB.skillAwakened ? 20 : 15;
+      player.hp = Math.min(player.maxHp, player.hp + healVal);
+      showFloatingText(`+${healVal} HP 青鳥之書`, 'dmg-heal');
     }
-    logMessage(`✨ 發動技能【${ch.skill.name}】！`, 'craft-msg');
+
+    // Lv.5 奧義突破：主動技能倍率 +15%
+    if (charB.skillAwakened) {
+      mult *= 1.15;
+    }
+    // 專武共鳴：手持主專武或副專武施放技能，傷害額外 +10%
+    const resonance = isUsingSpecialtyWeapon();
+    if (resonance) {
+      mult *= 1.10;
+    }
+    logMessage(`✨ 發動技能【${ch.skill.name}】${resonance ? '（⚔️專武共鳴 +10%）' : ''}！`, 'craft-msg');
   } else if (player.skillCd > 0) {
     player.skillCd--;
   }
 
-  // 被動加成
+  // 被動加成（含 Lv.3 被動覺醒）
   let passiveMult = 1;
-  if (ch.id === 'nadine' && !activeEnemy.isAI) passiveMult = 1.3;
-  if (ch.id === 'magnus' && activeEnemy.isAI) passiveMult = 1.15;
+  if (ch.id === 'nadine' && !activeEnemy.isAI) passiveMult = charB.passiveAwakened ? 1.45 : 1.3;
+  if (ch.id === 'magnus' && activeEnemy.isAI) passiveMult = charB.passiveAwakened ? 1.22 : 1.15;
+  // 槍械固有特性【火力壓制】：最終傷害 +6%
+  if (wType === 'gun') passiveMult *= 1.06;
+
   let critRate = (player.stance === 'aggressive' ? 0.25 : 0.15) + (getActivePerkBonuses().critBonus || 0);
-  if (ch.id === 'aya') critRate += 0.10;
-  if (ch.id === 'hyejin') critRate += 0.08;
+  if (ch.id === 'aya') critRate += (charB.passiveAwakened ? 0.16 : 0.10);
+  if (ch.id === 'hyejin') critRate += (charB.passiveAwakened ? 0.14 : 0.08);
+  // 利刃固有特性【斬擊鋒芒】：暴擊率 +5%
+  if (wType === 'blade') critRate += 0.05;
 
   // 隕星拳套被動【爆裂連擊】：30% 追加一次打擊
   if (playerHasPassive('combo') && Math.random() < 0.3) {
@@ -2149,10 +2595,13 @@ function doAttack(useSkill = false) {
   const pAtk = getPlayerAtk();
   let total = 0;
   let critAny = false;
-  const critMultiplier = playerHasPassive('crush') ? 1.85 : 1.4; // 隕星破滅鎚被動【重創】
+  // 隕星破滅鎚被動【重創】 + 弓箭固有特性【致命狙擊】（暴擊倍率 +0.15）
+  const critMultiplier = (playerHasPassive('crush') ? 1.85 : 1.4) + (wType === 'bow' ? 0.15 : 0);
 
   for (let h = 0; h < hits; h++) {
     let defPart = ignoreDef ? 0 : Math.floor(activeEnemy.def * 0.45);
+    // 鈍器固有特性【重擊破防】：無視敵方 12% 防禦
+    if (wType === 'blunt') defPart = Math.floor(defPart * 0.88);
     // 秘銀聖刃被動【破甲】：無視敵方 25% 防禦
     if (playerHasPassive('pierce')) defPart = Math.floor(defPart * 0.75);
 
@@ -2214,9 +2663,10 @@ function doAttack(useSkill = false) {
     player.kills += 1;
 
     if (ch.id === 'jackie') {
-      player.hp = Math.min(player.maxHp, player.hp + 20);
-      showFloatingText('+20 HP 嗜血', 'dmg-heal');
-      logMessage('🩸 被動【嗜血】發動，回復 20 HP！', 'gain-msg');
+      const bloodHeal = charB.passiveAwakened ? 32 : 20;
+      player.hp = Math.min(player.maxHp, player.hp + bloodHeal);
+      showFloatingText(`+${bloodHeal} HP 嗜血`, 'dmg-heal');
+      logMessage(`🩸 被動【嗜血】發動，回復 ${bloodHeal} HP！`, 'gain-msg');
     }
 
     if (defeated.isBoss) {
@@ -2305,7 +2755,7 @@ function doAttack(useSkill = false) {
 
   const pDef = getPlayerDef();
   const rawEnemyDmg = Math.max(4, Math.floor(activeEnemy.atk * enemyAtkMult) - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4));
-  const dmgToPlayer = applyDamageToPlayer(rawEnemyDmg);
+  const dmgToPlayer = applyDamageToPlayer(rawEnemyDmg, true);
 
   // 荊棘臂盾被動【尖刺荊棘】：受到反擊時反彈 10 點傷害
   if (playerHasPassive('thorns')) {
@@ -2534,7 +2984,8 @@ function useOrEquip(slotIdx) {
 
   if (it.type === 'consumable') {
     SFX.play('heal');
-    const mult = player.char?.id === 'sua' ? 1.25 : 1;
+    const charB = player.charBonuses || getCharMasteryBonuses(player.char?.id);
+    const mult = player.char?.id === 'sua' ? (charB.passiveAwakened ? 1.40 : 1.25) : 1;
     if (it.heal_hp) {
       const hpGain = Math.round(it.heal_hp * mult);
       player.hp = Math.min(player.maxHp, player.hp + hpGain);
@@ -2545,7 +2996,7 @@ function useOrEquip(slotIdx) {
       player.sp = Math.min(player.maxSp, player.sp + spGain);
     }
     player.inventory[slotIdx] = null;
-    logMessage(`💊 使用了 [${it.name}]，恢復了狀態${mult > 1 ? ' (心靈治癒 +25%)' : ''}。`, 'gain-msg');
+    logMessage(`💊 使用了 [${it.name}]，恢復了狀態${mult > 1 ? ` (心靈糧食 +${Math.round((mult - 1) * 100)}%)` : ''}。`, 'gain-msg');
     updateUI();
     return;
   }
@@ -2653,6 +3104,7 @@ function doRest() {
     SFX.play('heal');
     let healHp = 22;
     if (playerHasPassive('regen')) healHp += 4;
+    if (player.char?.id === 'hyunwoo' && player.charBonuses?.passiveAwakened) healHp += 5;
     const spGain = 25 + (getActivePerkBonuses().restSpBonus || 0);
     player.hp = Math.min(player.maxHp, player.hp + healHp);
     player.sp = Math.min(player.maxSp, player.sp + spGain);
@@ -2955,6 +3407,8 @@ btnRestart.onclick = showCharSelect;
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    if (portraitModal && !portraitModal.classList.contains('hidden')) { portraitModal.classList.add('hidden'); return; }
+    if (dossierModal && !dossierModal.classList.contains('hidden')) { dossierModal.classList.add('hidden'); return; }
     if (helpModal && !helpModal.classList.contains('hidden')) { helpModal.classList.add('hidden'); return; }
     if (careerModal && !careerModal.classList.contains('hidden')) { careerModal.classList.add('hidden'); return; }
     if (perksModal && !perksModal.classList.contains('hidden')) { perksModal.classList.add('hidden'); return; }

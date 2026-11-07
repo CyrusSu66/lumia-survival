@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640" width="400" height="640">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0f172a" />
+        <stop offset="55%" stop-color="#090d16" />
+        <stop offset="100%" stop-color="#2563eb" stop-opacity="0.45" />
+      </linearGradient>
+      <radialGradient id="aura" cx="50%" cy="32%" r="48%">
+        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="#000" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="coat" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#1e293b" />
+        <stop offset="100%" stop-color="#0f172a" />
+      </linearGradient>
+    </defs>
+
+    <!-- Background & Tactical Grid -->
+    <rect width="400" height="640" fill="url(#bg)" />
+    <circle cx="200" cy="210" r="175" fill="url(#aura)" />
+    <g stroke="#60a5fa" stroke-opacity="0.12" stroke-width="1">
+      <line x1="0" y1="120" x2="400" y2="120" />
+      <line x1="0" y1="240" x2="400" y2="240" />
+      <line x1="0" y1="360" x2="400" y2="360" />
+      <line x1="0" y1="480" x2="400" y2="480" />
+      <line x1="100" y1="0" x2="100" y2="640" />
+      <line x1="200" y1="0" x2="200" y2="640" />
+      <line x1="300" y1="0" x2="300" y2="640" />
+    </g>
+
+    <!-- Aglaia Confidential Watermark -->
+    <text x="24" y="42" fill="#60a5fa" fill-opacity="0.7" font-family="monospace" font-size="13" font-weight="bold">AGLAIA FILE // 14M-RFT02</text>
+    <rect x="24" y="50" width="90" height="3" fill="#2563eb" />
+
+    <!-- Full Body Stylized Character Figure -->
+    <!-- Cape / Coat Lower Silhouette (Full body area y: 260..540) -->
+    <path d="M125 250 L95 520 L165 520 L185 380 L215 380 L235 520 L305 520 L275 250 Z" fill="url(#coat)" stroke="#60a5fa" stroke-width="2" />
+    <!-- Boots / Legs -->
+    <rect x="145" y="490" width="32" height="75" rx="8" fill="#090d14" stroke="#2563eb" stroke-width="2" />
+    <rect x="223" y="490" width="32" height="75" rx="8" fill="#090d14" stroke="#2563eb" stroke-width="2" />
+
+    <!-- Torso / Tactical Vest (y: 215..385) -->
+    <path d="M135 225 Q200 245 265 225 L250 385 Q200 400 150 385 Z" fill="#1e293b" stroke="#2563eb" stroke-width="2.5" />
+    <path d="M175 230 L200 330 L225 230 Z" fill="#2563eb" fill-opacity="0.85" />
+    <!-- Belt -->
+    <rect x="145" y="365" width="110" height="16" rx="4" fill="#0f172a" stroke="#60a5fa" stroke-width="1.5" />
+    <rect x="190" y="363" width="20" height="20" rx="3" fill="#60a5fa" />
+
+    <!-- Signature Weapon Prop Across Body -->
+    <g transform="rotate(-18 200 330)">
+      <rect x="70" y="320" width="260" height="12" rx="6" fill="#60a5fa" stroke="#fff" stroke-width="1.5" />
+      <circle cx="95" cy="326" r="14" fill="#2563eb" stroke="#fff" stroke-width="2" />
+    </g>
+
+    <!-- Head & Shoulders Region (y: 75..235 — Framed for Avatar!) -->
+    <!-- Back Hair -->
+    <path d="M138 145 Q200 70 262 145 L272 225 Q200 210 128 225 Z" fill="#1e3a8a" />
+    <!-- Neck & Collar -->
+    <rect x="184" y="192" width="32" height="36" rx="8" fill="#fde68a" />
+    <path d="M155 215 L185 245 L200 228 L215 245 L245 215 L230 205 L170 205 Z" fill="#2563eb" stroke="#60a5fa" stroke-width="1.5" />
+    <!-- Face -->
+    <ellipse cx="200" cy="150" rx="44" ry="50" fill="#fef3c7" stroke="#475569" stroke-width="2" />
+    <!-- Eyes (Sharp Anime Survival Style) -->
+    <ellipse cx="182" cy="152" rx="8" ry="6" fill="#0f172a" />
+    <ellipse cx="218" cy="152" rx="8" ry="6" fill="#0f172a" />
+    <circle cx="182" cy="152" r="4.5" fill="#60a5fa" />
+    <circle cx="218" cy="152" r="4.5" fill="#60a5fa" />
+    <circle cx="180" cy="150" r="1.8" fill="#ffffff" />
+    <circle cx="216" cy="150" r="1.8" fill="#ffffff" />
+    <!-- Eyebrows & Expression -->
+    <path d="M170 140 L192 144" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round" />
+    <path d="M230 140 L208 144" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round" />
+    <path d="M192 178 Q200 183 208 178" stroke="#991b1b" stroke-width="2.2" fill="none" stroke-linecap="round" />
+    <!-- Front Hair Bangs -->
+    <path d="M152 135 Q175 88 205 95 Q235 88 248 135 Q232 115 215 138 Q200 112 185 138 Q168 115 152 135 Z" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" />
+
+    <!-- Emblem Badge -->
+    <circle cx="330" cy="110" r="28" fill="#0f172a" stroke="#60a5fa" stroke-width="2" />
+    <text x="330" y="120" text-anchor="middle" font-size="26">🔫</text>
+
+    <!-- Bottom Info Banner on Full-Body Card -->
+    <rect x="20" y="535" width="360" height="86" rx="10" fill="#090d16" fill-opacity="0.92" stroke="#60a5fa" stroke-width="1.5" />
+    <text x="36" y="564" fill="#f8fafc" font-family="sans-serif" font-size="20" font-weight="900">阿雅 AYA</text>
+    <text x="364" y="564" text-anchor="end" fill="#60a5fa" font-family="sans-serif" font-size="14" font-weight="bold">正義女警</text>
+    <text x="36" y="586" fill="#94a3b8" font-family="sans-serif" font-size="12">擅長武裝：制式左輪 / 戰術警刀</text>
+    <text x="36" y="608" fill="#e2e8f0" font-family="sans-serif" font-size="11.5" font-style="italic">「請放下武器！我只想保護還沒被污染的正義。」</text>
+  </svg>
