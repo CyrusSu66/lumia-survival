@@ -1,0 +1,2977 @@
+// ==================== 基礎常數 ====================
+const WEAPON_TYPES = { blade: '劈砍', blunt: '鈍器', gun: '槍械', bow: '弓箭', hand: '拳套' };
+const EQUIP_SLOTS = ['weapon', 'head', 'body', 'arm', 'leg', 'accessory'];
+const SLOT_META = {
+  weapon: { icon: '🗡️', empty: '空手' },
+  head: { icon: '⛑️', empty: '無頭部' },
+  body: { icon: '👕', empty: '無衣服' },
+  arm: { icon: '🛡️', empty: '無臂甲' },
+  leg: { icon: '👢', empty: '無鞋子' },
+  accessory: { icon: '💍', empty: '無飾品' }
+};
+const MASTERY_RANKS = ['F', 'E', 'D', 'C', 'B', 'A', 'S', 'SS'];
+const RARE_MATS = ['mithril', 'meteorite', 'tree_of_life'];
+const ACTIONS_PER_PHASE = 10;
+const BOSS_SPAWN_ACTION = 20;
+
+// ==================== 基礎遊戲資料庫 (v2.9 Beta：8 大區域 3x3 戰術雷達拓撲) ====================
+const GAME_DATA = {
+  areas: [
+    {
+      id: "alley",
+      name: "小巷",
+      icon: "🏘️",
+      row: 0, col: 0,
+      neighbors: ["school", "church"],
+      desc: "錯綜複雜的後街窄巷，散落日常器皿、布料與針線",
+      items: ["kitchen_knife", "cloth", "needle", "lighter", "water", "slippers", "scrap_metal", "brass_knuckles", "watch"],
+      wild: { name: "巷弄野貓", hp: 42, maxHp: 42, atk: 12, def: 3, exp: 20, drop: ["meat", "leather", "feather"] }
+    },
+    {
+      id: "school",
+      name: "學校",
+      icon: "🏫",
+      row: 0, col: 1,
+      neighbors: ["alley", "hospital", "forest"],
+      desc: "荒廢的教學大樓，散落著文具、布料與運動用品",
+      items: ["branch", "bandage", "lighter", "pen", "water", "cloth", "cap", "running_shoes", "watch", "kitchen_knife"],
+      wild: { name: "變異烏鴉", hp: 45, maxHp: 45, atk: 13, def: 3, exp: 20, drop: ["feather", "herb", "meat"] }
+    },
+    {
+      id: "hospital",
+      name: "醫院",
+      icon: "🏥",
+      row: 0, col: 2,
+      neighbors: ["school", "forest", "factory"],
+      desc: "充滿消毒水氣味的診所，有醫療藥品、銳器與警衛配槍",
+      items: ["bandage", "scalpel", "pills", "needle", "water", "alcohol", "pistol", "watch"],
+      wild: { name: "狂暴實驗犬", hp: 65, maxHp: 65, atk: 18, def: 6, exp: 30, drop: ["leather", "bandage", "meat"] }
+    },
+    {
+      id: "church",
+      name: "教堂",
+      icon: "⛪",
+      row: 1, col: 0,
+      neighbors: ["alley", "forest", "beach"],
+      desc: "莊嚴破敗的禮拜堂，能找到鎮靜藥劑、金屬線與羽翎",
+      items: ["scalpel", "cloth", "wire", "water", "pills", "flower", "feather", "short_bow", "cap"],
+      wild: { name: "變異蝙蝠", hp: 55, maxHp: 55, atk: 16, def: 5, exp: 25, drop: ["feather", "herb", "leather"] }
+    },
+    {
+      id: "forest",
+      name: "森林",
+      icon: "🌲",
+      row: 1, col: 1,
+      neighbors: ["school", "hospital", "church", "factory", "beach", "dock"],
+      desc: "島嶼中央交通樞紐，繁茂樹林適合採集天然素材、毛皮與獵弓",
+      items: ["branch", "stone", "herb", "flower", "water", "leather", "short_bow"],
+      wild: { name: "叢林山豬", hp: 90, maxHp: 90, atk: 24, def: 12, exp: 45, drop: ["meat", "leather", "herb"] }
+    },
+    {
+      id: "factory",
+      name: "工廠",
+      icon: "🏭",
+      row: 1, col: 2,
+      neighbors: ["hospital", "forest", "dock"],
+      desc: "廢棄重工業區，能找到金屬零件、火藥與工地裝備",
+      items: ["scrap_metal", "hammer", "iron_ore", "wire", "oil", "cloth", "helmet", "gunpowder"],
+      wild: { name: "巡邏機械犬", hp: 80, maxHp: 80, atk: 22, def: 10, exp: 40, drop: ["scrap_metal", "steel", "wire", "gunpowder"] }
+    },
+    {
+      id: "beach",
+      name: "海灘",
+      icon: "🏖️",
+      row: 2, col: 0,
+      neighbors: ["church", "forest", "dock"],
+      desc: "被海浪沖刷的西南海岸，有龜殼、海魚與漂流廢鐵",
+      items: ["scrap_metal", "stone", "water", "turtle_shell", "fish", "lighter", "slippers"],
+      wild: { name: "巨型寄居蟹", hp: 75, maxHp: 75, atk: 19, def: 16, exp: 35, drop: ["turtle_shell", "fish", "water"] }
+    },
+    {
+      id: "dock",
+      name: "碼頭",
+      icon: "⚓",
+      row: 2, col: 2,
+      neighbors: ["factory", "forest", "beach"],
+      desc: "東南貨櫃港區，儲放工具鐵鎚、廢五金、水產與防具零件",
+      items: ["scrap_metal", "hammer", "turtle_shell", "fish", "water", "lighter", "wire", "pistol", "running_shoes"],
+      wild: { name: "港口巨蟹", hp: 78, maxHp: 78, atk: 20, def: 15, exp: 38, drop: ["turtle_shell", "fish", "scrap_metal"] }
+    }
+  ],
+
+  items: {
+    // ---------- 基礎材料 ----------
+    branch: { name: "樹枝", type: "material", desc: "隨處可見的堅韌樹枝" },
+    stone: { name: "石頭", type: "material", desc: "硬質鵝卵石" },
+    lighter: { name: "打火機", type: "material", desc: "可以生火、煮水或烘烤食物" },
+    scrap_metal: { name: "廢鐵", type: "material", desc: "粗糙的鐵塊組件" },
+    iron_ore: { name: "鐵礦石", type: "material", desc: "純淨的鐵礦，可與廢鐵精煉成鋼鐵" },
+    turtle_shell: { name: "龜殼", type: "material", desc: "硬實的甲殼防禦素材" },
+    needle: { name: "縫合針", type: "material", desc: "醫療用尖銳長針" },
+    wire: { name: "鐵絲", type: "material", desc: "高韌性工業金屬線" },
+    oil: { name: "機油", type: "material", desc: "易燃工業潤滑油" },
+    flower: { name: "山茶花", type: "material", desc: "具有鎮靜功效的野生花朵" },
+    cloth: { name: "布料", type: "material", desc: "厚實的帆布衣料" },
+    leather: { name: "皮革", type: "material", desc: "堅韌的動物毛皮" },
+    feather: { name: "鴉羽", type: "material", desc: "輕盈的黑色羽翎" },
+    alcohol: { name: "高濃度酒精", type: "material", desc: "醫療消毒與燃燒溶劑" },
+    gunpowder: { name: "火藥", type: "material", desc: "可製作彈藥或爆裂物" },
+    steel: { name: "鋼鐵", type: "material", desc: "由廢鐵與鐵礦精煉的高硬度鋼材" },
+
+    // ---------- 稀有素材 (空投 / Boss) ----------
+    mithril: { name: "秘銀", type: "material", rare: true, desc: "★傳說金屬，僅能從空投或 Boss 取得" },
+    meteorite: { name: "隕石", type: "material", rare: true, desc: "★天外隕鐵，僅能從空投或 Boss 取得" },
+    tree_of_life: { name: "生命之樹", type: "material", rare: true, desc: "★蘊含生命力的神木枝，僅能從空投或 Boss 取得" },
+    vf_blood: { name: "VF 血液", type: "material", rare: true, desc: "★變異體血液樣本，僅能擊敗 Wickeline 取得" },
+
+    // ---------- 消耗品 ----------
+    bandage: { name: "繃帶", type: "consumable", heal_hp: 22, desc: "乾淨的布條，回復 22 HP" },
+    pills: { name: "止痛藥", type: "consumable", heal_hp: 35, desc: "強效止痛藥，回復 35 HP" },
+    water: { name: "生水", type: "consumable", heal_sp: 25, desc: "甘甜的清水，回復 25 SP" },
+    herb: { name: "草藥", type: "consumable", heal_hp: 18, desc: "清涼草藥，回復 18 HP" },
+    fish: { name: "生鮮海魚", type: "consumable", heal_hp: 15, desc: "生吃回復 15 HP，烤熟效果極佳" },
+    meat: { name: "生獸肉", type: "consumable", heal_hp: 20, desc: "生吃回復 20 HP，烤熟後大幅恢復" },
+    boiled_water: { name: "熱水", type: "consumable", heal_sp: 45, desc: "剛煮沸的熱水 (+45 SP)" },
+    herbal_tea: { name: "草本茶", type: "consumable", heal_sp: 70, heal_hp: 20, desc: "舒緩身心的草藥茶 (+70 SP, +20 HP)" },
+    flower_tea: { name: "山茶花露", type: "consumable", heal_sp: 55, heal_hp: 40, desc: "芬芳提神的花茶 (+55 SP, +40 HP)" },
+    first_aid_kit: { name: "急救包", type: "consumable", heal_hp: 75, desc: "專業戰地醫療包 (+75 HP)" },
+    grilled_fish: { name: "炭烤海魚", type: "consumable", heal_hp: 60, heal_sp: 20, desc: "香氣四溢的烤魚 (+60 HP, +20 SP)" },
+    steak: { name: "炙烤肉排", type: "consumable", heal_hp: 85, heal_sp: 25, desc: "頂級炙烤獸肉排 (+85 HP, +25 SP)" },
+    med_alcohol: { name: "戰地止血劑", type: "consumable", heal_hp: 55, heal_sp: 15, desc: "酒精消毒強效繃帶 (+55 HP, +15 SP)" },
+
+    // ---------- 武器：劈砍 ----------
+    kitchen_knife: { name: "菜刀", type: "weapon", subType: "blade", atk: 12, desc: "廚房用菜刀 (劈砍 +12)" },
+    pen: { name: "鋼筆", type: "weapon", subType: "blade", atk: 8, desc: "金屬筆尖的鋼筆 (劈砍 +8)" },
+    scalpel: { name: "手術刀", type: "weapon", subType: "blade", atk: 15, desc: "鋒利的外科手術刀 (劈砍 +15)" },
+    poison_scalpel: { name: "精密刺針刀", type: "weapon", subType: "blade", atk: 26, desc: "結合縫合針改造的暗殺刀 (劈砍 +26)" },
+    feather_dagger: { name: "黑羽飛刀", type: "weapon", subType: "blade", atk: 27, desc: "裝配鴉羽尾翼的高速利刃 (劈砍 +27)" },
+    steel_blade: { name: "精鋼短刀", type: "weapon", subType: "blade", atk: 38, desc: "冷光凜冽的鍛造短刀 (劈砍 +38)" },
+    flame_blade: { name: "烈焰魔劍", type: "weapon", subType: "blade", atk: 54, desc: "塗滿燃油並點火的長刃 (劈砍 +54)", passive: { id: "flame", name: "業火", desc: "每次攻擊額外附加 8 點真實燃燒傷害" } },
+    mithril_blade: { name: "秘銀聖刃", type: "weapon", subType: "blade", atk: 72, desc: "★傳說級秘銀鍛造聖劍 (劈砍 +72)", passive: { id: "pierce", name: "破甲", desc: "攻擊時必定無視目標 25% 防禦力" } },
+
+    // ---------- 武器：鈍器 ----------
+    hammer: { name: "鐵鎚", type: "weapon", subType: "blunt", atk: 13, desc: "工業重鐵鎚 (鈍器 +13)" },
+    spiked_club: { name: "狼牙木棒", type: "weapon", subType: "blunt", atk: 24, desc: "纏繞鐵絲的木棒 (鈍器 +24)" },
+    war_hammer: { name: "戰鎚", type: "weapon", subType: "blunt", atk: 34, desc: "沉重的鋼製重錘 (鈍器 +34)" },
+    thor_hammer: { name: "雷霆粉碎鎚", type: "weapon", subType: "blunt", atk: 52, desc: "纏繞高壓電線的戰鎚 (鈍器 +52)" },
+    meteor_hammer: { name: "隕星破滅鎚", type: "weapon", subType: "blunt", atk: 70, desc: "★傳說級隕鐵巨鎚 (鈍器 +70)", passive: { id: "crush", name: "重創", desc: "暴擊傷害倍率提升至 1.85 倍" } },
+
+    // ---------- 武器：槍械 ----------
+    pistol: { name: "警用手槍", type: "weapon", subType: "gun", atk: 14, desc: "制式小口徑手槍 (槍械 +14)" },
+    magnum: { name: "麥格農左輪", type: "weapon", subType: "gun", atk: 36, desc: "填裝強裝藥的大口徑左輪 (槍械 +36)" },
+    railgun: { name: "電磁軌道槍", type: "weapon", subType: "gun", atk: 70, desc: "★傳說級秘銀線圈電磁砲 (槍械 +70)", passive: { id: "rail", name: "電磁貫穿", desc: "攻擊有 35% 機率超載，追加 +16 點傷害" } },
+
+    // ---------- 武器：弓箭 ----------
+    short_bow: { name: "短弓", type: "weapon", subType: "bow", atk: 13, desc: "輕便的狩獵短弓 (弓箭 +13)" },
+    composite_bow: { name: "複合長弓", type: "weapon", subType: "bow", atk: 35, desc: "鋼製弓臂的複合弓 (弓箭 +35)" },
+    eros_bow: { name: "生命神弓", type: "weapon", subType: "bow", atk: 68, desc: "★傳說級生命之樹神弓 (弓箭 +68)", passive: { id: "vamp", name: "生命汲取", desc: "攻擊命中將造成傷害的 20% 轉化為自身 HP" } },
+
+    // ---------- 武器：拳套 ----------
+    brass_knuckles: { name: "指虎", type: "weapon", subType: "hand", atk: 12, desc: "包覆皮革的鐵製指虎 (拳套 +12)" },
+    steel_gauntlet: { name: "鋼鐵拳套", type: "weapon", subType: "hand", atk: 34, desc: "鋼板強化的格鬥拳套 (拳套 +34)" },
+    meteor_fist: { name: "隕星拳套", type: "weapon", subType: "hand", atk: 66, desc: "★傳說級隕鐵拳套 (拳套 +66)", passive: { id: "combo", name: "爆裂連擊", desc: "攻擊有 30% 機率追加一次打擊" } },
+
+    // ---------- 防具：頭部 ----------
+    cap: { name: "鴨舌帽", type: "armor", subType: "head", def: 4, desc: "普通的布帽 (防禦 +4)" },
+    helmet: { name: "工地安全帽", type: "armor", subType: "head", def: 9, desc: "硬殼安全帽 (防禦 +9)" },
+    tactical_helmet: { name: "戰術頭盔", type: "armor", subType: "head", def: 18, desc: "鋼板強化軍用頭盔 (防禦 +18)" },
+    mithril_helmet: { name: "秘銀頭冠", type: "armor", subType: "head", def: 30, desc: "★傳說級秘銀頭冠 (防禦 +30)", passive: { id: "cooldown", name: "冷靜", desc: "主動技能冷卻 CD 減少 1 回合" } },
+
+    // ---------- 防具：身體 ----------
+    leather_vest: { name: "獵人皮衣", type: "armor", subType: "body", def: 14, desc: "縫合布料與皮革 (防禦 +14)" },
+    chain_armor: { name: "鋼鐵鎖子甲", type: "armor", subType: "body", def: 28, desc: "鋼鐵與鐵絲編織的重甲 (防禦 +28)" },
+    combat_suit: { name: "特種防彈衣", type: "armor", subType: "body", def: 32, desc: "皮革強化鋼板的戰術護甲 (防禦 +32)" },
+    vf_armor: { name: "VF 生體裝甲", type: "armor", subType: "body", def: 46, desc: "★傳說級變異生體護甲 (防禦 +46)", passive: { id: "vf_barrier", name: "VF狂暴護盾", desc: "HP 低於 40% 時，承受的所有傷害減免 30%" } },
+
+    // ---------- 防具：臂甲 ----------
+    turtle_shield: { name: "龜甲盾", type: "armor", subType: "arm", def: 22, desc: "龜殼鋼盾 (防禦 +22)" },
+    spiked_shield: { name: "荊棘臂盾", type: "armor", subType: "arm", def: 30, desc: "鑲嵌尖刺的合金重盾 (防禦 +30)", passive: { id: "thorns", name: "尖刺荊棘", desc: "受到反擊時反彈 10 點傷害給敵人" } },
+
+    // ---------- 防具：腿部 ----------
+    slippers: { name: "拖鞋", type: "armor", subType: "leg", def: 3, desc: "聊勝於無的拖鞋 (防禦 +3)" },
+    running_shoes: { name: "運動鞋", type: "armor", subType: "leg", def: 6, desc: "輕便的運動鞋 (防禦 +6)" },
+    combat_boots: { name: "軍用戰靴", type: "armor", subType: "leg", def: 15, desc: "皮革強化的軍靴 (防禦 +15)" },
+    meteor_boots: { name: "隕鐵戰靴", type: "armor", subType: "leg", def: 26, desc: "★傳說級隕鐵戰靴 (防禦 +26)", passive: { id: "swift", name: "疾行", desc: "探索消耗減少 1 SP" } },
+
+    // ---------- 飾品 ----------
+    watch: { name: "手錶", type: "accessory", atk: 3, def: 2, desc: "精準計時的手錶 (攻 +3 / 防 +2)" },
+    feather_charm: { name: "鴉羽護符", type: "accessory", atk: 7, def: 3, desc: "以鐵絲編織的羽毛護符 (攻 +7 / 防 +3)" },
+    life_pendant: { name: "生命墜飾", type: "accessory", atk: 12, def: 8, desc: "★生命之樹雕刻墜飾 (攻 +12 / 防 +8)", passive: { id: "regen", name: "生生不息", desc: "每次探索或休息額外恢復 4 HP" } },
+
+    // ---------- 陷阱 ----------
+    bear_trap: { name: "捕獸夾", type: "trap", dmg: 35, desc: "埋設於區域，路過的受試者踩中受 35 傷害" },
+    landmine: { name: "土製地雷", type: "trap", dmg: 65, desc: "埋設於區域，路過的受試者踩中受 65 傷害" }
+  },
+
+  recipes: [
+    // 飲品與食物
+    { result: "boiled_water", materials: ["water", "lighter"] },
+    { result: "herbal_tea", materials: ["boiled_water", "herb"] },
+    { result: "flower_tea", materials: ["boiled_water", "flower"] },
+    { result: "first_aid_kit", materials: ["bandage", "pills"] },
+    { result: "med_alcohol", materials: ["bandage", "alcohol"] },
+    { result: "grilled_fish", materials: ["fish", "lighter"] },
+    { result: "steak", materials: ["meat", "lighter"] },
+
+    // 素材
+    { result: "steel", materials: ["scrap_metal", "iron_ore"] },
+
+    // 劈砍
+    { result: "poison_scalpel", materials: ["scalpel", "needle"] },
+    { result: "feather_dagger", materials: ["scalpel", "feather"] },
+    { result: "steel_blade", materials: ["scalpel", "steel"] },
+    { result: "flame_blade", materials: ["steel_blade", "oil"] },
+    { result: "mithril_blade", materials: ["flame_blade", "mithril"] },
+
+    // 鈍器
+    { result: "spiked_club", materials: ["branch", "wire"] },
+    { result: "war_hammer", materials: ["hammer", "steel"] },
+    { result: "thor_hammer", materials: ["war_hammer", "wire"] },
+    { result: "meteor_hammer", materials: ["thor_hammer", "meteorite"] },
+
+    // 槍械
+    { result: "magnum", materials: ["pistol", "gunpowder"] },
+    { result: "railgun", materials: ["magnum", "mithril"] },
+
+    // 弓箭
+    { result: "composite_bow", materials: ["short_bow", "steel"] },
+    { result: "eros_bow", materials: ["composite_bow", "tree_of_life"] },
+
+    // 拳套
+    { result: "brass_knuckles", materials: ["scrap_metal", "leather"] },
+    { result: "steel_gauntlet", materials: ["brass_knuckles", "steel"] },
+    { result: "meteor_fist", materials: ["steel_gauntlet", "meteorite"] },
+
+    // 防具
+    { result: "tactical_helmet", materials: ["helmet", "steel"] },
+    { result: "mithril_helmet", materials: ["tactical_helmet", "mithril"] },
+    { result: "leather_vest", materials: ["cloth", "leather"] },
+    { result: "chain_armor", materials: ["steel", "wire"] },
+    { result: "combat_suit", materials: ["leather_vest", "steel"] },
+    { result: "vf_armor", materials: ["combat_suit", "vf_blood"] },
+    { result: "turtle_shield", materials: ["turtle_shell", "steel"] },
+    { result: "spiked_shield", materials: ["turtle_shield", "wire"] },
+    { result: "combat_boots", materials: ["running_shoes", "leather"] },
+    { result: "meteor_boots", materials: ["combat_boots", "meteorite"] },
+
+    // 飾品
+    { result: "feather_charm", materials: ["feather", "wire"] },
+    { result: "life_pendant", materials: ["feather_charm", "tree_of_life"] },
+
+    // 陷阱
+    { result: "bear_trap", materials: ["scrap_metal", "wire"] },
+    { result: "landmine", materials: ["gunpowder", "scrap_metal"] }
+  ]
+};
+
+// ==================== 可選角色 ====================
+const CHARACTERS = [
+  {
+    id: "jackie", name: "傑琪", code: "06M-RF18", title: "連續殺人魔",
+    weaponType: "blade", startWeapon: "kitchen_knife", hp: 100, sp: 80, atk: 13, def: 5,
+    passive: { name: "嗜血", desc: "擊殺任何目標後回復 20 HP" },
+    skill: { name: "血祭狂斬", desc: "造成 1.8 倍傷害", cost: 10, cd: 6 }
+  },
+  {
+    id: "aya", name: "阿雅", code: "14M-RFT02", title: "前 FBI 探員",
+    weaponType: "gun", startWeapon: "pistol", hp: 95, sp: 85, atk: 12, def: 4,
+    passive: { name: "神射手", desc: "暴擊率 +10%" },
+    skill: { name: "二連射", desc: "連續射擊兩次（各 0.8 倍傷害，可各自暴擊）", cost: 10, cd: 5 }
+  },
+  {
+    id: "hyunwoo", name: "玄佑", code: "14M-RFT04", title: "街頭格鬥家",
+    weaponType: "hand", startWeapon: "brass_knuckles", hp: 120, sp: 80, atk: 11, def: 9,
+    passive: { name: "鋼鐵之軀", desc: "生命上限與基礎防禦天生較高" },
+    skill: { name: "先發制人", desc: "1.3 倍傷害，並使敵人本回合無法反擊", cost: 8, cd: 5 }
+  },
+  {
+    id: "nadine", name: "娜汀", code: "14M-RFT07", title: "荒野獵人",
+    weaponType: "bow", startWeapon: "short_bow", hp: 95, sp: 90, atk: 12, def: 4,
+    passive: { name: "狩獵本能", desc: "對野生動物與 Boss 傷害 +30%，狩獵戰利品 +1" },
+    skill: { name: "穿心箭", desc: "無視敵方防禦，造成 1.5 倍傷害", cost: 12, cd: 6 }
+  },
+  {
+    id: "magnus", name: "馬格努斯", code: "14M-RFT06", title: "機車黨老大",
+    weaponType: "blunt", startWeapon: "hammer", hp: 110, sp: 75, atk: 12, def: 7,
+    passive: { name: "硬漢", desc: "對受試者傷害 +15%，承受所有傷害 -10%" },
+    skill: { name: "重機衝撞", desc: "1.5 倍傷害並擊暈敵人（本回合無法反擊）", cost: 10, cd: 6 }
+  },
+  {
+    id: "hyejin", name: "慧珍", code: "15M-RFT12", title: "符咒巫女",
+    weaponType: "bow", startWeapon: "short_bow", hp: 96, sp: 95, atk: 13, def: 5,
+    passive: { name: "三災", desc: "戰鬥中暴擊率 +8%，且施放技能時壓制敵人無法反擊" },
+    skill: { name: "吸靈符", desc: "1.45 倍傷害並恐懼壓制敵人，同時回復自身 12 HP", cost: 10, cd: 5 }
+  },
+  {
+    id: "sua", name: "秀雅", code: "18M-RFT37", title: "圖書管理員",
+    weaponType: "blunt", startWeapon: "hammer", hp: 108, sp: 85, atk: 12, def: 7,
+    passive: { name: "心靈糧食", desc: "食用任何補品或飲料時，HP/SP 恢復效果額外 +25%" },
+    skill: { name: "青鳥之書", desc: "1.6 倍鈍器重擊，並立即回復自身 15 HP", cost: 10, cd: 5 }
+  }
+];
+
+// AI 受試者池（排除玩家所選角色後取 9 名，每位具備真實裝備欄、專屬技能與畢業合成路線）
+const AI_ROSTER = [
+  {
+    id: "jackie", name: "傑琪", startWeapon: "kitchen_knife", hp: 100, atk: 13, def: 5,
+    bag: ["scalpel", "bandage"],
+    skill: { name: "血祭狂斬", mult: 1.5, cd: 4 },
+    buildTargets: ["flame_blade", "chain_armor", "tactical_helmet", "first_aid_kit"]
+  },
+  {
+    id: "aya", name: "阿雅", startWeapon: "pistol", hp: 95, atk: 12, def: 4,
+    bag: ["gunpowder", "boiled_water"],
+    skill: { name: "二連射", mult: 1.45, cd: 4 },
+    buildTargets: ["magnum", "combat_suit", "feather_charm", "med_alcohol"]
+  },
+  {
+    id: "hyunwoo", name: "玄佑", startWeapon: "brass_knuckles", hp: 115, atk: 11, def: 8,
+    bag: ["turtle_shell", "water"],
+    skill: { name: "先發制人", mult: 1.35, cd: 4 },
+    buildTargets: ["steel_gauntlet", "turtle_shield", "tactical_helmet", "steak"]
+  },
+  {
+    id: "fiora", name: "菲歐拉", startWeapon: "scalpel", hp: 100, atk: 13, def: 6,
+    bag: ["needle", "herb"],
+    skill: { name: "極速突刺", mult: 1.45, cd: 4 },
+    buildTargets: ["steel_blade", "poison_scalpel", "chain_armor", "herbal_tea"]
+  },
+  {
+    id: "nadine", name: "娜汀", startWeapon: "short_bow", hp: 95, atk: 12, def: 5,
+    bag: ["meat", "lighter"],
+    skill: { name: "穿心箭", mult: 1.5, cd: 5 },
+    buildTargets: ["composite_bow", "leather_vest", "combat_boots", "steak"]
+  },
+  {
+    id: "yuki", name: "雪", startWeapon: "kitchen_knife", hp: 100, atk: 13, def: 6,
+    bag: ["scrap_metal", "bandage"],
+    skill: { name: "拔刀斬", mult: 1.5, cd: 4 },
+    buildTargets: ["steel_blade", "leather_vest", "feather_charm", "flower_tea"]
+  },
+  {
+    id: "rosalio", name: "羅薩里奧", startWeapon: "hammer", hp: 105, atk: 14, def: 6,
+    bag: ["iron_ore", "pills"],
+    skill: { name: "全壘打", mult: 1.55, cd: 5 },
+    buildTargets: ["thor_hammer", "turtle_shield", "combat_boots", "first_aid_kit"]
+  },
+  {
+    id: "sissela", name: "席瑟拉", startWeapon: "scalpel", hp: 90, atk: 13, def: 5,
+    bag: ["feather", "pills"],
+    skill: { name: "苦痛釋放", mult: 1.45, cd: 4 },
+    buildTargets: ["feather_dagger", "spiked_shield", "leather_vest", "first_aid_kit"]
+  },
+  {
+    id: "magnus", name: "馬格努斯", startWeapon: "hammer", hp: 115, atk: 12, def: 8,
+    bag: ["wire", "bandage"],
+    skill: { name: "重機衝撞", mult: 1.45, cd: 5 },
+    buildTargets: ["war_hammer", "spiked_club", "chain_armor", "med_alcohol"]
+  },
+  {
+    id: "leon", name: "里昂", startWeapon: "brass_knuckles", hp: 105, atk: 12, def: 7,
+    bag: ["helmet", "running_shoes"],
+    skill: { name: "潛流連擊", mult: 1.4, cd: 4 },
+    buildTargets: ["steel_gauntlet", "tactical_helmet", "combat_boots", "grilled_fish"]
+  }
+];
+
+// ==================== 遊戲狀態 ====================
+let player = null;
+let aiBots = [];
+let boss = null;
+let airdrop = null;        // { area, items[] }
+let playerTraps = [];      // { area, dmg, name }
+let aiTraps = [];          // { area, dmg, name, ownerName }
+let restrictedAreas = new Set();
+let warningAreas = new Set();
+let actionCounter = 0;
+
+let pendingFoundItem = null;
+let currentLootItems = [];
+let activeEnemy = null;
+let selectedSlotIdx = null;
+let selectedEquipType = null;
+let currentCodexTab = "all";
+let isGameOver = true; // 選角前視為未開始
+
+// ==================== DOM 快取 ====================
+const $ = (id) => document.getElementById(id);
+const hudName = $('hud-name');
+const hudLevel = $('hud-level');
+const btnStance = $('btn-stance');
+const hudAlive = $('hud-alive');
+const hudZoneTimer = $('hud-zone-timer');
+const hpBar = $('hp-bar');
+const hpText = $('hp-text');
+const spBar = $('sp-bar');
+const spText = $('sp-text');
+const hudAtk = $('hud-atk');
+const hudDef = $('hud-def');
+const hudSkill = $('hud-skill');
+const hudMastery = $('hud-mastery');
+
+const areaBanner = $('area-banner');
+const areaTitle = $('area-title');
+const areaZoneTag = $('area-zone-tag');
+const areaDesc = $('area-desc');
+const areaDropsHint = $('area-drops-hint');
+const combatLog = $('combat-log');
+const inventoryGrid = $('inventory-grid');
+const recipeList = $('recipe-list');
+
+const discoveryCard = $('discovery-card');
+const discItemName = $('disc-item-name');
+const discItemDesc = $('disc-item-desc');
+
+const lootCard = $('loot-card');
+const lootTitle = $('loot-title');
+const lootGrid = $('loot-grid');
+const btnCloseLoot = $('btn-close-loot');
+
+const combatCard = $('combat-card');
+const enemyTag = $('enemy-tag');
+const enemyStats = $('enemy-stats');
+const enemyName = $('enemy-name');
+const enemyHpText = $('enemy-hp-text');
+const enemyHpBar = $('enemy-hp-bar');
+const combatRoundDesc = $('combat-round-desc');
+
+const itemModal = $('item-modal');
+const itemModalTitle = $('item-modal-title');
+const itemModalDesc = $('item-modal-desc');
+const itemModalRecipes = $('item-modal-recipes');
+const btnModalUse = $('btn-modal-use');
+const btnModalUnequip = $('btn-modal-unequip');
+const btnModalDrop = $('btn-modal-drop');
+const btnModalCancel = $('btn-modal-cancel');
+
+const mapModal = $('map-modal');
+const areaSelector = $('area-selector');
+
+const codexModal = $('codex-modal');
+const codexList = $('codex-list');
+const btnOpenCodex = $('btn-open-codex');
+const btnCloseCodex = $('btn-close-codex');
+
+const charModal = $('char-modal');
+const charGrid = $('char-grid');
+
+const gameoverModal = $('gameover-modal');
+const gameoverTitle = $('gameover-title');
+const gameoverDesc = $('gameover-desc');
+const gameoverStats = $('gameover-stats');
+const btnRestart = $('btn-restart');
+
+const helpModal = $('help-modal');
+const btnOpenHelp = $('btn-open-help');
+const btnCloseHelp = $('btn-close-help');
+
+const careerModal = $('career-modal');
+const btnOpenCareer = $('btn-open-career');
+const btnCloseCareer = $('btn-close-career');
+const floatingLayer = $('floating-layer');
+
+// v2.9 Beta 新增 DOM
+const lobbyModal = $('lobby-modal');
+const perksModal = $('perks-modal');
+const pvpModal = $('pvp-modal');
+const patchModal = $('patch-modal');
+const btnBackLobby = $('btn-back-lobby');
+const btnSfxToggle = $('btn-sfx-toggle');
+const btnLobbySfx = $('btn-lobby-sfx');
+const btnMenuSolo = $('btn-menu-solo');
+const btnMenuPvp = $('btn-menu-pvp');
+const btnMenuPerks = $('btn-menu-perks');
+const btnMenuGuide = $('btn-menu-guide');
+const btnMenuCareer = $('btn-menu-career');
+const btnMenuPatch = $('btn-menu-patch');
+const btnClosePerks = $('btn-close-perks');
+const btnClosePvp = $('btn-close-pvp');
+const btnClosePatch = $('btn-close-patch');
+const btnSynthChip = $('btn-synth-chip');
+const btnCharBackLobby = $('btn-char-back-lobby');
+const btnGameoverLobby = $('btn-gameover-lobby');
+const charPerkSummary = $('char-perk-summary');
+const radarSvg = $('radar-svg');
+const radarRouteHint = $('radar-route-hint');
+
+const btnSearch = $('btn-search');
+const btnRest = $('btn-rest');
+const btnPickup = $('btn-pickup');
+const btnDiscard = $('btn-discard');
+const btnAttack = $('btn-attack');
+const btnSkill = $('btn-skill');
+const btnFlee = $('btn-flee');
+const btnOpenMap = $('btn-open-map');
+const btnCloseMap = $('btn-close-map');
+
+// ==================== Web Audio 原生戰術音效引擎 (SFX) ====================
+const SFX_STORAGE_KEY = 'lumia_sfx_enabled_v1';
+const SFX = {
+  enabled: true,
+  ctx: null,
+  init() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const saved = localStorage.getItem(SFX_STORAGE_KEY);
+        if (saved !== null) this.enabled = saved === 'true';
+      }
+    } catch (e) {}
+    this.syncUI();
+  },
+  toggle() {
+    this.enabled = !this.enabled;
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(SFX_STORAGE_KEY, String(this.enabled));
+      }
+    } catch (e) {}
+    this.syncUI();
+    if (this.enabled) this.play('click');
+  },
+  syncUI() {
+    if (btnSfxToggle) btnSfxToggle.innerText = this.enabled ? '🔊' : '🔇';
+    if (btnLobbySfx) btnLobbySfx.innerText = this.enabled ? '🔊 音效: 開' : '🔇 音效: 關';
+  },
+  getContext() {
+    if (!this.enabled) return null;
+    if (typeof window === 'undefined') return null;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return null;
+    if (!this.ctx) this.ctx = new AudioCtx();
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+    return this.ctx;
+  },
+  tone(freq, endFreq, duration, type = 'sine', gainVal = 0.08, delay = 0) {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime + delay;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      if (endFreq && endFreq !== freq) {
+        osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
+      }
+      gain.gain.setValueAtTime(gainVal, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + duration);
+    } catch (e) {}
+  },
+  play(kind) {
+    if (!this.enabled) return;
+    switch (kind) {
+      case 'click':
+        this.tone(560, 720, 0.05, 'sine', 0.05);
+        break;
+      case 'search':
+        this.tone(240, 340, 0.07, 'triangle', 0.06, 0);
+        this.tone(310, 420, 0.07, 'triangle', 0.05, 0.06);
+        break;
+      case 'pickup':
+        this.tone(520, 780, 0.08, 'sine', 0.07, 0);
+        this.tone(780, 1040, 0.1, 'sine', 0.07, 0.06);
+        break;
+      case 'craft':
+        this.tone(880, 440, 0.12, 'triangle', 0.1, 0);
+        this.tone(1320, 1760, 0.22, 'sine', 0.09, 0.08);
+        break;
+      case 'attack':
+        this.tone(320, 95, 0.11, 'sawtooth', 0.08);
+        break;
+      case 'crit':
+        this.tone(160, 55, 0.18, 'square', 0.1, 0);
+        this.tone(920, 460, 0.16, 'sawtooth', 0.09, 0.03);
+        break;
+      case 'skill':
+        this.tone(440, 660, 0.08, 'sine', 0.08, 0);
+        this.tone(660, 990, 0.14, 'triangle', 0.09, 0.06);
+        break;
+      case 'hurt':
+        this.tone(130, 50, 0.14, 'sawtooth', 0.09);
+        break;
+      case 'heal':
+        this.tone(523, 659, 0.1, 'sine', 0.07, 0);
+        this.tone(659, 784, 0.14, 'sine', 0.07, 0.08);
+        break;
+      case 'alarm':
+        this.tone(780, 740, 0.11, 'square', 0.07, 0);
+        this.tone(780, 740, 0.14, 'square', 0.07, 0.15);
+        break;
+      case 'win':
+        [523, 659, 784, 1046].forEach((f, i) => this.tone(f, f, 0.18, 'triangle', 0.09, i * 0.11));
+        break;
+      case 'lose':
+        [340, 280, 210].forEach((f, i) => this.tone(f, f * 0.85, 0.18, 'sawtooth', 0.07, i * 0.12));
+        break;
+    }
+  }
+};
+SFX.init();
+if (btnSfxToggle) btnSfxToggle.onclick = () => SFX.toggle();
+if (btnLobbySfx) btnLobbySfx.onclick = () => SFX.toggle();
+
+// ==================== 天賦研究所與雙貨幣系統 (Perks Lab) ====================
+const PERKS_STORAGE_KEY = 'lumia_perks_v1';
+const PERK_DEFS = [
+  {
+    id: 'vitality',
+    icon: '❤️',
+    name: '體能強化',
+    desc: (lv) => `初始與最大 HP +${lv * 4 + (lv >= 5 ? 10 : 0) + (lv >= 10 ? 15 : 0)} (下一級 +4 HP，Lv.5/10 突破大增)`
+  },
+  {
+    id: 'stamina',
+    icon: '⚡',
+    name: '精力充沛',
+    desc: (lv) => `初始與最大 SP +${lv * 4 + (lv >= 5 ? 10 : 0) + (lv >= 10 ? 15 : 0)}${lv >= 5 ? '｜★已解鎖：休息額外 +4 SP' : ' (Lv.5 解鎖休息額外恢復)'}`
+  },
+  {
+    id: 'smithing',
+    icon: '🔨',
+    name: '鍛造宗師',
+    desc: (lv) => `合成裝備獲得經驗值 +${lv * 10}%${lv >= 5 ? '｜★已解鎖：開局額外攜帶 [止痛藥]' : ' (Lv.5 解鎖開局攜帶止痛藥)'}`
+  },
+  {
+    id: 'instinct',
+    icon: '🗡️',
+    name: '戰鬥本能',
+    desc: (lv) => `基礎攻擊 +${Math.ceil(lv * 0.7)}、基礎防禦 +${Math.floor(lv * 0.6)}${lv >= 5 ? '｜★暴擊率 +4%' : ' (Lv.5 解鎖暴擊率 +4%)'}`
+  }
+];
+
+function getPerksData() {
+  const def = {
+    shards: 120, // 新手初始測試研究經費
+    chips: 1,    // 新手初始贈送 1 顆核心晶片供體驗突破
+    levels: { vitality: 0, stamina: 0, smithing: 0, instinct: 0 }
+  };
+  try {
+    if (typeof localStorage === 'undefined') return def;
+    const raw = localStorage.getItem(PERKS_STORAGE_KEY);
+    if (!raw) return def;
+    const parsed = JSON.parse(raw);
+    return {
+      shards: typeof parsed.shards === 'number' ? parsed.shards : def.shards,
+      chips: typeof parsed.chips === 'number' ? parsed.chips : def.chips,
+      levels: { ...def.levels, ...(parsed.levels || {}) }
+    };
+  } catch (e) {
+    return def;
+  }
+}
+
+function savePerksData(data) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(PERKS_STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch (e) {}
+  syncCurrencyUI(data);
+}
+
+function syncCurrencyUI(data = getPerksData()) {
+  const elS1 = $('lobby-shards-val');
+  const elC1 = $('lobby-chips-val');
+  const elS2 = $('perks-shards-val');
+  const elC2 = $('perks-chips-val');
+  if (elS1) elS1.innerText = data.shards;
+  if (elC1) elC1.innerText = data.chips;
+  if (elS2) elS2.innerText = data.shards;
+  if (elC2) elC2.innerText = data.chips;
+}
+
+function getPerkUpgradeCost(curLv) {
+  if (curLv >= 10) return { max: true, shards: 0, chips: 0 };
+  const nextLv = curLv + 1;
+  if (nextLv === 5) return { max: false, shards: 80, chips: 1, isBreakthrough: true };
+  if (nextLv === 10) return { max: false, shards: 180, chips: 2, isBreakthrough: true };
+  return { max: false, shards: 20 + curLv * 15, chips: 0, isBreakthrough: false };
+}
+
+function upgradePerk(perkId) {
+  const data = getPerksData();
+  const curLv = data.levels[perkId] || 0;
+  const cost = getPerkUpgradeCost(curLv);
+  if (cost.max) return;
+  if (data.shards < cost.shards || data.chips < cost.chips) return;
+  data.shards -= cost.shards;
+  data.chips -= cost.chips;
+  data.levels[perkId] = curLv + 1;
+  savePerksData(data);
+  SFX.play('craft');
+  renderPerksModal();
+}
+
+function synthesizeChip() {
+  const data = getPerksData();
+  if (data.shards < 150) return;
+  data.shards -= 150;
+  data.chips += 1;
+  savePerksData(data);
+  SFX.play('craft');
+  renderPerksModal();
+}
+
+function renderPerksModal() {
+  const data = getPerksData();
+  syncCurrencyUI(data);
+  if (btnSynthChip) {
+    btnSynthChip.disabled = data.shards < 150;
+  }
+  const listEl = $('perks-list');
+  if (!listEl) return;
+  listEl.innerHTML = '';
+
+  PERK_DEFS.forEach(p => {
+    const lv = data.levels[p.id] || 0;
+    const cost = getPerkUpgradeCost(lv);
+    const card = document.createElement('div');
+    card.className = 'perk-card';
+
+    let btnText = '已滿級 MAX';
+    let canAfford = false;
+    if (!cost.max) {
+      canAfford = data.shards >= cost.shards && data.chips >= cost.chips;
+      btnText = cost.isBreakthrough
+        ? `⚡ 突破 Lv.${lv + 1} (${cost.shards}🔹+${cost.chips}💠)`
+        : `升級 Lv.${lv + 1} (${cost.shards}🔹)`;
+    }
+
+    card.innerHTML = `
+      <div class="perk-info">
+        <div class="perk-title">${p.icon} ${p.name} <span style="color:#38bdf8;">Lv.${lv}/10</span></div>
+        <div class="perk-desc">${p.desc(lv)}</div>
+      </div>
+      <button class="perk-btn ${cost.isBreakthrough ? 'breakthrough' : ''}" ${(!canAfford || cost.max) ? 'disabled' : ''}>${btnText}</button>
+    `;
+    const btn = card.querySelector('button');
+    if (btn && !cost.max) {
+      btn.onclick = () => upgradePerk(p.id);
+    }
+    listEl.appendChild(card);
+  });
+  if (perksModal) perksModal.classList.remove('hidden');
+}
+
+function getActivePerkBonuses() {
+  const data = getPerksData();
+  const lvV = data.levels.vitality || 0;
+  const lvS = data.levels.stamina || 0;
+  const lvM = data.levels.smithing || 0;
+  const lvI = data.levels.instinct || 0;
+  return {
+    hpBonus: lvV * 4 + (lvV >= 5 ? 10 : 0) + (lvV >= 10 ? 15 : 0),
+    spBonus: lvS * 4 + (lvS >= 5 ? 10 : 0) + (lvS >= 10 ? 15 : 0),
+    restSpBonus: lvS >= 5 ? 4 : 0,
+    expMult: 1 + lvM * 0.1,
+    startPills: lvM >= 5,
+    atkBonus: Math.ceil(lvI * 0.7),
+    defBonus: Math.floor(lvI * 0.6),
+    critBonus: lvI >= 5 ? 0.04 : 0
+  };
+}
+
+// ==================== 圖論相鄰檢定與 BFS 最短路徑 ====================
+function areAreasAdjacent(idA, idB) {
+  if (idA === idB) return true;
+  const areaA = GAME_DATA.areas.find(a => a.id === idA);
+  return areaA && Array.isArray(areaA.neighbors) && areaA.neighbors.includes(idB);
+}
+
+function findShortestPath(fromId, toId, avoidRestricted = true) {
+  if (fromId === toId) return [fromId];
+  const queue = [[fromId]];
+  const visited = new Set([fromId]);
+
+  while (queue.length > 0) {
+    const path = queue.shift();
+    const cur = path[path.length - 1];
+    const areaObj = GAME_DATA.areas.find(a => a.id === cur);
+    const neighbors = areaObj?.neighbors || [];
+
+    for (const nxt of neighbors) {
+      if (nxt === toId) return [...path, nxt];
+      if (!visited.has(nxt) && (!avoidRestricted || !restrictedAreas.has(nxt))) {
+        visited.add(nxt);
+        queue.push([...path, nxt]);
+      }
+    }
+  }
+  // 若安全路徑被完全阻斷，回退允許經過禁區的路徑
+  if (avoidRestricted) return findShortestPath(fromId, toId, false);
+  return [fromId, toId];
+}
+
+// ==================== 通用工具 ====================
+const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const areaName = (id) => GAME_DATA.areas.find(a => a.id === id)?.name || '未知區域';
+const safeAreas = () => GAME_DATA.areas.map(a => a.id).filter(id => !restrictedAreas.has(id));
+
+// 檢查玩家目前穿戴的裝備是否持有指定被動 ID
+function playerHasPassive(passiveId) {
+  if (!player || !player.equipment) return false;
+  for (const slot of EQUIP_SLOTS) {
+    const itId = player.equipment[slot];
+    if (itId && GAME_DATA.items[itId]?.passive?.id === passiveId) return true;
+  }
+  return false;
+}
+
+// 畫面浮動數字動效
+function showFloatingText(text, type = 'dmg-out', targetEl = null) {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  const layer = document.getElementById('floating-layer');
+  if (!layer || typeof layer.appendChild !== 'function') return;
+
+  const floatEl = document.createElement('div');
+  floatEl.className = `dmg-float ${type}`;
+  floatEl.innerText = text;
+
+  let x = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth / 2 : 200;
+  let y = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight * 0.35 : 220;
+
+  if (targetEl && targetEl.getBoundingClientRect) {
+    const rect = targetEl.getBoundingClientRect();
+    x = rect.left + rect.width / 2 + (Math.random() * 24 - 12);
+    y = rect.top + rect.height * 0.35 + (Math.random() * 16 - 8);
+  } else {
+    x += (Math.random() * 30 - 15);
+    y += (Math.random() * 20 - 10);
+  }
+
+  floatEl.style.left = `${Math.round(x)}px`;
+  floatEl.style.top = `${Math.round(y)}px`;
+  layer.appendChild(floatEl);
+
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => {
+      if (floatEl.parentNode) floatEl.parentNode.removeChild(floatEl);
+    }, 1000);
+  }
+}
+
+// 震動回饋
+function triggerScreenShake() {
+  const app = document.getElementById('app');
+  if (!app || !app.classList) return;
+  app.classList.remove('screen-shake');
+  if (typeof app.offsetWidth !== 'undefined') void app.offsetWidth;
+  app.classList.add('screen-shake');
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => app.classList.remove('screen-shake'), 350);
+  }
+}
+
+function triggerEnemyShake() {
+  if (!combatCard || !combatCard.classList) return;
+  combatCard.classList.remove('enemy-shake');
+  if (typeof combatCard.offsetWidth !== 'undefined') void combatCard.offsetWidth;
+  combatCard.classList.add('enemy-shake');
+  if (typeof setTimeout === 'function') {
+    setTimeout(() => combatCard.classList.remove('enemy-shake'), 300);
+  }
+}
+
+// ==================== 生涯戰績管理 ====================
+const CAREER_STORAGE_KEY = 'lumia_career_stats_v1';
+
+function getCareerStats() {
+  const def = {
+    games: 0,
+    wins: 0,
+    kills: 0,
+    bossKills: 0,
+    maxDmg: 0,
+    chars: {
+      jackie: { plays: 0, wins: 0, kills: 0 },
+      aya: { plays: 0, wins: 0, kills: 0 },
+      hyunwoo: { plays: 0, wins: 0, kills: 0 },
+      nadine: { plays: 0, wins: 0, kills: 0 },
+      magnus: { plays: 0, wins: 0, kills: 0 }
+    }
+  };
+  try {
+    if (typeof localStorage === 'undefined') return def;
+    const raw = localStorage.getItem(CAREER_STORAGE_KEY);
+    if (!raw) return def;
+    const parsed = JSON.parse(raw);
+    return {
+      ...def,
+      ...parsed,
+      chars: { ...def.chars, ...(parsed.chars || {}) }
+    };
+  } catch (e) {
+    return def;
+  }
+}
+
+function saveCareerStats(data) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(CAREER_STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch (e) {}
+}
+
+function recordGameResult(isWin, kills, bossKilled, maxDmg) {
+  const stats = getCareerStats();
+  stats.games += 1;
+  if (isWin) stats.wins += 1;
+  stats.kills += (kills || 0);
+  if (bossKilled) stats.bossKills += 1;
+  if ((maxDmg || 0) > stats.maxDmg) stats.maxDmg = maxDmg;
+
+  const charId = player?.char?.id;
+  if (charId) {
+    if (!stats.chars[charId]) stats.chars[charId] = { plays: 0, wins: 0, kills: 0 };
+    stats.chars[charId].plays += 1;
+    if (isWin) stats.chars[charId].wins += 1;
+    stats.chars[charId].kills += (kills || 0);
+  }
+  saveCareerStats(stats);
+  return stats;
+}
+
+function renderCareerModal() {
+  const stats = getCareerStats();
+  const winRate = stats.games > 0 ? Math.round((stats.wins / stats.games) * 100) : 0;
+  const kda = stats.games > 0 ? (stats.kills / stats.games).toFixed(1) : '0.0';
+  const content = document.getElementById('career-stats-content');
+  if (!content) return;
+
+  const charRows = CHARACTERS.map(c => {
+    const cs = stats.chars[c.id] || { plays: 0, wins: 0, kills: 0 };
+    const rate = cs.plays > 0 ? Math.round((cs.wins / cs.plays) * 100) : 0;
+    return `
+      <div class="career-char-row">
+        <span class="career-char-name">🧬 ${c.name} <small style="color:#94a3b8;font-weight:normal;">(${c.title})</small></span>
+        <span class="career-char-stats">出戰 ${cs.plays} 場 ｜ 吃雞 ${cs.wins} 次 (${rate}%) ｜ 擊殺 ${cs.kills}</span>
+      </div>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="career-metric-grid">
+      <div class="career-metric-card">
+        <div class="career-metric-label">總實驗場次</div>
+        <div class="career-metric-value">${stats.games}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">冠軍 (吃雞)</div>
+        <div class="career-metric-value" style="color:#22c55e;">${stats.wins}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">吃雞勝率</div>
+        <div class="career-metric-value">${winRate}%</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">累積擊殺</div>
+        <div class="career-metric-value" style="color:#f87171;">${stats.kills}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">場均淘汰 (K/G)</div>
+        <div class="career-metric-value">${kda}</div>
+      </div>
+      <div class="career-metric-card">
+        <div class="career-metric-label">首領殺 / 最高傷</div>
+        <div class="career-metric-value" style="font-size:0.95rem;">${stats.bossKills} 殺 / ${stats.maxDmg}</div>
+      </div>
+    </div>
+    <div style="font-weight:bold; font-size:0.82rem; color:#cbd5e1; margin-top:6px;">🧬 各受試者實驗紀錄：</div>
+    <div class="career-char-list">${charRows}</div>
+  `;
+  if (careerModal) careerModal.classList.remove('hidden');
+}
+
+if (btnOpenCareer) btnOpenCareer.onclick = renderCareerModal;
+if (btnCloseCareer) btnCloseCareer.onclick = () => { if (careerModal) careerModal.classList.add('hidden'); };
+if (btnOpenHelp) btnOpenHelp.onclick = () => { if (helpModal) helpModal.classList.remove('hidden'); };
+if (btnCloseHelp) btnCloseHelp.onclick = () => { if (helpModal) helpModal.classList.add('hidden'); };
+if (btnClosePerks) btnClosePerks.onclick = () => { if (perksModal) perksModal.classList.add('hidden'); };
+if (btnSynthChip) btnSynthChip.onclick = synthesizeChip;
+if (btnClosePvp) btnClosePvp.onclick = () => { if (pvpModal) pvpModal.classList.add('hidden'); };
+if (btnClosePatch) btnClosePatch.onclick = () => { if (patchModal) patchModal.classList.add('hidden'); };
+
+function showLobby() {
+  isGameOver = true;
+  syncCurrencyUI();
+  if (charModal) charModal.classList.add('hidden');
+  if (gameoverModal) gameoverModal.classList.add('hidden');
+  if (mapModal) mapModal.classList.add('hidden');
+  if (lobbyModal) lobbyModal.classList.remove('hidden');
+}
+
+if (btnMenuSolo) btnMenuSolo.onclick = () => { SFX.play('click'); showCharSelect(); };
+if (btnMenuPvp) btnMenuPvp.onclick = () => { SFX.play('click'); if (pvpModal) pvpModal.classList.remove('hidden'); };
+if (btnMenuPerks) btnMenuPerks.onclick = () => { SFX.play('click'); renderPerksModal(); };
+if (btnMenuGuide) btnMenuGuide.onclick = () => { SFX.play('click'); if (helpModal) helpModal.classList.remove('hidden'); };
+if (btnMenuCareer) btnMenuCareer.onclick = () => { SFX.play('click'); renderCareerModal(); };
+if (btnMenuPatch) btnMenuPatch.onclick = () => { SFX.play('click'); if (patchModal) patchModal.classList.remove('hidden'); };
+if (btnBackLobby) btnBackLobby.onclick = () => { SFX.play('click'); showLobby(); };
+if (btnCharBackLobby) btnCharBackLobby.onclick = () => { SFX.play('click'); showLobby(); };
+if (btnGameoverLobby) btnGameoverLobby.onclick = () => { SFX.play('click'); showLobby(); };
+
+function getEquipSlot(it) {
+  if (!it) return null;
+  if (it.type === 'weapon') return 'weapon';
+  if (it.type === 'armor') return it.subType;
+  if (it.type === 'accessory') return 'accessory';
+  return null;
+}
+
+function getItemTag(it) {
+  if (it.type === 'weapon') return `${WEAPON_TYPES[it.subType]}+${it.atk}`;
+  if (it.type === 'armor') return `防+${it.def}`;
+  if (it.type === 'accessory') return `攻${it.atk}/防${it.def}`;
+  if (it.type === 'trap') return `陷阱${it.dmg}`;
+  if (it.heal_hp) return `+${it.heal_hp}HP`;
+  if (it.heal_sp) return `+${it.heal_sp}SP`;
+  if (it.rare) return '★稀有';
+  return '素材';
+}
+
+function logMessage(text, type = 'sys-msg') {
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${type}`;
+  entry.innerText = text;
+  combatLog.appendChild(entry);
+  combatLog.scrollTop = combatLog.scrollHeight;
+}
+
+// 所有玩家受到的傷害統一經此處理（套用馬格努斯被動減傷、VF裝甲被動、飄字與震動）
+function applyDamageToPlayer(raw) {
+  let dmg = Math.max(1, Math.round(raw));
+  if (player?.char?.id === 'magnus') dmg = Math.max(1, Math.round(dmg * 0.9));
+
+  // VF 生體裝甲被動【VF狂暴護盾】：HP 低於 40% 時減傷 30%
+  if (player && playerHasPassive('vf_barrier') && player.hp < player.maxHp * 0.4) {
+    dmg = Math.max(1, Math.round(dmg * 0.7));
+    showFloatingText('🛡️ VF護盾 -30%', 'dmg-passive');
+  }
+
+  player.hp = Math.max(0, player.hp - dmg);
+  SFX.play('hurt');
+  showFloatingText(`-${dmg}`, 'dmg-in');
+
+  if (dmg >= 15) triggerScreenShake();
+  return dmg;
+}
+
+// ==================== 角色選擇 ====================
+function showCharSelect() {
+  isGameOver = true;
+  if (lobbyModal) lobbyModal.classList.add('hidden');
+  gameoverModal.classList.add('hidden');
+
+  if (charPerkSummary) {
+    const b = getActivePerkBonuses();
+    const parts = [];
+    if (b.hpBonus > 0) parts.push(`HP +${b.hpBonus}`);
+    if (b.spBonus > 0) parts.push(`SP +${b.spBonus}`);
+    if (b.atkBonus > 0) parts.push(`攻 +${b.atkBonus}`);
+    if (b.defBonus > 0) parts.push(`防 +${b.defBonus}`);
+    if (b.restSpBonus > 0) parts.push(`休息 +${b.restSpBonus}SP`);
+    if (b.expMult > 1) parts.push(`經驗 +${Math.round((b.expMult - 1) * 100)}%`);
+    if (b.startPills) parts.push(`開局攜帶止痛藥`);
+    charPerkSummary.innerHTML = parts.length > 0
+      ? `🧬 <strong>已套用實驗室潛能加成</strong>：${parts.join(' ｜ ')}`
+      : `🧬 <strong>實驗室潛能</strong>：尚未激活（可於首頁「天賦潛能實驗室」消耗碎片強化）`;
+  }
+
+  charGrid.innerHTML = '';
+  CHARACTERS.forEach(ch => {
+    const card = document.createElement('button');
+    card.className = 'char-card';
+    card.innerHTML = `
+      <div class="char-card-top">
+        <span class="char-name">${ch.name} <small style="color:#94a3b8;font-weight:normal;">｜${ch.title}</small></span>
+        <span class="char-code">${ch.code}</span>
+      </div>
+      <div class="char-tags">
+        <span class="char-tag">🗡️ ${WEAPON_TYPES[ch.weaponType]}專精</span>
+        <span class="char-tag">HP ${ch.hp}</span>
+        <span class="char-tag">SP ${ch.sp}</span>
+        <span class="char-tag">攻 ${ch.atk}</span>
+        <span class="char-tag">防 ${ch.def}</span>
+        <span class="char-tag">初始：${GAME_DATA.items[ch.startWeapon].name}</span>
+      </div>
+      <div class="char-skill">
+        🔹 <strong>被動【${ch.passive.name}】</strong>：${ch.passive.desc}<br>
+        ✨ <strong>技能【${ch.skill.name}】</strong>：${ch.skill.desc}（${ch.skill.cost} SP / 冷卻 ${ch.skill.cd} 回合）
+      </div>
+    `;
+    card.onclick = () => { SFX.play('click'); initGame(ch.id); };
+    charGrid.appendChild(card);
+  });
+  charModal.classList.remove('hidden');
+}
+
+// ==================== 初始化 ====================
+function initGame(charId) {
+  const ch = CHARACTERS.find(c => c.id === charId) || CHARACTERS[0];
+  isGameOver = false;
+  actionCounter = 0;
+  restrictedAreas.clear();
+  warningAreas.clear();
+  pendingFoundItem = null;
+  currentLootItems = [];
+  activeEnemy = null;
+  selectedSlotIdx = null;
+  selectedEquipType = null;
+  boss = null;
+  airdrop = null;
+  playerTraps = [];
+  aiTraps = [];
+
+  const mastery = { blade: 0, blunt: 0, gun: 0, bow: 0, hand: 0 };
+  mastery[ch.weaponType] = 25; // 專精武器起始 E 級
+
+  const perkB = getActivePerkBonuses();
+  const initHp = ch.hp + perkB.hpBonus;
+  const initSp = ch.sp + perkB.spBonus;
+  const initAtk = ch.atk + perkB.atkBonus;
+  const initDef = ch.def + perkB.defBonus;
+  const startInv = ["water", "bandage", perkB.startPills ? "pills" : null, null, null, null];
+
+  // 隨機選擇玩家初始區域
+  const startArea = rand(GAME_DATA.areas).id;
+
+  player = {
+    char: ch,
+    name: ch.name,
+    hp: initHp, maxHp: initHp,
+    sp: initSp, maxSp: initSp,
+    baseAtk: initAtk, baseDef: initDef,
+    level: 1, exp: 0,
+    mastery,
+    skillCd: 0,
+    kills: 0, crafts: 0,
+    maxDmgHit: 0,
+    bossKilled: false,
+    stance: "normal",
+    area: startArea,
+    equipment: { weapon: ch.startWeapon, head: null, body: null, arm: null, leg: null, accessory: null },
+    inventory: startInv
+  };
+
+  const roster = AI_ROSTER.filter(r => r.id !== ch.id).slice(0, 9);
+  aiBots = roster.map((tpl, idx) => {
+    const bot = {
+      id: `ai_${idx}`,
+      charId: tpl.id,
+      name: tpl.name,
+      hp: tpl.hp, maxHp: tpl.hp,
+      baseAtk: tpl.atk, baseDef: tpl.def,
+      atk: tpl.atk, def: tpl.def,
+      masteryLv: 1,
+      stance: "stealth",
+      skill: { ...tpl.skill, curCd: 0 },
+      equipment: { weapon: tpl.startWeapon, head: null, body: null, arm: null, leg: null, accessory: null },
+      bag: [...tpl.bag],
+      buildTargets: [...tpl.buildTargets],
+      weaponName: GAME_DATA.items[tpl.startWeapon]?.name || "空手",
+      area: GAME_DATA.areas[Math.floor(Math.random() * GAME_DATA.areas.length)].id,
+      alive: true
+    };
+    aiAutoEquipBest(bot);
+    aiSyncStats(bot);
+    return bot;
+  });
+
+  // 隨機選擇第一個預告禁區
+  const initialWarningArea = rand(GAME_DATA.areas).id;
+  warningAreas.add(initialWarningArea);
+
+  combatLog.innerHTML = '';
+  discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
+  combatCard.classList.add('hidden');
+  gameoverModal.classList.add('hidden');
+  charModal.classList.add('hidden');
+  if (lobbyModal) lobbyModal.classList.add('hidden');
+
+  logMessage(`📢 [亞格萊雅廣播] 盧米亞島生存實驗開始 (8 區相鄰移動模式)！你是受試者【${player.name}】（降落於 [${areaName(startArea)}]）。`, 'sys-msg');
+  logMessage(`🧬 專精：${WEAPON_TYPES[ch.weaponType]}｜被動【${ch.passive.name}】｜技能【${ch.skill.name}】(戰鬥中按 Q)`, 'craft-msg');
+  logMessage(`⚠️ 第一階段禁區預告：[${areaName(initialWarningArea)}] 將於 12 次行動後封鎖！`, 'warn-msg');
+  logMessage('💡 點擊「🗺️ 移動 [M]」可開啟 3×3 戰術雷達圖（僅能移動至連線相鄰區域）！', 'gain-msg');
+  updateUI();
+}
+
+// ==================== 數值計算 ====================
+function getCurrentWeaponType() {
+  const w = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
+  return w ? w.subType : 'hand';
+}
+
+function getMasteryLevel(type) {
+  return Math.min(MASTERY_RANKS.length - 1, Math.floor(player.mastery[type] / 25));
+}
+
+function getMasteryLabel() {
+  const t = getCurrentWeaponType();
+  const lv = getMasteryLevel(t);
+  const pct = lv >= MASTERY_RANKS.length - 1 ? 100 : (player.mastery[t] % 25) * 4;
+  return `${WEAPON_TYPES[t]} ${MASTERY_RANKS[lv]} (${pct}%)`;
+}
+
+function addMastery() {
+  const t = getCurrentWeaponType();
+  const before = getMasteryLevel(t);
+  player.mastery[t] += (t === player.char.weaponType) ? 12 : 8;
+  const after = getMasteryLevel(t);
+  if (after > before) {
+    logMessage(`📈 [${WEAPON_TYPES[t]}] 熟練度提升至 ${MASTERY_RANKS[after]} 級！攻擊力上升！`, 'craft-msg');
+  }
+}
+
+function getPlayerAtk() {
+  let atk = player.baseAtk + getMasteryLevel(getCurrentWeaponType()) * 3;
+  const w = player.equipment.weapon ? GAME_DATA.items[player.equipment.weapon] : null;
+  if (w) atk += w.atk || 0;
+  const acc = player.equipment.accessory ? GAME_DATA.items[player.equipment.accessory] : null;
+  if (acc) atk += acc.atk || 0;
+  if (player.stance === "aggressive") atk = Math.round(atk * 1.15);
+  return atk;
+}
+
+function getPlayerDef() {
+  let def = player.baseDef;
+  ['head', 'body', 'arm', 'leg', 'accessory'].forEach(slot => {
+    const id = player.equipment[slot];
+    if (id && GAME_DATA.items[id]) def += GAME_DATA.items[id].def || 0;
+  });
+  if (player.stance === "aggressive") def = Math.max(0, Math.round(def * 0.85));
+  return def;
+}
+
+function getAliveCount() {
+  return 1 + aiBots.filter(b => b.alive).length;
+}
+
+function findItemDropAreas(itemId) {
+  const it = GAME_DATA.items[itemId];
+  if (it && it.rare) return itemId === 'vf_blood' ? ['Wickeline'] : ['空投/Boss'];
+  const list = [];
+  GAME_DATA.areas.forEach(a => {
+    if (a.items.includes(itemId)) list.push(a.name);
+    if (a.wild && a.wild.drop.includes(itemId)) list.push(`${a.name}(野怪)`);
+  });
+  return list;
+}
+
+function getAllPlayerItemIds() {
+  const ids = player.inventory.filter(Boolean);
+  EQUIP_SLOTS.forEach(s => { if (player.equipment[s]) ids.push(player.equipment[s]); });
+  return ids;
+}
+
+function hasRecipeMaterials(recipe, owned) {
+  const [m1, m2] = recipe.materials;
+  if (m1 === m2) return owned.filter(id => id === m1).length >= 2;
+  return owned.includes(m1) && owned.includes(m2);
+}
+
+function getAvailableRecipes() {
+  const owned = getAllPlayerItemIds();
+  return GAME_DATA.recipes
+    .filter(r => hasRecipeMaterials(r, owned))
+    .map(r => ({ ...r, resultName: GAME_DATA.items[r.result]?.name || r.result }));
+}
+
+// ==================== 介面渲染 ====================
+function updateUI() {
+  if (!player) return;
+  const ch = player.char;
+
+  hudName.innerText = player.name;
+  hudLevel.innerText = `Lv.${player.level}`;
+  hudAlive.innerText = `👤 ${getAliveCount()}/10`;
+  hudZoneTimer.innerText = `⏱️ ${ACTIONS_PER_PHASE - (actionCounter % ACTIONS_PER_PHASE)} 動`;
+
+  btnStance.className = 'stance-badge';
+  if (player.stance === 'aggressive') {
+    btnStance.classList.add('stance-aggressive');
+    btnStance.innerText = '⚔️ 進攻姿態';
+  } else if (player.stance === 'stealth') {
+    btnStance.classList.add('stance-stealth');
+    btnStance.innerText = '🥷 潛行姿態';
+  } else {
+    btnStance.innerText = '⚖️ 均衡姿態';
+  }
+
+  hpBar.style.width = `${Math.max(0, (player.hp / player.maxHp) * 100)}%`;
+  hpText.innerText = `HP ${player.hp} / ${player.maxHp}`;
+  spBar.style.width = `${Math.max(0, (player.sp / player.maxSp) * 100)}%`;
+  spText.innerText = `SP ${player.sp} / ${player.maxSp}`;
+
+  hudAtk.innerText = getPlayerAtk();
+  hudDef.innerText = getPlayerDef();
+  hudMastery.innerText = getMasteryLabel();
+  if (player.skillCd > 0) {
+    hudSkill.className = 'stat-chip skill-chip cd';
+    hudSkill.innerText = `✨ ${ch.skill.name} 冷卻 ${player.skillCd}`;
+  } else {
+    hudSkill.className = 'stat-chip skill-chip';
+    hudSkill.innerText = `✨ ${ch.skill.name} 就緒`;
+  }
+
+  // 6 格裝備欄
+  EQUIP_SLOTS.forEach(slot => {
+    const el = $(`eq-${slot}`);
+    const id = player.equipment[slot];
+    const it = id ? GAME_DATA.items[id] : null;
+    const meta = SLOT_META[slot];
+    el.className = `eq-slot ${it ? 'active-eq' : ''}`;
+    let stat = '';
+    if (it) {
+      if (it.type === 'weapon') stat = `+${it.atk}`;
+      else if (it.type === 'accessory') stat = `+${it.atk}/${it.def}`;
+      else stat = `+${it.def}`;
+    }
+    el.innerHTML = `${meta.icon} <span>${it ? `${it.name} ${stat}` : meta.empty}</span>`;
+    el.title = it ? `${it.desc}（點擊卸下）` : meta.empty;
+    el.onclick = () => openEquipModal(slot);
+  });
+
+  // 背包
+  inventoryGrid.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const slot = document.createElement('div');
+    const itemId = player.inventory[i];
+    const it = itemId ? GAME_DATA.items[itemId] : null;
+    slot.className = `inv-slot ${it ? 'occupied' : ''} ${it && it.rare ? 'rare-item' : ''}`;
+    if (it) {
+      slot.innerHTML = `<strong>${it.name}</strong><span class="slot-tag">${getItemTag(it)}</span>`;
+      slot.onclick = () => openItemModal(i);
+    } else {
+      slot.innerHTML = `<span style="color:#475569; font-size:0.7rem;">[${i + 1}]</span>`;
+    }
+    inventoryGrid.appendChild(slot);
+  }
+
+  // 合成
+  const available = getAvailableRecipes();
+  recipeList.innerHTML = '';
+  if (available.length === 0) {
+    recipeList.innerHTML = '<div class="no-recipe">湊齊材料自動浮現（可點「📖 配方圖鑑」查詢）</div>';
+  } else {
+    available.forEach(r => {
+      const resItem = GAME_DATA.items[r.result];
+      const chip = document.createElement('div');
+      chip.className = 'recipe-chip';
+      chip.innerHTML = `<span>🔨</span> <span>${r.resultName} (${getItemTag(resItem)})</span>`;
+      chip.onclick = () => craftItem(r.result);
+      recipeList.appendChild(chip);
+    });
+  }
+
+  // 區域
+  const curArea = GAME_DATA.areas.find(a => a.id === player.area);
+  if (curArea) {
+    areaTitle.innerText = curArea.name;
+    areaDesc.innerText = curArea.desc;
+    areaBanner.classList.remove('zone-warning-bg', 'zone-restricted-bg');
+    if (restrictedAreas.has(curArea.id)) {
+      areaZoneTag.className = 'zone-tag restricted';
+      areaZoneTag.innerText = '🚫 禁區封鎖 (手環電擊)';
+      areaBanner.classList.add('zone-restricted-bg');
+    } else if (warningAreas.has(curArea.id)) {
+      areaZoneTag.className = 'zone-tag warning';
+      areaZoneTag.innerText = '⚠️ 預告禁區';
+      areaBanner.classList.add('zone-warning-bg');
+    } else {
+      areaZoneTag.className = 'zone-tag safe';
+      areaZoneTag.innerText = '安全區';
+    }
+
+    const dropNames = curArea.items.map(id => GAME_DATA.items[id]?.name || id).join('、');
+    const aiHere = aiBots.filter(b => b.alive && b.area === curArea.id).length;
+    const myTraps = playerTraps.filter(t => t.area === curArea.id).length;
+    let html = `📦 <strong>區域物資</strong>：${dropNames}<br>🐾 <strong>野生生物</strong>：${curArea.wild.name} ｜ 📡 <strong>生命反應</strong>：${aiHere > 0 ? `<span style="color:#f87171;font-weight:bold;">偵測到 ${aiHere} 名受試者（休息可能遭突襲）</span>` : '周遭無其他受試者'}`;
+    if (myTraps > 0) html += `<br>🪤 你在此區域埋設了 ${myTraps} 個陷阱`;
+    if (airdrop && airdrop.area === curArea.id) html += `<br><span class="area-event-line">📦 補給空投就在附近！探索有機會找到</span>`;
+    if (boss && boss.alive && boss.area === curArea.id) html += `<br><span class="area-boss-line">👹 Wickeline 博士在此區域徘徊！(HP ${boss.hp}/${boss.maxHp})</span>`;
+    areaDropsHint.innerHTML = html;
+  }
+}
+
+// ==================== 戰利品搜刮區 ====================
+function openLoot(title, items) {
+  currentLootItems = [...items];
+  lootTitle.innerText = `${title} (${currentLootItems.length} 件)`;
+  renderLootCard();
+}
+
+function renderLootCard() {
+  if (!currentLootItems || currentLootItems.length === 0) {
+    lootCard.classList.add('hidden');
+    return;
+  }
+  lootGrid.innerHTML = '';
+  currentLootItems.forEach((itemId, idx) => {
+    const it = GAME_DATA.items[itemId];
+    if (!it) return;
+    const btn = document.createElement('button');
+    btn.className = 'loot-item-btn';
+    btn.innerHTML = `<span>${it.rare ? '⭐' : '📦'} <strong>${it.name}</strong></span><span class="loot-item-tag">${getItemTag(it)}</span>`;
+    btn.onclick = () => pickupLootItem(idx);
+    lootGrid.appendChild(btn);
+  });
+  lootCard.classList.remove('hidden');
+}
+
+function pickupLootItem(lootIdx) {
+  const itemId = currentLootItems[lootIdx];
+  if (!itemId) return;
+  const emptyIdx = player.inventory.findIndex(s => s === null);
+  if (emptyIdx === -1) {
+    logMessage('⚠️ 背包已滿！可先使用或丟棄背包物品，再繼續拾取戰利品。', 'warn-msg');
+    return;
+  }
+  SFX.play('pickup');
+  player.inventory[emptyIdx] = itemId;
+  currentLootItems.splice(lootIdx, 1);
+  logMessage(`📥 拾取了 [${GAME_DATA.items[itemId].name}]！`, 'gain-msg');
+  if (currentLootItems.length === 0) {
+    lootCard.classList.add('hidden');
+    logMessage('✨ 已搜刮完所有戰利品。', 'sys-msg');
+  } else {
+    renderLootCard();
+  }
+  updateUI();
+}
+
+btnCloseLoot.onclick = () => {
+  if (currentLootItems.length > 0) logMessage('🚪 離開了現場，放棄剩餘的戰利品。', 'sys-msg');
+  currentLootItems = [];
+  lootCard.classList.add('hidden');
+};
+
+// ==================== 空投 / Boss / 陷阱 ====================
+function spawnAirdrop() {
+  const candidates = safeAreas().filter(id => !warningAreas.has(id));
+  if (candidates.length === 0) return;
+  const items = [rand(RARE_MATS), rand(['first_aid_kit', 'herbal_tea', 'steak', 'flower_tea'])];
+  if (Math.random() < 0.4) items.push(rand(RARE_MATS));
+  airdrop = { area: rand(candidates), items };
+  logMessage(`📦 [空投廣播] 補給空投降落於 [${areaName(airdrop.area)}]！內含稀有素材，其他受試者也會爭奪！`, 'craft-msg');
+}
+
+function spawnBoss() {
+  const candidates = safeAreas().filter(id => !warningAreas.has(id));
+  const area = candidates.length > 0 ? rand(candidates) : rand(safeAreas());
+  boss = {
+    name: "Wickeline 博士",
+    hp: 420, maxHp: 420, atk: 36, def: 20,
+    area, alive: true,
+    drop: ["vf_blood", "mithril", "meteorite", "tree_of_life", "first_aid_kit"]
+  };
+  logMessage(`👹 [緊急廣播] 實驗失控！VF 變異體「Wickeline 博士」出現在 [${areaName(area)}]！擊敗可取得 VF 血液與傳說素材！`, 'warn-msg');
+}
+
+// 玩家踩到 AI 陷阱檢定；回傳 true 代表玩家死亡
+function checkEnemyTrap(baseChance) {
+  const idx = aiTraps.findIndex(t => t.area === player.area);
+  if (idx === -1) return false;
+  let chance = baseChance;
+  if (player.stance === 'stealth') chance *= 0.5;
+  if (Math.random() >= chance) return false;
+  const trap = aiTraps.splice(idx, 1)[0];
+  const dmg = applyDamageToPlayer(trap.dmg);
+  logMessage(`💥 你踩中了 ${trap.ownerName} 埋設的 [${trap.name}]！(-${dmg} HP)`, 'warn-msg');
+  if (player.hp <= 0) {
+    triggerGameOver(false, `踩中 ${trap.ownerName} 埋設的${trap.name}身亡。`);
+    return true;
+  }
+  return false;
+}
+
+// ==================== AI 擬真決策系統 (AI Brain v2.0：Level 1 路徑合成 + Level 2 智慧戰鬥) ====================
+function aiGetOwnedIds(bot) {
+  const list = [...bot.bag.filter(Boolean)];
+  EQUIP_SLOTS.forEach(s => { if (bot.equipment[s]) list.push(bot.equipment[s]); });
+  return list;
+}
+
+function aiSyncStats(bot) {
+  let atk = bot.baseAtk + bot.masteryLv * 3;
+  const wId = bot.equipment.weapon;
+  const wItem = wId ? GAME_DATA.items[wId] : null;
+  if (wItem) atk += wItem.atk || 0;
+  const accId = bot.equipment.accessory;
+  const accItem = accId ? GAME_DATA.items[accId] : null;
+  if (accItem) atk += accItem.atk || 0;
+  if (bot.stance === 'aggressive') atk = Math.round(atk * 1.1);
+
+  let def = bot.baseDef;
+  ['head', 'body', 'arm', 'leg', 'accessory'].forEach(slot => {
+    const id = bot.equipment[slot];
+    if (id && GAME_DATA.items[id]) def += GAME_DATA.items[id].def || 0;
+  });
+
+  bot.atk = atk;
+  bot.def = def;
+  bot.weaponName = wItem ? wItem.name : '空手';
+}
+
+function aiAutoEquipBest(bot) {
+  for (let i = bot.bag.length - 1; i >= 0; i--) {
+    const id = bot.bag[i];
+    const it = GAME_DATA.items[id];
+    if (!it) continue;
+    const slot = getEquipSlot(it);
+    if (!slot) continue;
+
+    const curId = bot.equipment[slot];
+    const curIt = curId ? GAME_DATA.items[curId] : null;
+    const newScore = (it.atk || 0) + (it.def || 0);
+    const curScore = curIt ? ((curIt.atk || 0) + (curIt.def || 0)) : -1;
+
+    if (newScore > curScore) {
+      bot.equipment[slot] = id;
+      bot.bag.splice(i, 1);
+      // 若換下來的舊裝備是未來合成原料則留著，否則淘汰避免塞滿背包
+      if (curId && GAME_DATA.recipes.some(r => r.materials.includes(curId)) && bot.bag.length < 6) {
+        bot.bag.push(curId);
+      }
+    }
+  }
+  aiSyncStats(bot);
+}
+
+// 遞迴拆解目標物品缺少的基礎採集材料 (Level 1 導航核心)
+function aiGetMissingLeafMaterials(bot, targetId, depth = 0) {
+  if (depth > 4) return [];
+  const owned = aiGetOwnedIds(bot);
+  if (owned.includes(targetId)) return [];
+
+  const recipe = GAME_DATA.recipes.find(r => r.result === targetId);
+  if (!recipe) return [targetId];
+
+  const missing = [];
+  recipe.materials.forEach(m => {
+    if (!owned.includes(m)) {
+      const sub = aiGetMissingLeafMaterials(bot, m, depth + 1);
+      missing.push(...(sub.length > 0 ? sub : [m]));
+    }
+  });
+  return missing;
+}
+
+function aiGetNeededMaterials(bot) {
+  for (const targetId of bot.buildTargets) {
+    const owned = aiGetOwnedIds(bot);
+    if (!owned.includes(targetId)) {
+      const leaves = aiGetMissingLeafMaterials(bot, targetId);
+      if (leaves.length > 0) return leaves;
+    }
+  }
+  return ['bandage', 'pills', 'meat', 'lighter'];
+}
+
+function aiConsumeItem(bot, matId) {
+  const bIdx = bot.bag.indexOf(matId);
+  if (bIdx !== -1) {
+    bot.bag.splice(bIdx, 1);
+    return true;
+  }
+  for (const s of EQUIP_SLOTS) {
+    if (bot.equipment[s] === matId) {
+      bot.equipment[s] = null;
+      return true;
+    }
+  }
+  return false;
+}
+
+// AI 自動檢查並執行裝備與補給合成
+function aiTryCraft(bot) {
+  let craftedAny = false;
+  for (let loop = 0; loop < 3; loop++) {
+    const owned = aiGetOwnedIds(bot);
+    const match = GAME_DATA.recipes.find(r => hasRecipeMaterials(r, owned));
+    if (!match) break;
+
+    aiConsumeItem(bot, match.materials[0]);
+    aiConsumeItem(bot, match.materials[1]);
+    bot.bag.push(match.result);
+    bot.masteryLv = Math.min(7, bot.masteryLv + 0.35);
+    craftedAny = true;
+
+    const resItem = GAME_DATA.items[match.result];
+    if (resItem && resItem.type === 'weapon' && resItem.atk >= 36 && Math.random() < 0.65) {
+      logMessage(`📡 [情報] 偵測到 ${bot.name} 已合成高階武器【${resItem.name}】！`, 'sys-msg');
+    }
+    aiAutoEquipBest(bot);
+  }
+  return craftedAny;
+}
+
+// Level 2：AI 自動吃藥回血決策
+function aiTryHeal(bot, inCombat = false) {
+  const threshold = inCombat ? 0.48 : 0.68;
+  if (bot.hp > bot.maxHp * threshold) return null;
+
+  let bestIdx = -1;
+  let bestHeal = 0;
+  bot.bag.forEach((id, idx) => {
+    const it = GAME_DATA.items[id];
+    if (it && it.type === 'consumable' && it.heal_hp && it.heal_hp > bestHeal) {
+      bestHeal = it.heal_hp;
+      bestIdx = idx;
+    }
+  });
+
+  if (bestIdx === -1) return null;
+  const itemId = bot.bag.splice(bestIdx, 1)[0];
+  const it = GAME_DATA.items[itemId];
+  bot.hp = Math.min(bot.maxHp, bot.hp + it.heal_hp);
+  return it;
+}
+
+// Level 2：AI 動態姿態切換
+function aiUpdateStance(bot) {
+  const wId = bot.equipment.weapon;
+  const wAtk = (wId && GAME_DATA.items[wId]) ? GAME_DATA.items[wId].atk : 0;
+  if (bot.hp < bot.maxHp * 0.45 || wAtk < 24) {
+    bot.stance = 'stealth';
+  } else if (bot.hp > bot.maxHp * 0.7 && wAtk >= 32) {
+    bot.stance = 'aggressive';
+  } else {
+    bot.stance = 'normal';
+  }
+  aiSyncStats(bot);
+}
+
+// Level 1：AI 目標導向區域導航（含 Phase 2.9 BFS 相鄰路線尋路）
+function aiChooseNextArea(bot, safeIds) {
+  if (safeIds.length === 0) return bot.area;
+
+  const inDanger = restrictedAreas.has(bot.area) || warningAreas.has(bot.area);
+  let targetId = bot.area;
+
+  // 1. 殘血時優先找安全區域避戰
+  if (bot.hp < bot.maxHp * 0.45) {
+    const quietSafe = safeIds.filter(id => id !== player.area && !warningAreas.has(id));
+    if (quietSafe.length > 0) targetId = rand(quietSafe);
+  } else if (airdrop && safeIds.includes(airdrop.area) && bot.hp > bot.maxHp * 0.65 && Math.random() < 0.45) {
+    // 2. 空投爭奪（狀態良好且為進攻/均衡姿態）
+    targetId = airdrop.area;
+  } else {
+    // 3. 目標合成材料導航
+    const needed = aiGetNeededMaterials(bot);
+    const curAreaObj = GAME_DATA.areas.find(a => a.id === bot.area);
+    // 若當前區域安全且正產出所需材料，70% 機率留在原地繼續搜刮
+    if (!inDanger && curAreaObj && needed.some(m => curAreaObj.items.includes(m)) && Math.random() < 0.7) {
+      return bot.area;
+    }
+
+    // 尋找有產出所需材料的安全區
+    const matchingAreas = safeIds.filter(aId => {
+      if (warningAreas.has(aId)) return false;
+      const aObj = GAME_DATA.areas.find(a => a.id === aId);
+      return aObj && needed.some(m => aObj.items.includes(m));
+    });
+    if (matchingAreas.length > 0) {
+      targetId = rand(matchingAreas);
+    } else {
+      targetId = inDanger ? rand(safeIds) : (Math.random() < 0.35 ? rand(safeIds) : bot.area);
+    }
+  }
+
+  if (targetId === bot.area) return bot.area;
+  const path = findShortestPath(bot.area, targetId, true);
+  return path.length > 1 ? path[1] : path[0];
+}
+
+// 取得 AI 死亡後的真實裝備與遺物清單
+function aiGetCorpseLoot(bot) {
+  const loot = [];
+  EQUIP_SLOTS.forEach(s => {
+    if (bot.equipment[s]) loot.push(bot.equipment[s]);
+  });
+  bot.bag.forEach(id => {
+    if (id && !loot.includes(id)) loot.push(id);
+  });
+  // 依稀有度與數值排序，取前 5 件最精華遺物
+  loot.sort((a, b) => {
+    const ia = GAME_DATA.items[a] || {};
+    const ib = GAME_DATA.items[b] || {};
+    const scoreA = (ia.rare ? 100 : 0) + (ia.atk || 0) + (ia.def || 0) + (ia.heal_hp || 0) * 0.5;
+    const scoreB = (ib.rare ? 100 : 0) + (ib.atk || 0) + (ib.def || 0) + (ib.heal_hp || 0) * 0.5;
+    return scoreB - scoreA;
+  });
+  return loot.slice(0, 5);
+}
+
+// ==================== 世界推進 ====================
+function advanceWorldTick() {
+  if (isGameOver) return;
+  actionCounter++;
+  if (player.skillCd > 0) player.skillCd--;
+
+  // 禁區電擊
+  if (restrictedAreas.has(player.area)) {
+    const dmg = applyDamageToPlayer(25);
+    logMessage(`⚡ 你滯留在已封鎖禁區，手環釋放高壓電流 (-${dmg} HP)！請立即移動！`, 'warn-msg');
+    if (player.hp <= 0) {
+      triggerGameOver(false, '滯留禁區過久，遭生命監控手環引爆淘汰。');
+      return;
+    }
+  }
+
+  const safeIds = safeAreas();
+
+  // AI 擬真行動循環：吃藥/休息 -> 目標導航移動 -> 採集目標材料 -> 合成與穿戴裝備 -> 切換姿態
+  aiBots.forEach(bot => {
+    if (!bot.alive) return;
+    if (bot.skill.curCd > 0) bot.skill.curCd--;
+
+    // 非戰鬥狀態下若受傷，優先吃補品或休息回血
+    if (bot.hp < bot.maxHp * 0.65) {
+      const healed = aiTryHeal(bot, false);
+      if (!healed && bot.hp < bot.maxHp * 0.5) {
+        bot.hp = Math.min(bot.maxHp, bot.hp + 18);
+      }
+    }
+
+    // 智慧移動導航
+    bot.area = aiChooseNextArea(bot, safeIds);
+
+    // 在所在區域進行目標導向採集
+    const areaObj = GAME_DATA.areas.find(a => a.id === bot.area);
+    if (areaObj) {
+      const needed = aiGetNeededMaterials(bot);
+      const targetMatInArea = areaObj.items.filter(id => needed.includes(id));
+      // 若該區有此 AI 合成路線所需的材料，高機率精準搜出該材料
+      const picked = (targetMatInArea.length > 0 && Math.random() < 0.72)
+        ? rand(targetMatInArea)
+        : rand(areaObj.items);
+
+      if (bot.bag.length >= 6) {
+        // 清理非合成路線的低階雜物
+        const dropIdx = bot.bag.findIndex(id => !needed.includes(id) && GAME_DATA.items[id]?.type === 'material');
+        if (dropIdx !== -1) bot.bag.splice(dropIdx, 1);
+        else bot.bag.shift();
+      }
+      bot.bag.push(picked);
+    }
+
+    // 嘗試合成裝備、擇優穿戴與更新姿態
+    aiTryCraft(bot);
+    aiAutoEquipBest(bot);
+    if (actionCounter % 6 === 0) {
+      bot.masteryLv = Math.min(7, bot.masteryLv + 0.5);
+      bot.maxHp += 4;
+      bot.hp = Math.min(bot.maxHp, bot.hp + 6);
+    }
+    aiUpdateStance(bot);
+
+    // 若 AI 合成出陷阱，自動埋設於當前區域
+    const trapIdx = bot.bag.findIndex(id => GAME_DATA.items[id]?.type === 'trap');
+    if (trapIdx !== -1 && aiTraps.length < 5 && !restrictedAreas.has(bot.area)) {
+      const trapId = bot.bag.splice(trapIdx, 1)[0];
+      const trapIt = GAME_DATA.items[trapId];
+      aiTraps.push({ area: bot.area, dmg: trapIt.dmg, name: trapIt.name, ownerName: bot.name });
+    }
+  });
+
+  // 玩家陷阱觸發
+  aiBots.forEach(bot => {
+    if (!bot.alive) return;
+    const tIdx = playerTraps.findIndex(t => t.area === bot.area);
+    if (tIdx !== -1 && Math.random() < 0.6) {
+      const t = playerTraps.splice(tIdx, 1)[0];
+      bot.hp -= t.dmg;
+      if (bot.hp <= 0) {
+        bot.alive = false;
+        player.kills += 1;
+        gainExp(35);
+        logMessage(`🪤 [陷阱擊殺] ${bot.name} 踩中你在 [${areaName(t.area)}] 的 [${t.name}] 當場死亡！(剩餘 ${getAliveCount()} 人)`, 'craft-msg');
+      } else {
+        logMessage(`🪤 ${bot.name} 踩中你在 [${areaName(t.area)}] 的 [${t.name}]！(-${t.dmg} HP)`, 'combat-msg');
+      }
+    }
+  });
+  if (checkVictory()) return;
+
+  // AI 互相交戰（進攻姿態 AI 優先發起戰鬥，並支援吃藥與掠奪裝備）
+  const aliveBots = aiBots.filter(b => b.alive);
+  if (aliveBots.length >= 2 && Math.random() < 0.30) {
+    const aggressiveBots = aliveBots.filter(b => b.stance === 'aggressive');
+    const attacker = aggressiveBots.length > 0 ? rand(aggressiveBots) : rand(aliveBots);
+    const others = aliveBots.filter(b => b.id !== attacker.id && (b.area === attacker.area || Math.random() < 0.3));
+    if (others.length > 0) {
+      const victim = rand(others);
+      const useSkill = attacker.skill.curCd <= 0 && Math.random() < 0.5;
+      const mult = useSkill ? attacker.skill.mult : 1;
+      if (useSkill) attacker.skill.curCd = attacker.skill.cd;
+
+      const dmg = Math.max(12, Math.round((attacker.atk - victim.def * 0.45) * mult));
+      victim.hp -= dmg;
+      attacker.masteryLv = Math.min(7, attacker.masteryLv + 0.4);
+
+      if (victim.hp > 0 && victim.hp < victim.maxHp * 0.45) {
+        aiTryHeal(victim, true);
+      }
+
+      if (victim.hp <= 0) {
+        victim.alive = false;
+        // 擊殺者搜刮死者最佳遺物並自動換裝
+        const victimLoot = aiGetCorpseLoot(victim);
+        if (victimLoot.length > 0) {
+          attacker.bag.push(victimLoot[0]);
+          aiAutoEquipBest(attacker);
+        }
+        logMessage(`💀 [擊殺廣播] ${attacker.name} 以【${attacker.weaponName}】在 [${areaName(victim.area)}] 擊殺了 ${victim.name}！(剩餘 ${getAliveCount()} 人)`, 'combat-msg');
+        if (checkVictory()) return;
+      }
+    }
+  }
+
+  // 空投爭奪 / 銷毀
+  if (airdrop) {
+    if (restrictedAreas.has(airdrop.area)) {
+      logMessage(`📦 [${areaName(airdrop.area)}] 的空投因禁區封鎖而遭銷毀。`, 'sys-msg');
+      airdrop = null;
+    } else {
+      const grabbers = aiBots.filter(b => b.alive && b.area === airdrop.area);
+      if (grabbers.length > 0 && Math.random() < 0.22) {
+        const g = rand(grabbers);
+        g.bag.push(...airdrop.items);
+        aiTryCraft(g);
+        aiAutoEquipBest(g);
+        logMessage(`📦 [空投廣播] ${g.name} 奪取了 [${areaName(airdrop.area)}] 的空投補給！`, 'warn-msg');
+        airdrop = null;
+      }
+    }
+  }
+
+  // Boss 行為
+  if (boss && boss.alive) {
+    boss.hp = Math.min(boss.maxHp, boss.hp + 5);
+    if ((restrictedAreas.has(boss.area) || warningAreas.has(boss.area)) && safeIds.length > 0) {
+      boss.area = rand(safeIds);
+      logMessage(`👹 Wickeline 博士移動到了 [${areaName(boss.area)}]！`, 'warn-msg');
+    }
+    const preys = aiBots.filter(b => b.alive && b.area === boss.area);
+    if (preys.length > 0 && Math.random() < 0.1) {
+      const prey = rand(preys);
+      prey.alive = false;
+      logMessage(`👹 [擊殺廣播] Wickeline 博士在 [${areaName(boss.area)}] 撕碎了 ${prey.name}！(剩餘 ${getAliveCount()} 人)`, 'warn-msg');
+      if (checkVictory()) return;
+    }
+  }
+
+  // 禁區階段推進
+  if (actionCounter % ACTIONS_PER_PHASE === 0) {
+    SFX.play('alarm');
+    warningAreas.forEach(aId => {
+      restrictedAreas.add(aId);
+      logMessage(`🚫 [禁區封鎖] [${areaName(aId)}] 已正式封鎖！停留將遭受手環電擊！`, 'warn-msg');
+    });
+    warningAreas.clear();
+
+    const remainingSafe = safeAreas();
+    if (remainingSafe.length > 1) {
+      const nextWarn = rand(remainingSafe);
+      warningAreas.add(nextWarn);
+      logMessage(`⚠️ [禁區預告] 下一個封鎖區域：[${areaName(nextWarn)}] (${ACTIONS_PER_PHASE} 動後)`, 'warn-msg');
+      spawnAirdrop();
+    } else if (remainingSafe.length === 1) {
+      logMessage(`🔥 [最終決戰] 全島僅剩 [${areaName(remainingSafe[0])}] 為安全區！`, 'combat-msg');
+    }
+
+    if (actionCounter === BOSS_SPAWN_ACTION && !boss) spawnBoss();
+  }
+}
+
+function checkVictory() {
+  if (isGameOver) return true;
+  if (getAliveCount() <= 1 && player.hp > 0) {
+    triggerGameOver(true, '所有競爭受試者皆已淘汰，你成為盧米亞島唯一倖存者！');
+    return true;
+  }
+  return false;
+}
+
+function triggerGameOver(isWin, reasonText) {
+  isGameOver = true;
+  activeEnemy = null;
+  combatCard.classList.add('hidden');
+  SFX.play(isWin ? 'win' : 'lose');
+  const rank = isWin ? 1 : getAliveCount();
+  gameoverTitle.innerText = isWin ? '🏆 唯一倖存者 (第 1 名)！' : `💀 實驗淘汰 (第 ${rank} 名 / 10 人)`;
+  gameoverTitle.style.color = isWin ? '#facc15' : '#ef4444';
+  gameoverDesc.innerText = reasonText;
+
+  // 紀錄並同步本機生涯數據
+  const career = recordGameResult(isWin, player?.kills || 0, !!player?.bossKilled, player?.maxDmgHit || 0);
+
+  // 計算雙軌貨幣獎勵：🔹 VF 數據碎片 + 💠 亞格萊雅核心晶片 (擊殺 Wickeline 並吃雞保底 +1)
+  const earnedShards = 15 + Math.max(0, 10 - rank) * 8 + ((player?.kills || 0) * 12) + ((player?.crafts || 0) * 3) + (player?.bossKilled ? 40 : 0);
+  const earnedChips = (isWin && player?.bossKilled) ? 1 : 0;
+  const pData = getPerksData();
+  pData.shards += earnedShards;
+  pData.chips += earnedChips;
+  savePerksData(pData);
+
+  const eqNames = EQUIP_SLOTS
+    .map(s => player.equipment[s] ? GAME_DATA.items[player.equipment[s]].name : null)
+    .filter(Boolean).join(' / ') || '無';
+
+  gameoverStats.innerHTML = `
+    <div>🧬 <strong>角色</strong>：${player.name}</div>
+    <div>🎖️ <strong>最終排名</strong>：第 ${rank} 名 / 10 人</div>
+    <div>⚔️ <strong>擊殺</strong>：${player.kills} ｜ <strong>單次最高傷</strong>：${player.maxDmgHit || 0} ｜ ${getMasteryLabel()}</div>
+    <div>🔨 <strong>合成</strong>：${player.crafts} 次 ｜ <strong>總行動</strong>：${actionCounter} 動</div>
+    <div>🛡️ <strong>最終裝備</strong>：${eqNames}</div>
+    <div style="margin-top:6px; padding:6px 8px; border-radius:6px; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.35); color:#e9d5ff; font-size:0.78rem;">
+      🎁 <strong>本局實驗結算獎勵</strong>：獲得 <strong style="color:#38bdf8;">+${earnedShards} 🔹 VF 數據碎片</strong>${earnedChips > 0 ? ` ＋ <strong style="color:#d8b4fe;">+${earnedChips} 💠 亞格萊雅核心晶片</strong>` : ''}<br>
+      <span style="font-size:0.72rem; color:#cbd5e1;">（當前持有：${pData.shards} 🔹 碎片 ／ ${pData.chips} 💠 晶片，可至首頁「天賦潛能實驗室」升級）</span>
+    </div>
+    <div style="margin-top:6px; padding-top:6px; border-top:1px dashed #334155; color:#94a3b8; font-size:0.75rem;">
+      🏆 生涯累計：共 ${career.games} 場 ｜ 吃雞 ${career.wins} 次 ｜ 總擊殺 ${career.kills} 人 (已自動保存)
+    </div>
+  `;
+  gameoverModal.classList.remove('hidden');
+}
+
+// ==================== 遭遇戰 ====================
+function spawnEnemyEncounter(isAmbush = false) {
+  const curArea = GAME_DATA.areas.find(a => a.id === player.area);
+  const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
+  const bossHere = boss && boss.alive && boss.area === player.area;
+
+  if (bossHere && Math.random() < 0.45) {
+    activeEnemy = {
+      isAI: false, isBoss: true, ref: boss,
+      name: boss.name, hp: boss.hp, maxHp: boss.maxHp,
+      atk: boss.atk, def: boss.def, exp: 120, drop: boss.drop
+    };
+  } else if (aiInArea.length > 0 && (Math.random() < 0.7 || isAmbush || restrictedAreas.size >= GAME_DATA.areas.length - 1)) {
+    const bot = rand(aiInArea);
+    activeEnemy = {
+      isAI: true, ref: bot,
+      name: bot.name, hp: bot.hp, maxHp: bot.maxHp,
+      atk: bot.atk, def: bot.def, weaponName: bot.weaponName
+    };
+  } else {
+    const w = curArea.wild;
+    activeEnemy = {
+      isAI: false, name: w.name, hp: w.hp, maxHp: w.maxHp,
+      atk: w.atk, def: w.def, exp: w.exp, drop: w.drop
+    };
+  }
+
+  if (isAmbush) {
+    const dmg = applyDamageToPlayer(Math.max(6, (activeEnemy.atk - getPlayerDef() * 0.4) * 1.15));
+    logMessage(`💥 突襲警報！你在毫無防備下遭到 [${activeEnemy.name}] 偷襲 (-${dmg} HP)！`, 'warn-msg');
+    renderCombatCard(`遭到 [${activeEnemy.name}] 先手突襲 (-${dmg} HP)！請立即反擊或撤退！`);
+    if (player.hp <= 0) triggerGameOver(false, `休息時遭到 [${activeEnemy.name}] 致命偷襲身亡。`);
+  } else {
+    let msg = `🐾 探索時驚動了野生生物 [${activeEnemy.name}]！`;
+    if (activeEnemy.isAI) msg = `🚨 遭遇敵方受試者 [${activeEnemy.name}] (持有:${activeEnemy.weaponName})！`;
+    if (activeEnemy.isBoss) msg = `👹 你遭遇了首領級變異體 [${activeEnemy.name}]！`;
+    logMessage(msg, 'combat-msg');
+    renderCombatCard('敵人正準備發動攻擊，請選擇交戰、技能或撤退！');
+  }
+}
+
+function renderCombatCard(descText) {
+  if (!activeEnemy) {
+    combatCard.classList.add('hidden');
+    return;
+  }
+  if (activeEnemy.isBoss) {
+    enemyTag.innerText = '👹 首領級變異體';
+  } else if (activeEnemy.isAI) {
+    const stMap = { aggressive: '⚔️進攻', stealth: '🥷潛行', normal: '⚖️均衡' };
+    const stLabel = activeEnemy.ref ? (stMap[activeEnemy.ref.stance] || '') : '';
+    enemyTag.innerText = `🚨 受試者｜手持：${activeEnemy.weaponName} ${stLabel}`;
+  } else {
+    enemyTag.innerText = '🐾 野生動物';
+  }
+  enemyStats.innerText = `攻 ${activeEnemy.atk} / 防 ${activeEnemy.def}`;
+  enemyName.innerText = activeEnemy.name;
+  enemyHpText.innerText = `HP ${activeEnemy.hp}/${activeEnemy.maxHp}`;
+  enemyHpBar.style.width = `${Math.max(0, (activeEnemy.hp / activeEnemy.maxHp) * 100)}%`;
+  combatRoundDesc.innerText = descText;
+
+  const sk = player.char.skill;
+  const ready = player.skillCd <= 0 && player.sp >= sk.cost;
+  btnSkill.disabled = !ready;
+  btnSkill.innerText = player.skillCd > 0 ? `✨ ${sk.name} (${player.skillCd})` : `✨ ${sk.name} [Q]`;
+  btnFlee.innerText = '🏃 撤退 -5SP [Esc]';
+  combatCard.classList.remove('hidden');
+}
+
+// ==================== 探索 ====================
+function doSearch() {
+  if (isGameOver) return;
+  if (activeEnemy) {
+    logMessage('⚠️ 正在遭遇敵襲！請先交戰或撤退！', 'warn-msg');
+    return;
+  }
+  const spCost = playerHasPassive('swift') ? 4 : 5;
+  if (player.sp < spCost) {
+    logMessage(`精力不足（需 ${spCost} SP），請休息或飲用飲料！`, 'warn-msg');
+    return;
+  }
+
+  SFX.play('search');
+  player.sp = Math.max(0, player.sp - spCost);
+  discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
+  pendingFoundItem = null;
+  currentLootItems = [];
+
+  // 生命墜飾被動【生生不息】：行動額外回復 4 HP
+  if (playerHasPassive('regen') && player.hp < player.maxHp) {
+    player.hp = Math.min(player.maxHp, player.hp + 4);
+    showFloatingText('+4 HP 生命墜飾', 'dmg-heal');
+  }
+
+  if (checkEnemyTrap(0.15)) return;
+
+  const curArea = GAME_DATA.areas.find(a => a.id === player.area);
+  const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
+  const bossHere = boss && boss.alive && boss.area === player.area;
+
+  let combatChance = 0.28;
+  if (player.stance === 'aggressive') combatChance = 0.55;
+  if (player.stance === 'stealth') combatChance = 0.12;
+  if (bossHere) combatChance = Math.max(combatChance, 0.4);
+  if (restrictedAreas.size >= GAME_DATA.areas.length - 1 && aiInArea.length > 0) combatChance = 0.75;
+
+  if (Math.random() < combatChance) {
+    spawnEnemyEncounter(false);
+  } else if (airdrop && airdrop.area === player.area && Math.random() < 0.55) {
+    logMessage(`📦 你找到了補給空投箱！`, 'craft-msg');
+    openLoot('📦 補給空投箱', airdrop.items);
+    airdrop = null;
+  } else {
+    const foundId = rand(curArea.items);
+    const itemData = GAME_DATA.items[foundId];
+    pendingFoundItem = { id: foundId, ...itemData };
+    discItemName.innerText = itemData.name;
+    discItemDesc.innerText = itemData.desc;
+    discoveryCard.classList.remove('hidden');
+    logMessage(`📦 探索發現了 [${itemData.name}]！`, 'gain-msg');
+  }
+
+  advanceWorldTick();
+  updateUI();
+}
+
+// ==================== 戰鬥 ====================
+function doAttack(useSkill = false) {
+  if (!activeEnemy || isGameOver) return;
+  const ch = player.char;
+
+  let mult = 1, ignoreDef = false, noCounter = false, hits = 1, hitMult = 1;
+  if (useSkill) {
+    if (player.skillCd > 0) {
+      logMessage(`⏳ 技能【${ch.skill.name}】冷卻中（剩餘 ${player.skillCd} 回合）。`, 'warn-msg');
+      return;
+    }
+    if (player.sp < ch.skill.cost) {
+      logMessage(`⚠️ 精力不足，發動【${ch.skill.name}】需 ${ch.skill.cost} SP。`, 'warn-msg');
+      return;
+    }
+    player.sp -= ch.skill.cost;
+    // 秘銀頭冠被動【冷靜】：主動技能 CD -1
+    const cdReduc = playerHasPassive('cooldown') ? 1 : 0;
+    player.skillCd = Math.max(2, ch.skill.cd - cdReduc);
+
+    if (ch.id === 'jackie') mult = 1.8;
+    if (ch.id === 'aya') { hits = 2; hitMult = 0.8; }
+    if (ch.id === 'hyunwoo') { mult = 1.3; noCounter = true; }
+    if (ch.id === 'nadine') { mult = 1.5; ignoreDef = true; }
+    if (ch.id === 'magnus') { mult = 1.5; noCounter = true; }
+    if (ch.id === 'hyejin') {
+      mult = 1.45;
+      noCounter = true;
+      player.hp = Math.min(player.maxHp, player.hp + 12);
+      showFloatingText('+12 HP 吸靈符', 'dmg-heal');
+    }
+    if (ch.id === 'sua') {
+      mult = 1.6;
+      player.hp = Math.min(player.maxHp, player.hp + 15);
+      showFloatingText('+15 HP 青鳥之書', 'dmg-heal');
+    }
+    logMessage(`✨ 發動技能【${ch.skill.name}】！`, 'craft-msg');
+  } else if (player.skillCd > 0) {
+    player.skillCd--;
+  }
+
+  // 被動加成
+  let passiveMult = 1;
+  if (ch.id === 'nadine' && !activeEnemy.isAI) passiveMult = 1.3;
+  if (ch.id === 'magnus' && activeEnemy.isAI) passiveMult = 1.15;
+  let critRate = (player.stance === 'aggressive' ? 0.25 : 0.15) + (getActivePerkBonuses().critBonus || 0);
+  if (ch.id === 'aya') critRate += 0.10;
+  if (ch.id === 'hyejin') critRate += 0.08;
+
+  // 隕星拳套被動【爆裂連擊】：30% 追加一次打擊
+  if (playerHasPassive('combo') && Math.random() < 0.3) {
+    hits += 1;
+    logMessage('🥊 隕星拳套【爆裂連擊】發動，追加一次打擊！', 'gain-msg');
+  }
+
+  const pAtk = getPlayerAtk();
+  let total = 0;
+  let critAny = false;
+  const critMultiplier = playerHasPassive('crush') ? 1.85 : 1.4; // 隕星破滅鎚被動【重創】
+
+  for (let h = 0; h < hits; h++) {
+    let defPart = ignoreDef ? 0 : Math.floor(activeEnemy.def * 0.45);
+    // 秘銀聖刃被動【破甲】：無視敵方 25% 防禦
+    if (playerHasPassive('pierce')) defPart = Math.floor(defPart * 0.75);
+
+    let dmg = Math.max(6, pAtk - defPart + Math.floor(Math.random() * 5));
+    if (Math.random() < critRate) {
+      dmg = Math.round(dmg * critMultiplier);
+      critAny = true;
+    }
+    total += Math.round(dmg * mult * hitMult * passiveMult);
+  }
+
+  // 烈焰魔劍被動【業火】：額外附加 8 點真實燃燒傷害
+  if (playerHasPassive('flame')) {
+    total += 8;
+    showFloatingText('🔥 業火 -8', 'dmg-passive');
+    logMessage('🔥 烈焰魔劍【業火】發動，附加 8 點真實燃燒傷害！', 'gain-msg');
+  }
+
+  // 電磁軌道槍被動【電磁貫穿】：35% 機率超載追加 16 傷害
+  if (playerHasPassive('rail') && Math.random() < 0.35) {
+    total += 16;
+    showFloatingText('⚡ 電磁超載 -16', 'dmg-passive');
+    logMessage('⚡ 電磁軌道槍【電磁超載】發動，追加 16 點貫穿傷害！', 'gain-msg');
+  }
+
+  // 生命神弓被動【生命汲取】：造成傷害的 20% 轉為自身生命
+  if (playerHasPassive('vamp')) {
+    const vampHeal = Math.max(1, Math.round(total * 0.2));
+    player.hp = Math.min(player.maxHp, player.hp + vampHeal);
+    showFloatingText(`+${vampHeal} HP 吸血`, 'dmg-heal');
+    logMessage(`🩸 生命神弓【生命汲取】發動，吸取 ${vampHeal} HP！`, 'gain-msg');
+  }
+
+  // 更新單次最高傷害紀錄
+  if (total > (player.maxDmgHit || 0)) player.maxDmgHit = total;
+
+  // 音效、飄字與受擊震顫動效
+  SFX.play(critAny ? 'crit' : (useSkill ? 'skill' : 'attack'));
+  triggerEnemyShake();
+  if (critAny) {
+    showFloatingText(`💥 -${total} 暴擊!`, 'dmg-crit');
+  } else if (useSkill) {
+    showFloatingText(`✨ -${total} [${ch.skill.name}]`, 'dmg-skill');
+  } else {
+    showFloatingText(`-${total}`, 'dmg-out');
+  }
+
+  activeEnemy.hp = Math.max(0, activeEnemy.hp - total);
+  if (activeEnemy.ref) activeEnemy.ref.hp = activeEnemy.hp;
+
+  addMastery();
+  gainExp(12);
+
+  // ---------- 擊殺 ----------
+  if (activeEnemy.hp <= 0) {
+    const defeated = activeEnemy;
+    activeEnemy = null;
+    combatCard.classList.add('hidden');
+    player.kills += 1;
+
+    if (ch.id === 'jackie') {
+      player.hp = Math.min(player.maxHp, player.hp + 20);
+      showFloatingText('+20 HP 嗜血', 'dmg-heal');
+      logMessage('🩸 被動【嗜血】發動，回復 20 HP！', 'gain-msg');
+    }
+
+    if (defeated.isBoss) {
+      player.bossKilled = true;
+      defeated.ref.alive = false;
+      logMessage(`🏆 [全島廣播] 你擊敗了 Wickeline 博士 (${total} 傷害)！`, 'craft-msg');
+      gainExp(defeated.exp);
+      openLoot('👹 Wickeline 博士的遺骸', defeated.drop);
+    } else if (defeated.isAI) {
+      defeated.ref.alive = false;
+      logMessage(`🔥 致命一擊 (${total} 傷害)！你擊殺了受試者 [${defeated.name}]！`, 'craft-msg');
+      gainExp(45);
+      if (checkVictory()) {
+        updateUI();
+        return;
+      }
+      openLoot(`💀 [${defeated.name}] 的遺物箱`, aiGetCorpseLoot(defeated.ref));
+    } else {
+      let count = 2 + (Math.random() < 0.45 ? 1 : 0) + (ch.id === 'nadine' ? 1 : 0);
+      const drops = [...defeated.drop].sort(() => Math.random() - 0.5);
+      const loot = [];
+      for (let i = 0; i < count; i++) loot.push(drops[i % drops.length]);
+      logMessage(`⚔️ 擊斃了 [${defeated.name}] (${total} 傷害)！可搜刮 ${loot.length} 件戰利品！`, 'gain-msg');
+      gainExp(defeated.exp || 25);
+      openLoot(`🐾 [${defeated.name}] 狩獵戰利品`, loot);
+    }
+
+    advanceWorldTick();
+    updateUI();
+    return;
+  }
+
+  const critText = critAny ? '💥暴擊！' : '';
+
+  // ---------- 敵人無法反擊 (技能控制) ----------
+  if (noCounter) {
+    const msg = `${critText}你對 [${activeEnemy.name}] 造成 ${total} 傷害，敵人被壓制無法反擊！`;
+    logMessage(msg, 'combat-msg');
+    renderCombatCard(msg);
+    updateUI();
+    return;
+  }
+
+  // ---------- 敵人反擊 (含 Level 2 AI 智慧決策) ----------
+  let aiActionText = '';
+  let enemyAtkMult = 1.0;
+
+  if (activeEnemy.isAI && activeEnemy.ref) {
+    const bot = activeEnemy.ref;
+    aiUpdateStance(bot);
+    activeEnemy.atk = bot.atk;
+    activeEnemy.def = bot.def;
+
+    // 1. 殘血緊急嗑藥 (HP <= 45%)
+    if (bot.hp <= bot.maxHp * 0.45) {
+      const healedIt = aiTryHeal(bot, true);
+      if (healedIt) {
+        activeEnemy.hp = bot.hp;
+        aiActionText = ` 💊[${bot.name}] 緊急服用 [${healedIt.name}] (+${healedIt.heal_hp} HP)！`;
+        logMessage(`💊 交戰中 [${bot.name}] 緊急服用了 [${healedIt.name}]，回復 ${healedIt.heal_hp} HP！`, 'warn-msg');
+      }
+    }
+
+    // 2. 重傷且無藥可吃時嘗試戰術撤退
+    if (activeEnemy.hp < 28 && Math.random() < 0.48) {
+      const escapeIds = safeAreas().filter(id => id !== player.area);
+      if (escapeIds.length > 0) {
+        bot.area = rand(escapeIds);
+        bot.stance = 'cautious';
+        logMessage(`💥 你造成 ${total} 傷害！重傷的 [${activeEnemy.name}] 切換謹慎姿態並緊急撤離了此區域！`, 'combat-msg');
+        activeEnemy = null;
+        combatCard.classList.add('hidden');
+        updateUI();
+        return;
+      }
+    }
+
+    // 3. AI 主動技能施放
+    if (bot.skill && bot.skill.curCd <= 0 && Math.random() < 0.6) {
+      bot.skill.curCd = bot.skill.cd;
+      enemyAtkMult = bot.skill.mult || 1.3;
+      aiActionText += ` ⚡發動【${bot.skill.name}】！`;
+      logMessage(`⚡ [${bot.name}] 對你發動專屬技能【${bot.skill.name}】！`, 'warn-msg');
+    }
+  }
+
+  const pDef = getPlayerDef();
+  const rawEnemyDmg = Math.max(4, Math.floor(activeEnemy.atk * enemyAtkMult) - Math.floor(pDef * 0.5) + Math.floor(Math.random() * 4));
+  const dmgToPlayer = applyDamageToPlayer(rawEnemyDmg);
+
+  // 荊棘臂盾被動【尖刺荊棘】：受到反擊時反彈 10 點傷害
+  if (playerHasPassive('thorns')) {
+    activeEnemy.hp = Math.max(0, activeEnemy.hp - 10);
+    if (activeEnemy.ref) activeEnemy.ref.hp = activeEnemy.hp;
+    showFloatingText('🛡️ 荊棘 -10', 'dmg-passive');
+    logMessage('🛡️ 荊棘臂盾【尖刺荊棘】反彈 10 點傷害給敵人！', 'gain-msg');
+    if (activeEnemy.hp <= 0) {
+      logMessage(`💀 敵人在反擊中被荊棘尖刺刺死！`, 'craft-msg');
+      activeEnemy = null;
+      combatCard.classList.add('hidden');
+      player.kills += 1;
+      checkVictory();
+      updateUI();
+      return;
+    }
+  }
+
+  const roundMsg = `${critText}你對 [${activeEnemy.name}] 造成 ${total} 傷害，承受反擊 -${dmgToPlayer} HP！${aiActionText}`;
+  logMessage(roundMsg, 'combat-msg');
+  renderCombatCard(roundMsg);
+
+  if (player.hp <= 0) {
+    triggerGameOver(false, `在與 [${activeEnemy.name}] 的交戰中力竭身亡。`);
+    return;
+  }
+  updateUI();
+}
+
+function doFlee() {
+  if (!activeEnemy || isGameOver) return;
+  const pDef = getPlayerDef();
+  const enemyRefName = activeEnemy.name;
+
+  if (player.sp < 5) {
+    const dmg = applyDamageToPlayer(Math.max(5, (activeEnemy.atk - pDef * 0.45) * 0.85));
+    const msg = `⚠️ 精力不足（需 5 SP）突圍失敗！遭 [${enemyRefName}] 趁隙追砍 (-${dmg} HP)！`;
+    logMessage(msg, 'warn-msg');
+    renderCombatCard(msg);
+    if (player.hp <= 0) {
+      triggerGameOver(false, `體力透支無法逃脫，遭 [${enemyRefName}] 追擊身亡。`);
+      return;
+    }
+    advanceWorldTick();
+    updateUI();
+    return;
+  }
+
+  player.sp = Math.max(0, player.sp - 5);
+  let pursuitChance = 0.40;
+  if (player.stance === 'aggressive') pursuitChance = 0.55;
+  if (player.stance === 'stealth') pursuitChance = 0.18;
+
+  if (Math.random() < pursuitChance) {
+    const dmg = applyDamageToPlayer(Math.max(3, (activeEnemy.atk - pDef * 0.5) * 0.6));
+    logMessage(`🏃 你強行突圍擺脫了 [${enemyRefName}] (-5 SP)，但遭追擊擦傷 (-${dmg} HP)！`, 'combat-msg');
+    if (player.hp <= 0) {
+      triggerGameOver(false, `在強行突圍時遭 [${enemyRefName}] 追擊身亡。`);
+      return;
+    }
+  } else {
+    logMessage(`🏃 你利用地形掩護，成功無傷擺脫了 [${enemyRefName}] (-5 SP)。`, 'sys-msg');
+  }
+
+  activeEnemy = null;
+  combatCard.classList.add('hidden');
+  advanceWorldTick();
+  updateUI();
+}
+
+function gainExp(amount) {
+  const mult = getActivePerkBonuses().expMult || 1;
+  player.exp += Math.round(amount * mult);
+  while (player.exp >= player.level * 50) {
+    player.level += 1;
+    player.maxHp += 15;
+    player.hp = Math.min(player.maxHp, player.hp + 15);
+    player.maxSp += 10;
+    player.baseAtk += 2;
+    player.baseDef += 1;
+    logMessage(`🆙 等級提升至 Lv.${player.level}！生命/精力上限與基礎攻防提升！`, 'craft-msg');
+  }
+}
+
+// ==================== 拾取與物品管理 ====================
+function doPickup() {
+  if (!pendingFoundItem) return;
+  const emptyIdx = player.inventory.findIndex(s => s === null);
+  if (emptyIdx === -1) {
+    logMessage('背包已滿（6 格）！請先使用、裝備或丟棄物品。', 'warn-msg');
+    return;
+  }
+  SFX.play('pickup');
+  player.inventory[emptyIdx] = pendingFoundItem.id;
+  logMessage(`將 [${pendingFoundItem.name}] 收入背包第 ${emptyIdx + 1} 格。`, 'sys-msg');
+  pendingFoundItem = null;
+  discoveryCard.classList.add('hidden');
+  updateUI();
+}
+
+function doDiscard() {
+  if (!pendingFoundItem) return;
+  logMessage(`略過了 [${pendingFoundItem.name}]。`, 'sys-msg');
+  pendingFoundItem = null;
+  discoveryCard.classList.add('hidden');
+}
+
+function renderItemRecipeHint(itemId) {
+  const related = GAME_DATA.recipes.filter(r => r.materials.includes(itemId));
+  if (related.length > 0) {
+    const lines = related.map(r => {
+      const m1 = GAME_DATA.items[r.materials[0]]?.name;
+      const m2 = GAME_DATA.items[r.materials[1]]?.name;
+      return `• ${m1} + ${m2} ➔ <strong style="color:#fde047;">${GAME_DATA.items[r.result].name}</strong>`;
+    });
+    itemModalRecipes.innerHTML = `<div>🔨 <strong>可進階合成</strong>：</div>${lines.join('<br>')}`;
+  } else {
+    itemModalRecipes.innerHTML = '此為頂級成品或直接消耗品。';
+  }
+}
+
+function openItemModal(slotIdx) {
+  const itemId = player.inventory[slotIdx];
+  if (!itemId) return;
+  const it = GAME_DATA.items[itemId];
+  selectedSlotIdx = slotIdx;
+  selectedEquipType = null;
+
+  itemModalTitle.innerText = it.name;
+  let descText = it.desc;
+  if (it.passive) {
+    descText += `\n✨ 被動【${it.passive.name}】：${it.passive.desc}`;
+  }
+  itemModalDesc.innerText = descText;
+  renderItemRecipeHint(itemId);
+
+  btnModalUnequip.style.display = 'none';
+  if (it.type === 'material') {
+    btnModalUse.style.display = 'none';
+  } else {
+    btnModalUse.style.display = 'flex';
+    const labels = {
+      consumable: '💊 使用恢復 [Enter]',
+      weapon: '🗡️ 裝備武器 [Enter]',
+      armor: '🛡️ 穿戴防具 [Enter]',
+      accessory: '💍 佩戴飾品 [Enter]',
+      trap: '🪤 埋設於此區域 [Enter]'
+    };
+    btnModalUse.innerText = labels[it.type] || '使用 [Enter]';
+  }
+  itemModal.classList.remove('hidden');
+}
+
+function openEquipModal(equipSlot) {
+  if (isGameOver) return;
+  const itemId = player.equipment[equipSlot];
+  if (!itemId) {
+    logMessage('該裝備槽目前為空。可從背包點擊對應裝備穿戴。', 'sys-msg');
+    return;
+  }
+  const it = GAME_DATA.items[itemId];
+  selectedSlotIdx = null;
+  selectedEquipType = equipSlot;
+  itemModalTitle.innerText = `[已裝備] ${it.name}`;
+  let descText = it.desc;
+  if (it.passive) {
+    descText += `\n✨ 被動【${it.passive.name}】：${it.passive.desc}`;
+  }
+  itemModalDesc.innerText = descText;
+  renderItemRecipeHint(itemId);
+  btnModalUse.style.display = 'none';
+  btnModalUnequip.style.display = 'flex';
+  itemModal.classList.remove('hidden');
+}
+
+function closeItemModal() {
+  selectedSlotIdx = null;
+  selectedEquipType = null;
+  itemModal.classList.add('hidden');
+}
+
+btnModalCancel.onclick = closeItemModal;
+
+btnModalUnequip.onclick = () => {
+  if (!selectedEquipType) return;
+  const itemId = player.equipment[selectedEquipType];
+  if (!itemId) return;
+  const emptyIdx = player.inventory.findIndex(s => s === null);
+  if (emptyIdx === -1) {
+    logMessage('⚠️ 背包已滿，無法卸下裝備！請先清出 1 格空間。', 'warn-msg');
+    closeItemModal();
+    return;
+  }
+  player.equipment[selectedEquipType] = null;
+  player.inventory[emptyIdx] = itemId;
+  logMessage(`📥 已將 [${GAME_DATA.items[itemId].name}] 卸下放回背包第 ${emptyIdx + 1} 格。`, 'sys-msg');
+  closeItemModal();
+  updateUI();
+};
+
+btnModalDrop.onclick = () => {
+  if (selectedSlotIdx !== null) {
+    const it = GAME_DATA.items[player.inventory[selectedSlotIdx]];
+    player.inventory[selectedSlotIdx] = null;
+    logMessage(`🗑️ 丟棄了 [${it.name}]。`, 'warn-msg');
+  } else if (selectedEquipType !== null) {
+    const it = GAME_DATA.items[player.equipment[selectedEquipType]];
+    player.equipment[selectedEquipType] = null;
+    logMessage(`🗑️ 卸下並丟棄了 [${it.name}]。`, 'warn-msg');
+  }
+  closeItemModal();
+  updateUI();
+};
+
+btnModalUse.onclick = () => {
+  if (selectedSlotIdx === null) return;
+  const slot = selectedSlotIdx;
+  closeItemModal();
+  useOrEquip(slot);
+};
+
+function useOrEquip(slotIdx) {
+  const itemId = player.inventory[slotIdx];
+  if (!itemId) return;
+  const it = GAME_DATA.items[itemId];
+
+  if (it.type === 'consumable') {
+    SFX.play('heal');
+    const mult = player.char?.id === 'sua' ? 1.25 : 1;
+    if (it.heal_hp) {
+      const hpGain = Math.round(it.heal_hp * mult);
+      player.hp = Math.min(player.maxHp, player.hp + hpGain);
+      showFloatingText(`+${hpGain} HP`, 'dmg-heal');
+    }
+    if (it.heal_sp) {
+      const spGain = Math.round(it.heal_sp * mult);
+      player.sp = Math.min(player.maxSp, player.sp + spGain);
+    }
+    player.inventory[slotIdx] = null;
+    logMessage(`💊 使用了 [${it.name}]，恢復了狀態${mult > 1 ? ' (心靈治癒 +25%)' : ''}。`, 'gain-msg');
+    updateUI();
+    return;
+  }
+
+  if (it.type === 'trap') {
+    if (activeEnemy) {
+      logMessage('⚠️ 戰鬥中無法埋設陷阱！', 'warn-msg');
+      return;
+    }
+    if (restrictedAreas.has(player.area)) {
+      logMessage('⚠️ 禁區內埋設陷阱毫無意義。', 'warn-msg');
+      return;
+    }
+    SFX.play('pickup');
+    playerTraps.push({ area: player.area, dmg: it.dmg, name: it.name });
+    player.inventory[slotIdx] = null;
+    logMessage(`🪤 你在 [${areaName(player.area)}] 埋設了 [${it.name}]，等待獵物上門。`, 'sys-msg');
+    advanceWorldTick();
+    updateUI();
+    return;
+  }
+
+  const slot = getEquipSlot(it);
+  if (!slot) return;
+  SFX.play('pickup');
+  const old = player.equipment[slot];
+  player.equipment[slot] = itemId;
+  player.inventory[slotIdx] = old;
+  const stat = it.type === 'weapon' ? `${WEAPON_TYPES[it.subType]} +${it.atk}` : it.type === 'accessory' ? `攻 +${it.atk} / 防 +${it.def}` : `防禦 +${it.def}`;
+  logMessage(`🛡️ 裝備了 [${it.name}] (${stat})！`, 'gain-msg');
+  updateUI();
+}
+
+// ==================== 合成 ====================
+function consumeMaterialForCraft(matId) {
+  const invIdx = player.inventory.indexOf(matId);
+  if (invIdx !== -1) {
+    player.inventory[invIdx] = null;
+    return { from: 'inventory', slot: invIdx };
+  }
+  for (const eqSlot of EQUIP_SLOTS) {
+    if (player.equipment[eqSlot] === matId) {
+      player.equipment[eqSlot] = null;
+      return { from: 'equip', slot: eqSlot };
+    }
+  }
+  return null;
+}
+
+function craftItem(resultId) {
+  const recipe = GAME_DATA.recipes.find(r => r.result === resultId);
+  if (!recipe || !hasRecipeMaterials(recipe, getAllPlayerItemIds())) return;
+
+  SFX.play('craft');
+  consumeMaterialForCraft(recipe.materials[0]);
+  consumeMaterialForCraft(recipe.materials[1]);
+
+  const resItem = GAME_DATA.items[resultId];
+  player.crafts += 1;
+
+  // 若成品對應的裝備槽為空（含剛被拿來合成的已穿戴裝備），自動穿上
+  const slot = getEquipSlot(resItem);
+  let placed = '';
+  if (slot && !player.equipment[slot]) {
+    player.equipment[slot] = resultId;
+    placed = '(已自動裝備並更新攻防)';
+  } else {
+    const freeIdx = player.inventory.indexOf(null);
+    if (freeIdx !== -1) {
+      player.inventory[freeIdx] = resultId;
+    } else {
+      openLoot('🔨 合成成品（背包已滿）', [resultId]);
+      placed = '(背包已滿，請從成品區拾取)';
+    }
+  }
+
+  logMessage(`🔨 成功合成 [${resItem.name}]！${placed || `(${resItem.desc})`}`, 'craft-msg');
+  gainExp(resItem.rare || /★/.test(resItem.desc) ? 50 : 25);
+  updateUI();
+}
+
+// ==================== 休息、姿態、移動 (3x3 戰術雷達) ====================
+function doRest() {
+  if (isGameOver) return;
+  if (activeEnemy) {
+    logMessage('⚠️ 戰鬥中無法休息！', 'warn-msg');
+    return;
+  }
+  discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
+  pendingFoundItem = null;
+  currentLootItems = [];
+
+  const aiInArea = aiBots.filter(b => b.alive && b.area === player.area);
+  const bossHere = boss && boss.alive && boss.area === player.area;
+  let ambushChance = (aiInArea.length > 0 || bossHere) ? 0.38 : 0.10;
+  if (player.stance === 'aggressive') ambushChance += 0.15;
+  if (player.stance === 'stealth') ambushChance *= 0.4;
+
+  if (Math.random() < ambushChance) {
+    player.sp = Math.min(player.maxSp, player.sp + 10);
+    spawnEnemyEncounter(true);
+    if (isGameOver) return;
+  } else {
+    SFX.play('heal');
+    let healHp = 22;
+    if (playerHasPassive('regen')) healHp += 4;
+    const spGain = 25 + (getActivePerkBonuses().restSpBonus || 0);
+    player.hp = Math.min(player.maxHp, player.hp + healHp);
+    player.sp = Math.min(player.maxSp, player.sp + spGain);
+    showFloatingText(`+${healHp} HP`, 'dmg-heal');
+    logMessage(`💤 在掩體安全調息，未被發現 (+${healHp} HP, +${spGain} SP)。`, 'gain-msg');
+  }
+  advanceWorldTick();
+  updateUI();
+}
+
+btnStance.onclick = () => {
+  if (isGameOver) return;
+  SFX.play('click');
+  const order = ['normal', 'aggressive', 'stealth'];
+  player.stance = order[(order.indexOf(player.stance) + 1) % order.length];
+  const labels = {
+    normal: '⚖️ 切換為【均衡姿態】：標準探索與戰鬥平衡。',
+    aggressive: '⚔️ 切換為【進攻姿態】：遇敵率提升，攻擊 +15%、暴擊率提升，防禦 -15%！',
+    stealth: '🥷 切換為【潛行姿態】：降低遇敵、偷襲、踩陷阱與追擊機率！'
+  };
+  logMessage(labels[player.stance], 'sys-msg');
+  updateUI();
+};
+
+function renderRadarMap() {
+  if (!areaSelector) return;
+  areaSelector.innerHTML = '';
+
+  // 1. 繪製 SVG 戰術連線 (viewBox 0 0 300 300)
+  if (radarSvg) {
+    const lines = [];
+    const drawn = new Set();
+    GAME_DATA.areas.forEach(a => {
+      const x1 = (a.col || 0) * 100 + 50;
+      const y1 = (a.row || 0) * 100 + 50;
+      (a.neighbors || []).forEach(nId => {
+        const key = [a.id, nId].sort().join('--');
+        if (drawn.has(key)) return;
+        drawn.add(key);
+        const b = GAME_DATA.areas.find(x => x.id === nId);
+        if (!b) return;
+        const x2 = (b.col || 0) * 100 + 50;
+        const y2 = (b.row || 0) * 100 + 50;
+        const touchesPlayer = (a.id === player.area || b.id === player.area);
+        const otherId = a.id === player.area ? b.id : a.id;
+        let stroke = '#475569';
+        let width = '2';
+        let dash = 'stroke-dasharray="4 4"';
+        if (touchesPlayer) {
+          if (restrictedAreas.has(otherId)) {
+            stroke = '#ef4444';
+            width = '2.5';
+            dash = 'stroke-dasharray="3 3"';
+          } else {
+            stroke = '#4ade80';
+            width = '3';
+            dash = '';
+          }
+        }
+        lines.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${width}" ${dash} />`);
+      });
+    });
+    radarSvg.innerHTML = lines.join('');
+  }
+
+  // 2. 繪製 3x3 區域節點
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const a = GAME_DATA.areas.find(x => x.row === r && x.col === c);
+      if (!a) {
+        const spacer = document.createElement('div');
+        spacer.style.pointerEvents = 'none';
+        areaSelector.appendChild(spacer);
+        continue;
+      }
+
+      const btn = document.createElement('button');
+      const isCur = player.area === a.id;
+      const isAdj = areAreasAdjacent(player.area, a.id);
+      const isRestr = restrictedAreas.has(a.id);
+      const isWarn = warningAreas.has(a.id);
+
+      let cls = 'radar-node';
+      let badgeText = '🟢 安全';
+      let bottomTag = '';
+
+      if (isCur) {
+        cls += ' node-current';
+        badgeText = isRestr ? '🚫 禁區' : (isWarn ? '⚠️ 預告' : '📍 當前');
+        bottomTag = '📍 當前所在區域';
+      } else if (isAdj && isRestr) {
+        cls += ' node-restricted';
+        badgeText = '🚫 禁區';
+        bottomTag = '⚡ 強行穿越 (-8SP/-25HP)';
+      } else if (isAdj && isWarn) {
+        cls += ' node-adj-warn';
+        badgeText = '⚠️ 預告';
+        bottomTag = '🟢 相鄰可移動 (-3 SP)';
+      } else if (isAdj) {
+        cls += ' node-adjacent';
+        badgeText = '🟢 可直達';
+        bottomTag = '🟢 相鄰可移動 (-3 SP)';
+      } else if (isRestr) {
+        cls += ' node-restricted node-distant';
+        badgeText = '🚫 禁區';
+        bottomTag = '🔒 非相鄰 (點擊查路線)';
+      } else {
+        cls += ' node-distant';
+        badgeText = isWarn ? '⚠️ 預告' : '🔒 需轉乘';
+        bottomTag = '🧭 非相鄰 (點擊查路線)';
+      }
+
+      const aiCount = aiBots.filter(b => b.alive && b.area === a.id).length;
+      let icons = '';
+      if (airdrop && airdrop.area === a.id) icons += ' 📦';
+      if (boss && boss.alive && boss.area === a.id) icons += ' 👹';
+      const myTraps = playerTraps.filter(t => t.area === a.id).length;
+      if (myTraps > 0) icons += ` 🪤${myTraps}`;
+
+      btn.className = cls;
+      btn.innerHTML = `
+        <div class="radar-node-top">
+          <span class="radar-node-name">${a.icon || ''} ${a.name}</span>
+          <span class="radar-node-badge">${badgeText}</span>
+        </div>
+        <div class="radar-node-mid">👤 ${aiCount} 人${icons}</div>
+        <div class="radar-node-tag">${bottomTag}</div>
+      `;
+      btn.onclick = () => moveToArea(a);
+      areaSelector.appendChild(btn);
+    }
+  }
+
+  if (radarRouteHint) {
+    const curObj = GAME_DATA.areas.find(x => x.id === player.area);
+    const adjNames = (curObj?.neighbors || []).map(areaName).join('、');
+    radarRouteHint.innerHTML = `📍 當前位於 <strong>[${areaName(player.area)}]</strong> ｜ 可直達相鄰區域：<strong style="color:#4ade80;">${adjNames}</strong>`;
+  }
+}
+
+btnOpenMap.onclick = () => {
+  if (isGameOver) return;
+  if (activeEnemy) {
+    logMessage('⚠️ 交戰中被敵人纏住無法移動！請先擊敗敵人或「🏃 撤退」突圍！', 'warn-msg');
+    return;
+  }
+  SFX.play('click');
+  renderRadarMap();
+  mapModal.classList.remove('hidden');
+};
+
+function moveToArea(a) {
+  if (player.area === a.id) {
+    mapModal.classList.add('hidden');
+    return;
+  }
+
+  // 檢查是否為相鄰區域
+  if (!areAreasAdjacent(player.area, a.id)) {
+    SFX.play('click');
+    const path = findShortestPath(player.area, a.id, true);
+    const routeStr = path.map(areaName).join(' ➔ ');
+    const nextStep = path.length > 1 ? areaName(path[1]) : a.name;
+    if (radarRouteHint) {
+      radarRouteHint.innerHTML = `🧭 <strong>[${a.name}] 與當前區域不相鄰！</strong> 最短轉乘路線：<strong style="color:#fde047;">${routeStr}</strong>（請先點擊相鄰的 <strong>[${nextStep}]</strong>）`;
+    }
+    logMessage(`🧭 [${a.name}] 非相鄰區域無法直接跨越！最短路線：${routeStr}`, 'warn-msg');
+    return;
+  }
+
+  const isEnteringRestricted = restrictedAreas.has(a.id);
+  const spCost = isEnteringRestricted ? 8 : 3;
+
+  if (player.sp < spCost) {
+    logMessage(`精力不足無法移動（${isEnteringRestricted ? '強行穿越禁區需 8 SP' : '需 3 SP'}），請先休息！`, 'warn-msg');
+    return;
+  }
+
+  SFX.play('click');
+  player.sp -= spCost;
+  player.area = a.id;
+  activeEnemy = null;
+  pendingFoundItem = null;
+  currentLootItems = [];
+  combatCard.classList.add('hidden');
+  discoveryCard.classList.add('hidden');
+  lootCard.classList.add('hidden');
+  mapModal.classList.add('hidden');
+
+  if (isEnteringRestricted) {
+    const dmg = applyDamageToPlayer(25);
+    logMessage(`⚡ 你強行衝入已封鎖禁區 [${a.name}] (-8 SP)，遭受手環高壓電擊 (-${dmg} HP)！`, 'warn-msg');
+    if (player.hp <= 0) {
+      triggerGameOver(false, `強行穿越禁區 [${a.name}] 時遭手環高壓電流擊斃。`);
+      return;
+    }
+  } else {
+    logMessage(`🗺️ 已沿戰術通道移動至相鄰區域 [${a.name}] (-3 SP)。`, 'sys-msg');
+  }
+
+  if (checkEnemyTrap(0.5)) return;
+
+  const aiHere = aiBots.filter(b => b.alive && b.area === a.id);
+  const chance = player.stance === 'stealth' ? 0.05 : (player.stance === 'aggressive' ? 0.35 : 0.18);
+  if (aiHere.length > 0 && Math.random() < chance) spawnEnemyEncounter(false);
+
+  advanceWorldTick();
+  updateUI();
+}
+
+btnCloseMap.onclick = () => mapModal.classList.add('hidden');
+
+// ==================== 合成圖鑑 ====================
+function renderCodex(tab = 'all') {
+  currentCodexTab = tab;
+  document.querySelectorAll('.codex-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+  codexList.innerHTML = '';
+  const owned = getAllPlayerItemIds();
+
+  GAME_DATA.recipes.forEach(r => {
+    const resItem = GAME_DATA.items[r.result];
+    if (!resItem) return;
+    if (tab === 'weapon' && resItem.type !== 'weapon') return;
+    if (tab === 'armor' && resItem.type !== 'armor' && resItem.type !== 'accessory') return;
+    if (tab === 'consumable' && !['consumable', 'material', 'trap'].includes(resItem.type)) return;
+
+    const [m1, m2] = r.materials;
+    const item1 = GAME_DATA.items[m1];
+    const item2 = GAME_DATA.items[m2];
+    const has1 = owned.includes(m1);
+    const has2 = owned.includes(m2);
+    const drop1 = findItemDropAreas(m1).join('/') || '合成';
+    const drop2 = findItemDropAreas(m2).join('/') || '合成';
+
+    const passiveHtml = resItem.passive
+      ? `<div style="font-size:0.7rem; color:#d8b4fe; margin-top:2px;">✨ 被動【${resItem.passive.name}】：${resItem.passive.desc}</div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'codex-card';
+    card.innerHTML = `
+      <div class="codex-card-top">
+        <span class="codex-res-name">${resItem.name}</span>
+        <span class="codex-res-stat">${getItemTag(resItem)}</span>
+      </div>
+      ${passiveHtml}
+      <div class="codex-mats">
+        <span class="mat-badge ${has1 ? 'owned' : ''}">${has1 ? '✓ ' : ''}${item1.name} <small>(${drop1})</small></span>
+        <span>+</span>
+        <span class="mat-badge ${has2 ? 'owned' : ''}">${has2 ? '✓ ' : ''}${item2.name} <small>(${drop2})</small></span>
+      </div>
+    `;
+    codexList.appendChild(card);
+  });
+}
+
+btnOpenCodex.onclick = () => {
+  if (!player) return;
+  SFX.play('click');
+  renderCodex(currentCodexTab);
+  codexModal.classList.remove('hidden');
+};
+btnCloseCodex.onclick = () => codexModal.classList.add('hidden');
+document.querySelectorAll('.codex-tab').forEach(tabBtn => {
+  tabBtn.onclick = () => renderCodex(tabBtn.dataset.tab);
+});
+
+// ==================== 事件綁定與鍵盤 ====================
+btnSearch.onclick = doSearch;
+btnPickup.onclick = doPickup;
+btnDiscard.onclick = doDiscard;
+btnAttack.onclick = () => doAttack(false);
+btnSkill.onclick = () => doAttack(true);
+btnFlee.onclick = doFlee;
+btnRest.onclick = doRest;
+btnRestart.onclick = showCharSelect;
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (helpModal && !helpModal.classList.contains('hidden')) { helpModal.classList.add('hidden'); return; }
+    if (careerModal && !careerModal.classList.contains('hidden')) { careerModal.classList.add('hidden'); return; }
+    if (perksModal && !perksModal.classList.contains('hidden')) { perksModal.classList.add('hidden'); return; }
+    if (pvpModal && !pvpModal.classList.contains('hidden')) { pvpModal.classList.add('hidden'); return; }
+    if (patchModal && !patchModal.classList.contains('hidden')) { patchModal.classList.add('hidden'); return; }
+  }
+
+  if (isGameOver) return;
+  const key = e.key.toLowerCase();
+
+  if (e.key === 'Escape') {
+    if (!itemModal.classList.contains('hidden')) { closeItemModal(); return; }
+    if (!codexModal.classList.contains('hidden')) { codexModal.classList.add('hidden'); return; }
+    if (!mapModal.classList.contains('hidden')) { mapModal.classList.add('hidden'); return; }
+    if (activeEnemy) { doFlee(); return; }
+    if (!lootCard.classList.contains('hidden')) { btnCloseLoot.click(); return; }
+    if (!discoveryCard.classList.contains('hidden')) { doDiscard(); return; }
+  }
+
+  if (key === 'h' || e.key === '?') {
+    if (helpModal) helpModal.classList.toggle('hidden');
+    return;
+  }
+
+  if (!itemModal.classList.contains('hidden')) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (btnModalUse.style.display !== 'none') btnModalUse.click();
+      else if (btnModalUnequip.style.display !== 'none') btnModalUnequip.click();
+    } else if (key === 'd') {
+      btnModalDrop.click();
+    }
+    return;
+  }
+
+  if (activeEnemy) {
+    if (e.key === ' ' || e.key === 'Enter' || key === 'a') {
+      e.preventDefault();
+      doAttack(false);
+    } else if (key === 'q') {
+      doAttack(true);
+    }
+    return;
+  }
+
+  if (!discoveryCard.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    doPickup();
+    return;
+  }
+
+  if (e.key === ' ' || key === 's') { e.preventDefault(); doSearch(); return; }
+  if (key === 'r') { doRest(); return; }
+  if (key === 'm') { btnOpenMap.click(); return; }
+  if (key === 'b') { btnOpenCodex.click(); return; }
+  if (key === 't') { btnStance.click(); return; }
+  if (e.key >= '1' && e.key <= '6') { openItemModal(parseInt(e.key) - 1); return; }
+  if (key === 'c') {
+    const firstChip = recipeList.querySelector('.recipe-chip');
+    if (firstChip) firstChip.click();
+  }
+});
+
+// 啟動：Beta 版先進入首頁大廳 (預先初始化角色列表供直接開局或測試調用)
+showCharSelect();
+showLobby();

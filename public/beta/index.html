@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Project Lumia - 黑色倖存 (v2.9 Beta 測試服)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 頂部 HUD -->
+    <header class="hud-header">
+      <div class="user-meta">
+        <div class="meta-left">
+          <button id="btn-back-lobby" class="btn-help-badge" style="background:#1e293b; border-color:#475569; color:#cbd5e1;" title="返回實驗室首頁大廳">🏠 大廳</button>
+          <span class="player-name" id="hud-name">受試者</span>
+          <span class="player-lvl" id="hud-level">Lv.1</span>
+          <button id="btn-stance" class="stance-badge stance-normal" title="點擊切換探索姿態 [T]">⚖️ 均衡姿態</button>
+        </div>
+        <div class="meta-right">
+          <button id="btn-sfx-toggle" class="btn-help-badge" title="切換戰術音效開關 [M/靜音]">🔊</button>
+          <button id="btn-open-help" class="btn-help-badge" title="查看操作教學與介面指南 [H]">❓ 指南</button>
+          <span class="alive-badge" id="hud-alive" title="剩餘存活受試者">👤 10/10</span>
+          <span class="zone-timer" id="hud-zone-timer" title="距離下次禁區封鎖">⏱️ 12 動</span>
+        </div>
+      </div>
+
+      <div class="vital-bars">
+        <div class="bar-wrap">
+          <div class="bar-fill hp-bar" id="hp-bar" style="width: 100%;"></div>
+          <span class="bar-label" id="hp-text">HP 100 / 100</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill sp-bar" id="sp-bar" style="width: 100%;"></div>
+          <span class="bar-label" id="sp-text">SP 80 / 80</span>
+        </div>
+      </div>
+
+      <div class="equip-status-bar">
+        <div class="stat-chips">
+          <span class="stat-chip atk-chip">⚔️ 攻 <strong id="hud-atk">12</strong></span>
+          <span class="stat-chip def-chip">🛡️ 防 <strong id="hud-def">5</strong></span>
+          <span class="stat-chip skill-chip" id="hud-skill" title="角色技能狀態">✨ 技能就緒</span>
+          <span class="stat-chip mas-chip" id="hud-mastery">劈砍 F (0%)</span>
+        </div>
+        <!-- 6 格裝備欄 (點擊可卸下) -->
+        <div class="equipped-slots">
+          <div class="eq-slot" id="eq-weapon"></div>
+          <div class="eq-slot" id="eq-head"></div>
+          <div class="eq-slot" id="eq-body"></div>
+          <div class="eq-slot" id="eq-arm"></div>
+          <div class="eq-slot" id="eq-leg"></div>
+          <div class="eq-slot" id="eq-accessory"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主遊戲中央區域 -->
+    <main class="main-viewport">
+      <section class="area-banner" id="area-banner">
+        <div class="area-header-fixed">
+          <div class="area-top-row">
+            <div class="area-info">
+              <div class="area-title-wrap">
+                <h2 id="area-title">學校</h2>
+                <span id="area-zone-tag" class="zone-tag safe">安全區</span>
+              </div>
+              <p id="area-desc"></p>
+            </div>
+            <div class="header-tools">
+              <button id="btn-open-career" class="btn-codex btn-career" title="查看生涯戰績">🏆 戰績</button>
+              <button id="btn-open-codex" class="btn-codex" title="開啟合成配方圖鑑 [B]">📖 圖鑑</button>
+            </div>
+          </div>
+
+          <div class="area-drops-hint" id="area-drops-hint"></div>
+        </div>
+
+        <div class="area-cards-viewport">
+          <!-- 探索發現單一物資 -->
+          <div id="discovery-card" class="discovery-card hidden">
+            <div class="card-header">📦 探索發現物資！</div>
+            <div class="item-preview">
+              <span id="disc-item-name" class="highlight-name">物品名稱</span>
+              <p id="disc-item-desc">物品說明</p>
+            </div>
+            <div class="discovery-actions">
+              <button id="btn-pickup" class="btn btn-primary">放入背包 [Space]</button>
+              <button id="btn-discard" class="btn btn-secondary">略過 [Esc]</button>
+            </div>
+          </div>
+
+          <!-- 戰利品搜刮區 (屍體 / 空投) -->
+          <div id="loot-card" class="discovery-card loot-card hidden">
+            <div class="loot-header">
+              <span id="loot-title" class="card-header" style="color:#fde047;">💀 戰利品搜刮區</span>
+              <span class="shortcut-tip">點擊物品放入背包</span>
+            </div>
+            <div id="loot-grid" class="loot-grid"></div>
+            <div class="discovery-actions" style="margin-top:8px;">
+              <button id="btn-close-loot" class="btn btn-secondary" style="width:100%;">🚪 離開現場（放棄剩餘物品）[Esc]</button>
+            </div>
+          </div>
+
+          <!-- 遭遇戰鬥 -->
+          <div id="combat-card" class="discovery-card combat-card hidden">
+            <div class="combat-header">
+              <span id="enemy-tag" class="enemy-type-badge">⚠️ 遭遇敵襲</span>
+              <span id="enemy-stats" class="enemy-stats-text">攻 15 / 防 5</span>
+            </div>
+            <div class="enemy-info-row">
+              <span id="enemy-name" class="highlight-name">敵人名稱</span>
+              <span id="enemy-hp-text" class="enemy-hp-num">HP 60/60</span>
+            </div>
+            <div class="bar-wrap enemy-hp-wrap">
+              <div class="bar-fill hp-bar" id="enemy-hp-bar" style="width: 100%;"></div>
+            </div>
+            <p id="combat-round-desc" class="combat-desc">敵人正虎視眈眈地盯著你！</p>
+            <div class="discovery-actions">
+              <button id="btn-attack" class="btn btn-danger" style="flex:1.3;">⚔️ 攻擊 [A]</button>
+              <button id="btn-skill" class="btn btn-skill" style="flex:1.3;">✨ 技能 [Q]</button>
+              <button id="btn-flee" class="btn btn-secondary" style="flex:1;">🏃 撤退 [Esc]</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="log-panel" id="combat-log"></section>
+    </main>
+
+    <!-- 下半部：背包與配方 -->
+    <footer class="interaction-dock">
+      <div class="inventory-section">
+        <div class="section-title">
+          <span>戰術背包 (6格)</span>
+          <span class="shortcut-tip">點擊物品或按 1~6 管理</span>
+        </div>
+        <div class="grid-inventory" id="inventory-grid"></div>
+      </div>
+
+      <div class="craft-section">
+        <div class="section-title">
+          <span>🔨 可立即合成 (含已裝備物品)</span>
+          <span class="shortcut-tip">鍵盤 C 快速合成</span>
+        </div>
+        <div class="recipe-list" id="recipe-list"></div>
+      </div>
+
+      <div class="actions-dock">
+        <button id="btn-search" class="btn btn-action search-btn">🔍 探索 (-5 SP) [S]</button>
+        <button id="btn-rest" class="btn btn-action" title="同區有人時休息可能遭突襲">💤 休息 [R]</button>
+        <button id="btn-open-map" class="btn btn-action">🗺️ 雷達地圖 [M]</button>
+      </div>
+    </footer>
+
+    <!-- 物品 / 裝備操作彈窗 -->
+    <div id="item-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <div class="item-action-title" id="item-modal-title">物品名稱</div>
+        <div class="item-action-desc" id="item-modal-desc">物品說明</div>
+        <div class="item-recipe-usage" id="item-modal-recipes"></div>
+        <div class="item-action-buttons">
+          <button id="btn-modal-use" class="btn btn-primary">使用 / 裝備 [Enter]</button>
+          <button id="btn-modal-unequip" class="btn btn-primary" style="background:#2563eb; display:none;">📥 卸下至背包 [Enter]</button>
+          <button id="btn-modal-drop" class="btn btn-danger">🗑️ 丟棄物品 [D]</button>
+          <button id="btn-modal-cancel" class="btn btn-secondary">取消 [Esc]</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3x3 戰術雷達相鄰地圖 -->
+    <div id="map-modal" class="modal hidden">
+      <div class="modal-content radar-map-dialog">
+        <div class="modal-header-row">
+          <h3>🗺️ 盧米亞島戰術雷達 (相鄰移動 -3 SP)</h3>
+          <span class="shortcut-tip">綠框=可直達 ｜ 暗框=需轉乘</span>
+        </div>
+        <div class="radar-legend-bar">
+          <span>📍當前位置</span>
+          <span style="color:#4ade80;">🟢相鄰安全</span>
+          <span style="color:#fbbf24;">⚠️即將封鎖</span>
+          <span style="color:#f87171;">⛔禁區(強穿-25HP)</span>
+        </div>
+        <div class="radar-board-wrap">
+          <svg class="radar-svg-lines" id="radar-svg" viewBox="0 0 300 300" preserveAspectRatio="none"></svg>
+          <div class="radar-grid-3x3" id="area-selector"></div>
+        </div>
+        <div id="radar-route-hint" class="radar-route-hint">💡 點擊發光連線的相鄰區域即可移動。</div>
+        <button id="btn-close-map" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">關閉雷達地圖 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 合成圖鑑 -->
+    <div id="codex-modal" class="modal hidden">
+      <div class="modal-content codex-dialog">
+        <div class="modal-header-row">
+          <h3>📖 合成圖鑑</h3>
+          <span class="shortcut-tip">綠字＝已持有</span>
+        </div>
+        <div class="codex-tabs">
+          <button class="codex-tab active" data-tab="all">全部</button>
+          <button class="codex-tab" data-tab="weapon">🗡️ 武器</button>
+          <button class="codex-tab" data-tab="armor">🛡️ 防具/飾品</button>
+          <button class="codex-tab" data-tab="consumable">💊 補給/陷阱</button>
+        </div>
+        <div class="codex-list" id="codex-list"></div>
+        <button id="btn-close-codex" class="btn btn-secondary" style="margin-top: 12px; width: 100%;">關閉圖鑑 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 飄字層 (傷害、暴擊、治療動效) -->
+    <div id="floating-layer" class="floating-layer" pointer-events="none"></div>
+
+    <!-- 生涯戰績 -->
+    <div id="career-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <div class="modal-header-row">
+          <h3>🏆 生涯實驗戰績</h3>
+          <span class="shortcut-tip">本機統計數據</span>
+        </div>
+        <div id="career-stats-content" class="career-stats-box"></div>
+        <button id="btn-close-career" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉戰績 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 操作指南與介面教學 (Help Modal) -->
+    <div id="help-modal" class="modal hidden">
+      <div class="modal-content help-dialog">
+        <div class="modal-header-row">
+          <h3>🧭 盧米亞島操作與介面指南</h3>
+          <span class="shortcut-tip">[H] 或 [Esc] 關閉</span>
+        </div>
+        <div class="help-scroll-body">
+          <div class="help-image-wrap">
+            <img src="assets/guide_ui.png" alt="生存介面操作說明圖解" class="help-guide-img" />
+            <div class="help-img-caption">盧米亞島生存介面佈局示意圖</div>
+          </div>
+          <div class="help-guide-list">
+            <div class="help-guide-card">
+              <div class="help-card-title">⚖️ ① 探索姿態切換 (快捷鍵 T)</div>
+              <div class="help-card-desc">
+                • <strong>⚖️ 均衡姿態</strong>：標準探索，攻防適中。<br>
+                • <strong>⚔️ 進攻姿態</strong>：攻擊力 +15%、暴擊率大幅提升，但防禦 -15%，遇敵率加倍。<br>
+                • <strong>🥷 潛行姿態</strong>：遇敵率大幅降低，專心搜尋所需材料或殘血安全調息。
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">🗺️ ② 8 區戰術雷達與相鄰移動 (快捷鍵 M)</div>
+              <div class="help-card-desc">
+                • 全島共 8 個區域，呈 3×3 九宮格連通（中央<strong>森林</strong>為交通樞紐）。<br>
+                • 每次移動僅能前往<strong>有線路相連的相鄰區域</strong>（消耗 3 SP）。<br>
+                • 若必經之路遭禁區封鎖，可選擇繞路，或冒險<strong>「⚡強行穿越禁區」</strong>（承受 25 HP 電擊並消耗 8 SP）。
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">🧬 ③ 天賦研究所與雙貨幣突破</div>
+              <div class="help-card-desc">
+                • 每局結算依名次與擊殺獲得 <strong>🔹 VF 數據碎片</strong>，可於首頁升級 4 大局外天賦。<br>
+                • 天賦升至 Lv.5 與 Lv.10 時，需消耗 <strong>💠 亞格萊雅核心晶片</strong>（可由多人對戰前 3 名、單人擊殺 Wickeline 博士並奪冠、或以 150 碎片合成取得）。
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">⚡ ④ 底部三大戰術行動與快捷鍵</div>
+              <div class="help-card-desc">
+                • <strong>🔍 探索 [S/Space]</strong> ｜ <strong>💤 休息 [R]</strong> ｜ <strong>🗺️ 雷達地圖 [M]</strong><br>
+                • <strong>🔨 快速合成 [C]</strong> ｜ <strong>📖 配方圖鑑 [B]</strong> ｜ <strong>⚔️ 攻擊 [A] / 技能 [Q]</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-close-help" class="btn btn-primary" style="margin-top: 10px; width: 100%;">我知道了！[Esc]</button>
+      </div>
+    </div>
+
+    <!-- ==================== 遊戲首頁大廳 (Lobby Modal) ==================== -->
+    <div id="lobby-modal" class="modal">
+      <div class="modal-content lobby-dialog">
+        <div class="lobby-top-bar">
+          <span class="beta-pill">🧪 v2.9 Beta 測試服</span>
+          <div style="display:flex; gap:6px;">
+            <button id="btn-lobby-sfx" class="btn-help-badge" title="切換音效開關">🔊 音效: 開</button>
+            <a href="../" class="btn-help-badge" style="text-decoration:none; background:#1e293b; border-color:#64748b; color:#cbd5e1;">🛡️ 返回穩定版</a>
+          </div>
+        </div>
+
+        <div class="lobby-hero">
+          <div class="lobby-subtitle">AGLAIA SURVIVAL PROJECT</div>
+          <h1 class="lobby-title">盧米亞島：黑色倖存</h1>
+          <p class="lobby-tagline">8 區戰術雷達 ‧ 擬真 AI 決策 ‧ 雙軌天賦養成</p>
+        </div>
+
+        <!-- 實驗室雙貨幣資源欄 -->
+        <div class="lobby-currency-bar">
+          <div class="currency-item" title="單人演習與多人對戰結算獲得，用於天賦常規升級">
+            <span>🔹 VF 數據碎片</span>
+            <strong id="lobby-shards-val" style="color:#38bdf8;">0</strong>
+          </div>
+          <div class="currency-item" title="天賦 Lv.5 / Lv.10 突破專用！由多人前3名、單人殺Boss奪冠或碎片合成取得">
+            <span>💠 核心晶片</span>
+            <strong id="lobby-chips-val" style="color:#c084fc;">0</strong>
+          </div>
+        </div>
+
+        <!-- 五大主選單入口 -->
+        <div class="lobby-menu-list">
+          <button id="btn-menu-solo" class="lobby-btn lobby-btn-primary">
+            <div class="lobby-btn-left">
+              <span class="lobby-btn-icon">⚔️</span>
+              <div>
+                <div class="lobby-btn-title">開始遊戲：單人戰術演習</div>
+                <div class="lobby-btn-desc">7 名可選受試者 ‧ 8 區相鄰雷達 ‧ 挑戰高擬真 AI 與博士</div>
+              </div>
+            </div>
+            <span class="lobby-arrow">➔</span>
+          </button>
+
+          <button id="btn-menu-pvp" class="lobby-btn lobby-btn-pvp">
+            <div class="lobby-btn-left">
+              <span class="lobby-btn-icon">🌐</span>
+              <div>
+                <div class="lobby-btn-title">多人即時連線 (PvP 戰情室) <small class="pvp-tag">Phase 3 預備</small></div>
+                <div class="lobby-btn-desc">好友房號連線對決 ‧ 爭奪高機率掉落【💠 核心晶片】</div>
+              </div>
+            </div>
+            <span class="lobby-arrow">➔</span>
+          </button>
+
+          <button id="btn-menu-perks" class="lobby-btn">
+            <div class="lobby-btn-left">
+              <span class="lobby-btn-icon">🧬</span>
+              <div>
+                <div class="lobby-btn-title">受試者培養：天賦研究所</div>
+                <div class="lobby-btn-desc">消耗數據碎片與核心晶片，強化初始體能、精力與戰術本能</div>
+              </div>
+            </div>
+            <span class="lobby-arrow">➔</span>
+          </button>
+
+          <div class="lobby-sub-row">
+            <button id="btn-menu-guide" class="lobby-sub-btn">🧭 玩法簡介教學</button>
+            <button id="btn-menu-career" class="lobby-sub-btn">🏆 生涯實驗戰績</button>
+            <button id="btn-menu-patch" class="lobby-sub-btn">📜 版本更新紀錄</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 天賦研究所 (Perks Modal) ==================== -->
+    <div id="perks-modal" class="modal hidden">
+      <div class="modal-content char-dialog">
+        <div class="modal-header-row">
+          <h3>🧬 亞格萊雅天賦研究所</h3>
+          <span class="shortcut-tip">單人與多人共用加成</span>
+        </div>
+        <div class="lobby-currency-bar" style="margin-bottom:8px;">
+          <div class="currency-item">
+            <span>🔹 VF 數據碎片</span>
+            <strong id="perks-shards-val" style="color:#38bdf8;">0</strong>
+          </div>
+          <div class="currency-item">
+            <span>💠 核心晶片</span>
+            <strong id="perks-chips-val" style="color:#c084fc;">0</strong>
+          </div>
+        </div>
+        <div class="chip-craft-bar">
+          <span>⚗️ 實驗室晶片合成（150 🔹 碎片 ➔ 1 💠 晶片）</span>
+          <button id="btn-synth-chip" class="btn-help-badge" style="background:#3b0764; border-color:#a855f7; color:#f3e8ff;">合成晶片</button>
+        </div>
+        <div id="perks-list" class="perks-list"></div>
+        <button id="btn-close-perks" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">返回首頁大廳 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- ==================== 多人連線預備室 (PvP Modal) ==================== -->
+    <div id="pvp-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <div class="modal-header-row">
+          <h3>🌐 多人即時連線戰情室</h3>
+          <span class="beta-pill">Phase 3 籌備中</span>
+        </div>
+        <div class="help-guide-list" style="margin:8px 0;">
+          <div class="help-guide-card">
+            <div class="help-card-title">📡 WebSocket 即時大逃殺架構 (即將開放)</div>
+            <div class="help-card-desc">
+              • 支援建立 <strong>4 位數專屬房間代碼</strong>，邀請朋友即時同局競技，不足 10 人自動由擬真 AI 補位。<br>
+              • 全島物資限量搶奪、90 秒同步縮圈、遭遇即時冷卻互砍。
+            </div>
+          </div>
+          <div class="help-guide-card" style="border-color:#a855f7;">
+            <div class="help-card-title" style="color:#e9d5ff;">💠 核心晶片雙軌獲取機制</div>
+            <div class="help-card-desc">
+              • <strong>多人對戰獎勵</strong>：真人連線對局獲得前 3 名時，高機率直接掉落天賦 Lv.5 / Lv.10 突破專用的<strong>【💠 亞格萊雅核心晶片】</strong>。<br>
+              • <strong>單人演習保底</strong>：在單人模式中達成<strong>「單局擊敗首領 Wickeline 博士且最終奪冠」</strong>，亦可 100% 獲得 1 顆核心晶片！
+            </div>
+          </div>
+        </div>
+        <button id="btn-close-pvp" class="btn btn-primary" style="width:100%;">返回首頁大廳 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- ==================== 版本更新紀錄 (Patch Notes Modal) ==================== -->
+    <div id="patch-modal" class="modal hidden">
+      <div class="modal-content help-dialog">
+        <div class="modal-header-row">
+          <h3>📜 版本更新紀錄 (Patch Notes)</h3>
+          <span class="shortcut-tip">開發進度追蹤</span>
+        </div>
+        <div class="help-scroll-body">
+          <div class="help-guide-card" style="border-color:#f59e0b;">
+            <div class="help-card-title">🧪 v2.9 Beta（當前測試版）— 首頁大廳、8區雷達與戰術音效</div>
+            <div class="help-card-desc">
+              • <strong>實驗室首頁大廳</strong>：新增主選單、雙版本切換（穩定版 ↔ Beta 測試服）、更新紀錄與多人預備室。<br>
+              • <strong>Web Audio 原生戰術音效</strong>：新增探索、打鐵合成、揮砍、暴擊、技能、警報與吃雞和弦音效（支援頂部一鍵靜音）。<br>
+              • <strong>8 區 3×3 戰術雷達相鄰地圖</strong>：擴充小巷、教堂、碼頭共 8 大區域；實裝 SVG 相鄰路徑連線、轉乘提示、強行穿毒機制與 AI 最短路徑尋路。<br>
+              • <strong>天賦研究所與新角色</strong>：實裝 4 大局外天賦（🔹碎片常規升級 + 💠核心晶片 5/10 級突破），並新增受試者<strong>【慧珍】</strong>與<strong>【秀雅】</strong>。
+            </div>
+          </div>
+          <div class="help-guide-card">
+            <div class="help-card-title">🛡️ v2.7（當前穩定正式版）— 打擊飄字、神裝被動與戰績指南</div>
+            <div class="help-card-desc">
+              • 實裝戰鬥浮動傷害飄字、受擊震動特效與 11 款傳說裝備專屬被動技能。<br>
+              • 實裝本機生涯戰績統計、介面操作圖解指南（Help），並修復 Windows 捲軸與矮螢幕響應式排版。
+            </div>
+          </div>
+          <div class="help-guide-card">
+            <div class="help-card-title">🤖 v2.6 — NPC 擬真決策系統 (AI Brain v2.0)</div>
+            <div class="help-card-desc">
+              • AI 擁有真實 6 格裝備、目標合成樹尋路採集、自動穿戴神裝、殘血吃藥回血與施放專屬技能；擊殺 AI 可搜刮其實際穿戴裝備。
+            </div>
+          </div>
+          <div class="help-guide-card">
+            <div class="help-card-title">⚔️ v1.0 ~ v2.5 — 核心生存、6格裝備、空投與首領戰</div>
+            <div class="help-card-desc">
+              • 建立盧米亞島大逃殺基礎、65 種物品、38 條合成配方、雙向陷阱、空投補給與首領 Wickeline 博士。
+            </div>
+          </div>
+        </div>
+        <button id="btn-close-patch" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">關閉更新紀錄 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 角色選擇 -->
+    <div id="char-modal" class="modal hidden">
+      <div class="modal-content char-dialog">
+        <div class="modal-header-row">
+          <h3>🧬 選擇出戰受試者 (7名)</h3>
+          <button id="btn-char-back-lobby" class="btn-help-badge" style="background:#334155; border-color:#64748b; color:#e2e8f0;">⬅ 返回大廳</button>
+        </div>
+        <div id="char-perk-summary" class="char-perk-summary"></div>
+        <div class="char-grid" id="char-grid"></div>
+      </div>
+    </div>
+
+    <!-- 結算 -->
+    <div id="gameover-modal" class="modal hidden">
+      <div class="modal-content item-action-dialog">
+        <h2 id="gameover-title" style="margin-bottom: 8px; font-size: 1.5rem;">實驗結束</h2>
+        <p id="gameover-desc" style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 14px;"></p>
+        <div id="gameover-stats" class="gameover-stats-box"></div>
+        <div style="display:flex; gap:8px; margin-top: 14px;">
+          <button id="btn-gameover-lobby" class="btn btn-secondary" style="flex:1; font-size: 0.92rem;">🏠 返回大廳升級天賦</button>
+          <button id="btn-restart" class="btn btn-primary" style="flex:1.2; font-size: 0.95rem;">🔄 再次選角出戰</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="solo_game.js"></script>
+</body>
+</html>
