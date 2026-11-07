@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Project Lumia - 黑色倖存 (v2.9 Beta 測試服)</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.9.3">
 </head>
 <body>
   <div id="app">
@@ -18,10 +18,9 @@
           <button id="btn-stance" class="stance-badge stance-normal" title="點擊切換探索姿態 [T]">⚖️ 均衡姿態</button>
         </div>
         <div class="meta-right">
-          <button id="btn-sfx-toggle" class="btn-help-badge" title="切換戰術音效開關 [M/靜音]">🔊</button>
-          <button id="btn-open-help" class="btn-help-badge" title="查看操作教學與介面指南 [H]">❓ 指南</button>
+          <button id="btn-sfx-toggle" class="btn-help-badge" title="切換戰術音效開關">🔊</button>
           <span class="alive-badge" id="hud-alive" title="剩餘存活受試者">👤 10/10</span>
-          <span class="zone-timer" id="hud-zone-timer" title="距離下次禁區封鎖">⏱️ 12 動</span>
+          <span class="zone-timer" id="hud-zone-timer" title="距離下次禁區封鎖">⏱️ 10 動</span>
         </div>
       </div>
 
@@ -212,69 +211,8 @@
     <!-- 飄字層 (傷害、暴擊、治療動效) -->
     <div id="floating-layer" class="floating-layer" pointer-events="none"></div>
 
-    <!-- 生涯戰績 -->
-    <div id="career-modal" class="modal hidden">
-      <div class="modal-content item-action-dialog">
-        <div class="modal-header-row">
-          <h3>🏆 生涯實驗戰績</h3>
-          <span class="shortcut-tip">本機統計數據</span>
-        </div>
-        <div id="career-stats-content" class="career-stats-box"></div>
-        <button id="btn-close-career" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉戰績 [Esc]</button>
-      </div>
-    </div>
-
-    <!-- 操作指南與介面教學 (Help Modal) -->
-    <div id="help-modal" class="modal hidden">
-      <div class="modal-content help-dialog">
-        <div class="modal-header-row">
-          <h3>🧭 盧米亞島操作與介面指南</h3>
-          <span class="shortcut-tip">[H] 或 [Esc] 關閉</span>
-        </div>
-        <div class="help-scroll-body">
-          <div class="help-image-wrap">
-            <img src="assets/guide_ui.png" alt="生存介面操作說明圖解" class="help-guide-img" />
-            <div class="help-img-caption">盧米亞島生存介面佈局示意圖</div>
-          </div>
-          <div class="help-guide-list">
-            <div class="help-guide-card">
-              <div class="help-card-title">⚖️ ① 探索姿態切換 (快捷鍵 T)</div>
-              <div class="help-card-desc">
-                • <strong>⚖️ 均衡姿態</strong>：標準探索，攻防適中。<br>
-                • <strong>⚔️ 進攻姿態</strong>：攻擊力 +15%、暴擊率大幅提升，但防禦 -15%，遇敵率加倍。<br>
-                • <strong>🥷 潛行姿態</strong>：遇敵率大幅降低，專心搜尋所需材料或殘血安全調息。
-              </div>
-            </div>
-            <div class="help-guide-card">
-              <div class="help-card-title">🗺️ ② 9 區 3×3 戰術雷達與中央研究中心 (快捷鍵 M)</div>
-              <div class="help-card-desc">
-                • 全島共 <strong>9 大區域</strong>（外圍 8 區環狀連通 ＋ 中央<strong>【🔬 研究中心】</strong>）。<br>
-                • <strong>🟢 綠色節點</strong>代表與當前位置相鄰，可消耗 <code>3 SP</code> 直接移動；<strong>⚪ 灰色節點</strong>代表非相鄰，點擊會自動提示最短轉乘路線；<strong>🔴 紅色節點</strong>為已封鎖禁區。<br>
-                • <strong>🔬 中央研究中心解鎖機制</strong>：開局處於安保封鎖狀態，當<strong>「場上累積 3 個禁區封鎖（或第 20 動博士登場）」</strong>時自動開啟，提供高階實驗物資與十字中央捷徑！
-              </div>
-            </div>
-            <div class="help-guide-card">
-              <div class="help-card-title">🧬 ③ 天賦研究所與雙貨幣突破</div>
-              <div class="help-card-desc">
-                • 每局結算依名次與擊殺獲得 <strong>🔹 VF 數據碎片</strong>，可於首頁升級 4 大局外天賦。<br>
-                • 天賦升至 Lv.5 與 Lv.10 時，需消耗 <strong>💠 亞格萊雅核心晶片</strong>（可由多人對戰前 3 名、單人擊殺 Wickeline 博士並奪冠、或以 150 碎片合成取得）。
-              </div>
-            </div>
-            <div class="help-guide-card">
-              <div class="help-card-title">⚡ ④ 底部三大戰術行動與快捷鍵</div>
-              <div class="help-card-desc">
-                • <strong>🔍 探索 [S/Space]</strong> ｜ <strong>💤 休息 [R]</strong> ｜ <strong>🗺️ 雷達地圖 [M]</strong><br>
-                • <strong>🔨 快速合成 [C]</strong> ｜ <strong>📖 配方圖鑑 [B]</strong> ｜ <strong>⚔️ 攻擊 [A] / 技能 [Q]</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button id="btn-close-help" class="btn btn-primary" style="margin-top: 10px; width: 100%;">我知道了！[Esc]</button>
-      </div>
-    </div>
-
     <!-- ==================== 遊戲首頁大廳 (Lobby Modal) ==================== -->
-    <div id="lobby-modal" class="modal">
+    <div id="lobby-modal" class="modal" style="z-index: 95;">
       <div class="modal-content lobby-dialog">
         <div class="lobby-top-bar">
           <span class="beta-pill">🧪 v2.9 Beta 測試服</span>
@@ -346,8 +284,69 @@
       </div>
     </div>
 
+    <!-- 生涯戰績 (置於 Lobby 之後 + z-index 250 確保永遠在最上層) -->
+    <div id="career-modal" class="modal hidden" style="z-index: 250;">
+      <div class="modal-content item-action-dialog">
+        <div class="modal-header-row">
+          <h3>🏆 生涯實驗戰績</h3>
+          <span class="shortcut-tip">本機統計數據</span>
+        </div>
+        <div id="career-stats-content" class="career-stats-box"></div>
+        <button id="btn-close-career" class="btn btn-secondary" style="margin-top: 14px; width: 100%;">關閉戰績 [Esc]</button>
+      </div>
+    </div>
+
+    <!-- 操作指南與介面教學 (置於 Lobby 之後 + z-index 250 確保永遠在最上層) -->
+    <div id="help-modal" class="modal hidden" style="z-index: 250;">
+      <div class="modal-content help-dialog">
+        <div class="modal-header-row">
+          <h3>🧭 盧米亞島操作與介面指南</h3>
+          <span class="shortcut-tip">[H] 或 [Esc] 關閉</span>
+        </div>
+        <div class="help-scroll-body">
+          <div class="help-image-wrap">
+            <img src="assets/guide_ui.png" alt="生存介面操作說明圖解" class="help-guide-img" />
+            <div class="help-img-caption">盧米亞島生存介面佈局示意圖</div>
+          </div>
+          <div class="help-guide-list">
+            <div class="help-guide-card">
+              <div class="help-card-title">⚖️ ① 探索姿態切換 (快捷鍵 T)</div>
+              <div class="help-card-desc">
+                • <strong>⚖️ 均衡姿態</strong>：標準探索，攻防適中。<br>
+                • <strong>⚔️ 進攻姿態</strong>：攻擊力 +15%、暴擊率大幅提升，但防禦 -15%，遇敵率加倍。<br>
+                • <strong>🥷 潛行姿態</strong>：遇敵率大幅降低，專心搜尋所需材料或殘血安全調息。
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">🗺️ ② 9 區 3×3 戰術雷達與中央研究中心 (快捷鍵 M)</div>
+              <div class="help-card-desc">
+                • 全島共 <strong>9 大區域</strong>（外圍 8 區環狀連通 ＋ 中央<strong>【🔬 研究中心】</strong>）。<br>
+                • <strong>🟢 綠色節點</strong>代表與當前位置相鄰，可消耗 <code>3 SP</code> 直接移動；<strong>⚪ 灰色節點</strong>代表非相鄰，點擊會自動提示最短轉乘路線；<strong>🔴 紅色節點</strong>為已封鎖禁區。<br>
+                • <strong>🔬 中央研究中心解鎖機制</strong>：開局處於安保封鎖狀態，當<strong>「場上累積 3 個禁區封鎖（或第 20 動博士登場）」</strong>時自動開啟，提供高階實驗物資與十字中央捷徑！
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">🧬 ③ 天賦研究所與雙貨幣突破</div>
+              <div class="help-card-desc">
+                • 每局結算依名次與擊殺獲得 <strong>🔹 VF 數據碎片</strong>，可於首頁升級 4 大局外天賦。<br>
+                • 天賦升至 Lv.5 與 Lv.10 時，需消耗 <strong>💠 亞格萊雅核心晶片</strong>（可由多人對戰前 3 名、單人擊殺 Wickeline 博士並奪冠、或以 150 碎片合成取得）。
+              </div>
+            </div>
+            <div class="help-guide-card">
+              <div class="help-card-title">⚡ ④ 底部三大戰術行動與快捷鍵</div>
+              <div class="help-card-desc">
+                • <strong>🔍 探索 [S/Space]</strong> ｜ <strong>💤 休息 [R]</strong> ｜ <strong>🗺️ 雷達地圖 [M]</strong><br>
+                • <strong>🔨 快速合成 [C]</strong> ｜ <strong>📖 配方圖鑑 [B]</strong> ｜ <strong>⚔️ 攻擊 [A] / 技能 [Q]</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-close-help" class="btn btn-primary" style="margin-top: 10px; width: 100%;">我知道了！[Esc]</button>
+      </div>
+    </div>
+
     <!-- ==================== 天賦研究所 (Perks Modal) ==================== -->
-    <div id="perks-modal" class="modal hidden">
+    <div id="perks-modal" class="modal hidden" style="z-index: 250;">
       <div class="modal-content char-dialog">
         <div class="modal-header-row">
           <h3>🧬 亞格萊雅天賦研究所</h3>
@@ -466,6 +465,6 @@
     </div>
   </div>
 
-  <script src="solo_game.js"></script>
+  <script src="solo_game.js?v=2.9.3"></script>
 </body>
 </html>
